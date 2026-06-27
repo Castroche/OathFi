@@ -112,9 +112,12 @@ class AgentHypothesisRead(SourceMeta):
     suggested_rule: dict[str, Any] | None = None
     symbol: str
     timeframe: str
+    title: str
     label: str
+    side: str
     type: str
     direction: str
+    thesis: str
     trigger: str
     invalidation: str
     risk: str
@@ -131,6 +134,9 @@ class AgentHypothesisRead(SourceMeta):
     reasons: list[str]
     warnings: list[str]
     status: str
+    latest_backtest_result_id: str | None = None
+    latest_risk_check_id: str | None = None
+    latest_paper_order_id: str | None = None
     created_at: datetime
 
 

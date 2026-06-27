@@ -75,7 +75,7 @@
     "backendRequiredGeneric": "后端尚未接入。该操作会在 API 桥接后开放。",
     "backendRequiredGenerateHypothesis": "后端尚未接入。交易假设生成后续会调用 POST /api/hypotheses/generate。",
     "backendRequiredBacktest": "后端尚未接入。回测任务后续会调用 POST /api/backtests。",
-    "backendRequiredRisk": "后端尚未接入。风控检查后续会调用 POST /api/risk/check。",
+    "backendRequiredRisk": "后端尚未接入。风控检查后续会调用 POST /api/risk/checks。",
     "backendRequiredPaperExecution": "后端尚未接入。模拟执行会在风控与订单接口接入后开放。",
     "backendRequiredAuditReport": "后端尚未接入。审计报告后续会调用 POST /api/audit-reports。",
     "backendRequiredPaperOrder": "后端未接入，模拟订单创建已禁用；真实交易仍保持禁用。",
@@ -871,6 +871,29 @@
       "guarded": "守护模式",
       "ruleByRule": "逐条评估"
     },
+    "labels": {
+      "riskDecision": "风险决策",
+      "riskLevel": "风险等级",
+      "riskLevelMeta": "由规则阻断、预警、市场波动、价差和假设风险计算得出。",
+      "liveTradingDisabled": "实盘交易已禁用",
+      "liveTradingMeta": "任何模拟执行交付前，实盘执行必须保持禁用。",
+      "executionMode": "执行模式",
+      "executionModeMeta": "Risk Firewall 只批准模拟执行。",
+      "recommendedSize": "建议仓位",
+      "riskScore": "风险评分 {{score}}",
+      "marketDataStatus": "市场数据",
+      "marketDataLive": "Ticker、订单簿和 K 线输入可用。",
+      "marketDataUnavailable": "市场数据不可用。风控决策已降级，并使用备用输入。"
+    },
+    "decisions": {
+      "approvedForPaper": "批准进入模拟交易",
+      "approved": "已批准",
+      "conditional": "有条件批准",
+      "rejected": "已拒绝",
+      "pass": "通过",
+      "warning": "预警",
+      "block": "阻断"
+    },
     "metrics": {
       "riskLevel": {
         "title": "风险等级",
@@ -896,10 +919,13 @@
       "accountEquityMeta": "仅用于风险计算的演示账户价值。",
       "riskPerTrade": "单笔风险",
       "riskPerTradeMeta": "计算建议仓位前先应用硬性上限。",
+      "stopLossDistance": "止损距离",
       "suggestedSize": "建议仓位",
       "suggestedSizeMeta": "受波动率与回撤检查影响后下调。",
+      "leverage": "杠杆",
       "maxLoss": "最大损失",
-      "maxLossMeta": "防火墙允许的最坏模拟损失。"
+      "maxLossMeta": "防火墙允许的最坏模拟损失。",
+      "rewardRisk": "收益风险比"
     },
     "rules": {
       "executionMode": {
@@ -957,10 +983,28 @@
       "summary": "该策略可以在受限仓位下进入模拟执行，不授予任何实盘交易权限。",
       "controls": {
         "paperOnly": "执行模式锁定为模拟交易。",
+        "riskCheckId": "模拟交付携带 risk_check_id {{id}}。",
+        "liveDisabled": "实盘交易保持禁用。",
         "sizeCap": "建议仓位封顶为 0.65 ETH。",
         "stop": "止损与失效条件必须随订单票据保留。",
         "audit": "风控决策已保存，用于审计复盘。"
       }
+    },
+    "finalDecision": {
+      "approved": "已批准",
+      "conditional": "有条件批准",
+      "rejected": "已拒绝",
+      "approvedSummary": "该策略可以使用已保存的 risk_check_id 和计算仓位创建模拟订单草稿。",
+      "conditionalSummary": "该策略只能在保留预警和受限仓位的前提下进入模拟执行。",
+      "rejectedSummary": "该策略被 Risk Firewall 规则阻断，不能创建模拟订单。"
+    },
+    "actions": {
+      "rejecting": "正在拒绝..."
+    },
+    "empty": {
+      "disconnectedTitle": "尚未连接风控检查",
+      "disconnectedBody": "请先从回测工作台运行后端风控检查，再查看防火墙决策。",
+      "noRules": "暂无规则评估结果。"
     },
     "externalRisk": {
       "newsRisk": {

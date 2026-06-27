@@ -8,7 +8,7 @@ def risk_blocked_error(risk_check_id: str) -> HTTPException:
             "ok": False,
             "error": {
                 "code": "RISK_BLOCKED",
-                "message": "Risk decision is BLOCK. Paper order creation is not allowed.",
+                "message": "Risk decision blocks paper order creation.",
                 "details": {"risk_check_id": risk_check_id},
             },
         },

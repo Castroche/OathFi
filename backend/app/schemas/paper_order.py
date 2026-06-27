@@ -35,6 +35,7 @@ class PaperOrderRead(SourceMeta):
     take_profit: float | None = None
     is_real_trade: bool
     execution_mode: str
+    risk_check: dict | None = None
     created_at: datetime
 
 

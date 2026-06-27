@@ -75,7 +75,7 @@
     "backendRequiredGeneric": "Backend integration is not connected yet. This action will be available after the API handoff.",
     "backendRequiredGenerateHypothesis": "Backend integration is not connected yet. Hypothesis generation will use POST /api/hypotheses/generate later.",
     "backendRequiredBacktest": "Backend integration is not connected yet. Backtest creation will use POST /api/backtests later.",
-    "backendRequiredRisk": "Backend integration is not connected yet. Risk checks will use POST /api/risk/check later.",
+    "backendRequiredRisk": "Backend integration is not connected yet. Risk checks will use POST /api/risk/checks later.",
     "backendRequiredPaperExecution": "Backend integration is not connected yet. Paper execution will be enabled after risk and order APIs are connected.",
     "backendRequiredAuditReport": "Backend integration is not connected yet. Audit report generation will use POST /api/audit-reports later.",
     "backendRequiredPaperOrder": "Backend not connected. Paper order creation is disabled; live trading remains disabled.",
@@ -875,6 +875,29 @@
       "guarded": "Guarded",
       "ruleByRule": "Rule-by-Rule"
     },
+    "labels": {
+      "riskDecision": "Risk Decision",
+      "riskLevel": "Risk Level",
+      "riskLevelMeta": "Computed from rule blocks, warnings, market volatility, spread, and hypothesis risk.",
+      "liveTradingDisabled": "Live Trading Disabled",
+      "liveTradingMeta": "Live execution must stay disabled before any paper handoff.",
+      "executionMode": "Execution Mode",
+      "executionModeMeta": "Risk Firewall only approves paper execution.",
+      "recommendedSize": "Recommended Size",
+      "riskScore": "Risk Score {{score}}",
+      "marketDataStatus": "Market Data",
+      "marketDataLive": "Ticker, orderbook, and kline inputs are available.",
+      "marketDataUnavailable": "Market data unavailable. Risk decision is downgraded and uses fallback inputs."
+    },
+    "decisions": {
+      "approvedForPaper": "APPROVED FOR PAPER TRADING",
+      "approved": "Approved",
+      "conditional": "Conditional",
+      "rejected": "Rejected",
+      "pass": "Pass",
+      "warning": "Warning",
+      "block": "Blocked"
+    },
     "metrics": {
       "riskLevel": {
         "title": "Risk Level",
@@ -900,10 +923,13 @@
       "accountEquityMeta": "Demo account value used only for risk math.",
       "riskPerTrade": "Risk Per Trade",
       "riskPerTradeMeta": "Hard cap applied before suggested size is calculated.",
+      "stopLossDistance": "Stop-Loss Distance",
       "suggestedSize": "Suggested Position Size",
       "suggestedSizeMeta": "Reduced by volatility and drawdown checks.",
+      "leverage": "Leverage",
       "maxLoss": "Max Loss",
-      "maxLossMeta": "Worst-case simulated loss allowed by the firewall."
+      "maxLossMeta": "Worst-case simulated loss allowed by the firewall.",
+      "rewardRisk": "Reward-to-Risk"
     },
     "rules": {
       "executionMode": {
@@ -961,10 +987,30 @@
       "summary": "The strategy may move to Paper Execution with constrained size. No live-trading permission is granted.",
       "controls": {
         "paperOnly": "Execution mode locked to paper trading.",
+        "riskCheckId": "Paper handoff carries risk_check_id {{id}}.",
+        "liveDisabled": "Live trading remains disabled.",
         "sizeCap": "Suggested size capped at 0.65 ETH.",
         "stop": "Stop and invalidation must remain attached to the order ticket.",
         "audit": "Risk decision is stored for audit review."
-      }
+      },
+      "blocks": "Blocking reasons",
+      "warnings": "Warnings"
+    },
+    "finalDecision": {
+      "approved": "Approved",
+      "conditional": "Conditional",
+      "rejected": "Rejected",
+      "approvedSummary": "The strategy can create a paper order draft using the stored risk_check_id and calculated position size.",
+      "conditionalSummary": "The strategy can move to paper execution only with the recorded warnings and constrained size preserved.",
+      "rejectedSummary": "The strategy is blocked by Risk Firewall rules and cannot create a paper order."
+    },
+    "actions": {
+      "rejecting": "Rejecting..."
+    },
+    "empty": {
+      "disconnectedTitle": "No Risk Check Connected",
+      "disconnectedBody": "Run a backend risk check from Backtest Studio before reviewing the firewall decision.",
+      "noRules": "No rule evaluations are available."
     },
     "externalRisk": {
       "newsRisk": {

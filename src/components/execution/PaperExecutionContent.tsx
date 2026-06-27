@@ -1,4 +1,4 @@
-import { Lock, Radio, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Lock, Radio, ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { StatusPill } from "../common/StatusPill";
 import type { PaperOrder } from "../../api/paperOrders";
@@ -9,6 +9,7 @@ type PaperExecutionContentProps = {
   riskCheck?: RiskCheck;
   blockReason?: string;
   onExecutePaperTrade: () => void;
+  onReturnToAgentLab: () => void;
   isCreatingPaperOrder: boolean;
   canExecutePaperOrder: boolean;
   disabledReason?: string;
@@ -18,11 +19,14 @@ export function PaperExecutionContent({
   paperOrder,
   riskCheck,
   blockReason,
+  onReturnToAgentLab,
   isCreatingPaperOrder,
   disabledReason,
 }: PaperExecutionContentProps) {
   const { t } = useTranslation();
   const reason = blockReason || disabledReason || "Exchange execution is not connected. Simulated paper execution is disabled.";
+  const riskSummary = riskCheck ?? paperOrder?.risk_check;
+  const riskStatus = riskCheck?.decision ?? paperOrder?.risk_check?.status ?? paperOrder?.risk_check?.decision;
 
   return (
     <section className="paper-execution" aria-label={t("paperExecution.aria")}>
@@ -33,6 +37,10 @@ export function PaperExecutionContent({
           <p>{paperOrder ? `${paperOrder.symbol} ${paperOrder.side} ${paperOrder.quantity}` : reason}</p>
         </div>
         <div className="execution-brief__meta">
+          <button className="secondary-action" type="button" onClick={onReturnToAgentLab}>
+            <ArrowLeft size={14} aria-hidden="true" />
+            <span>{t("actions.returnToAgentLab")}</span>
+          </button>
           <StatusPill variant="danger">
             <Lock size={13} aria-hidden="true" />
             {t("status.liveTradingDisabled")}
@@ -59,9 +67,9 @@ export function PaperExecutionContent({
               <ShieldCheck size={15} aria-hidden="true" />
               Risk check
             </span>
-            <StatusPill variant={riskCheck ? "success" : "warning"}>{riskCheck?.decision ?? "disconnected"}</StatusPill>
+            <StatusPill variant={riskSummary ? "success" : "warning"}>{riskStatus ?? "disconnected"}</StatusPill>
           </div>
-          <p>{riskCheck ? riskCheck.id : "No real risk check is connected."}</p>
+          <p>{riskSummary?.id ?? "No real risk check is connected."}</p>
         </section>
 
         {paperOrder ? (

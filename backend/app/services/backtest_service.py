@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from datetime import datetime
 
@@ -84,36 +84,45 @@ class BacktestService:
         )
         db.commit()
         db.refresh(result)
-        return self.to_schema(result)
+        return self.to_schema(db, result)
 
     def get(self, db: Session, backtest_id: str) -> dict | None:
         result = db.get(BacktestResult, backtest_id)
-        return self.to_schema(result) if result else None
+        return self.to_schema(db, result) if result else None
 
     def list(self, db: Session, limit: int = 50) -> list[dict]:
         stmt = select(BacktestResult).order_by(BacktestResult.created_at.desc()).limit(limit)
-        return [self.to_schema(result) for result in db.scalars(stmt)]
+        return [self.to_schema(db, result) for result in db.scalars(stmt)]
 
-    @staticmethod
-    def to_schema(result: BacktestResult) -> dict:
+    def to_schema(self, db: Session, result: BacktestResult) -> dict:
         metrics = result.metrics_json or {}
+        job = db.get(BacktestJob, result.backtest_job_id)
+        hypothesis = db.get(Hypothesis, result.hypothesis_id)
+        strategy_id = getattr(job, "strategy_rule_id", None) if job else None
+        symbol = job.symbol if job else (hypothesis.symbol if hypothesis else "")
+        timeframe = job.timeframe if job else (hypothesis.timeframe if hypothesis else "")
         return {
             "id": result.id,
             "workflow_id": result.workflow_id,
             "hypothesis_id": result.hypothesis_id,
+            "strategy_id": strategy_id or result.backtest_job_id,
+            "symbol": symbol,
+            "timeframe": timeframe,
             "status": result.status,
             "win_rate": result.win_rate,
             "profit_factor": result.profit_factor,
             "expectancy": result.expectancy,
             "max_drawdown": result.max_drawdown,
+            "sample_size": result.trade_count,
             "trade_count": result.trade_count,
             "avg_rr": result.avg_rr,
+            "sharpe": getattr(result, "sharpe_ratio", 0.0),
             "sample_quality": result.sample_quality,
             "equity_curve": result.equity_curve_json,
             "trades": result.trades_json,
-            "methodology": metrics["methodology"],
-            "data_source": metrics["data_source"],
-            "sample_period": metrics["sample_period"],
+            "methodology": metrics.get("methodology", "simplified_demo_kline_replay"),
+            "data_source": metrics.get("data_source", result.source),
+            "sample_period": metrics.get("sample_period", ""),
             "created_at": result.created_at,
             "is_mock": result.is_mock,
             "source": result.source,

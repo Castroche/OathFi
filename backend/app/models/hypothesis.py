@@ -43,3 +43,6 @@ class Hypothesis(Base, TimestampMixin):
     analysis_mode = Column(String, default="ai", nullable=False)
     bias = Column(String, nullable=True)
     suggested_rule_json = Column(JSON, nullable=True)
+    latest_backtest_result_id = Column(String, nullable=True)
+    latest_risk_check_id = Column(String, nullable=True)
+    latest_paper_order_id = Column(String, nullable=True)

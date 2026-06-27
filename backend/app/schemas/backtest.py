@@ -1,4 +1,4 @@
-from datetime import datetime
+﻿from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel
@@ -19,13 +19,18 @@ class BacktestRead(SourceMeta):
     id: str
     workflow_id: str
     hypothesis_id: str
+    strategy_id: str | None = None
+    symbol: str
+    timeframe: str
     status: str
     win_rate: float
     profit_factor: float
     expectancy: float
     max_drawdown: float
+    sample_size: int
     trade_count: int
     avg_rr: float
+    sharpe: float
     sample_quality: str
     equity_curve: list[dict]
     trades: list[dict]

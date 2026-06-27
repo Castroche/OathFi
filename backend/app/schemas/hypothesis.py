@@ -24,9 +24,12 @@ class HypothesisRead(SourceMeta):
     ai_analysis_id: str | None = None
     provider: str
     model: str
+    title: str
     symbol: str
+    side: str
     timeframe: str
     direction: str
+    thesis: str
     entry_condition: str
     invalid_condition: str
     stop_loss: float | None = None
@@ -39,6 +42,9 @@ class HypothesisRead(SourceMeta):
     summary: str
     reasons: list[str]
     warnings: list[str]
+    latest_backtest_result_id: str | None = None
+    latest_risk_check_id: str | None = None
+    latest_paper_order_id: str | None = None
     created_at: datetime
 
 

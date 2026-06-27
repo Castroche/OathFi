@@ -13,18 +13,8 @@ service = PaperExecutionService()
 
 @router.post("", response_model=PaperOrderResponse)
 def create_paper_order(request: PaperOrderCreateRequest, db: Session = Depends(get_db)) -> PaperOrderResponse | JSONResponse:
-    return JSONResponse(
-        status_code=503,
-        content={
-            "ok": False,
-            "error": {
-                "code": "EXECUTION_NOT_CONNECTED",
-                "message": "Exchange execution is not connected. Simulated paper order creation is disabled.",
-            },
-        },
-    )
     risk_check = db.get(RiskCheck, request.risk_check_id)
-    if risk_check and risk_check.decision == "BLOCK":
+    if risk_check and risk_check.decision in {"BLOCK", "REJECTED"}:
         block_reasons = risk_check.block_reasons_json or ["Risk decision is BLOCK."]
         return JSONResponse(
             status_code=409,
@@ -32,7 +22,7 @@ def create_paper_order(request: PaperOrderCreateRequest, db: Session = Depends(g
                 "ok": False,
                 "error": {
                     "code": "RISK_BLOCKED",
-                    "message": "Risk decision is BLOCK. Paper order creation is not allowed.",
+                    "message": "Risk decision blocks paper order creation.",
                     "details": {"risk_check_id": request.risk_check_id, "block_reasons": block_reasons},
                 },
             },

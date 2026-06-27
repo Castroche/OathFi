@@ -77,9 +77,12 @@ export type AgentHypothesis = {
   suggested_rule?: Record<string, unknown> | null;
   symbol: string;
   timeframe: string;
+  title: string;
   label: string;
+  side: string;
   type: string;
   direction: string;
+  thesis: string;
   trigger: string;
   invalidation: string;
   risk: string;
@@ -96,6 +99,9 @@ export type AgentHypothesis = {
   reasons: string[];
   warnings: string[];
   status: string;
+  latest_backtest_result_id?: string | null;
+  latest_risk_check_id?: string | null;
+  latest_paper_order_id?: string | null;
   created_at: string;
   source: string;
   is_mock: boolean;

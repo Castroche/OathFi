@@ -1,4 +1,4 @@
-import { apiJson, apiRequest } from "./client";
+﻿import { apiJson, apiRequest } from "./client";
 
 export type BacktestCreateRequest = {
   hypothesis_id: string;
@@ -13,13 +13,18 @@ export type Backtest = {
   id: string;
   workflow_id: string;
   hypothesis_id: string;
+  strategy_id?: string | null;
+  symbol: string;
+  timeframe: string;
   status: string;
   win_rate: number;
   profit_factor: number;
   expectancy: number;
   max_drawdown: number;
+  sample_size: number;
   trade_count: number;
   avg_rr: number;
+  sharpe: number;
   sample_quality: string;
   equity_curve: Record<string, unknown>[];
   trades: Record<string, unknown>[];

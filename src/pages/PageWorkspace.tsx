@@ -1,21 +1,16 @@
 import {
   ArrowRight,
-  Brain,
-  CheckCircle2,
   Cpu,
   Database,
-  FlaskConical,
-  GitBranch,
-  ListChecks,
   ShieldAlert,
-  SlidersHorizontal,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { ApiError } from "../api/client";
-import { generateHypothesis, type Hypothesis } from "../api/hypotheses";
+import { generateHypothesis } from "../api/hypotheses";
+import { rejectAgentHypothesis } from "../api/agent";
 import { createBacktest, fetchBacktest } from "../api/backtests";
 import { fetchRiskCheck, runRiskCheck } from "../api/risk";
 import { createPaperOrder, fetchPaperOrder } from "../api/paperOrders";
@@ -41,7 +36,6 @@ type PageWorkspaceProps = {
 };
 
 const panelIcons = [Database, Cpu, ShieldAlert] as const;
-const labMetricIcons = [Database, Brain, FlaskConical] as const;
 
 function getModuleKey(routeId: AppRoute["id"]) {
   return `navigation.${routeId}` as const;
@@ -86,7 +80,6 @@ export function PageWorkspace({ route }: PageWorkspaceProps) {
   const riskCheckId = useAppStore((state) => state.riskCheckId);
   const paperOrderId = useAppStore((state) => state.paperOrderId);
   const setWorkflowIds = useAppStore((state) => state.setWorkflowIds);
-  const latestHypothesis = useAppStore((state) => state.latestHypothesis);
   const latestBacktest = useAppStore((state) => state.latestBacktest);
   const latestRiskCheck = useAppStore((state) => state.latestRiskCheck);
   const latestPaperOrder = useAppStore((state) => state.latestPaperOrder);
@@ -147,6 +140,11 @@ export function PageWorkspace({ route }: PageWorkspaceProps) {
     queryFn: ({ signal }) => fetchPaperOrder(params.paperOrderId as string, signal),
     enabled: Boolean(params.paperOrderId),
   });
+  const paperOrderRiskCheckQuery = useQuery({
+    queryKey: ["risk-check", paperOrderQuery.data?.risk_check_id],
+    queryFn: ({ signal }) => fetchRiskCheck(paperOrderQuery.data?.risk_check_id as string, signal),
+    enabled: Boolean(paperOrderQuery.data?.risk_check_id),
+  });
   const auditReportQuery = useQuery({
     queryKey: ["audit-report", params.auditReportId],
     queryFn: ({ signal }) => fetchAuditReport(params.auditReportId as string, signal),
@@ -188,6 +186,18 @@ export function PageWorkspace({ route }: PageWorkspaceProps) {
       });
     }
   }, [backtestId, paperOrderQuery.data, setLatestPaperOrder, setWorkflowIds]);
+
+  useEffect(() => {
+    if (paperOrderRiskCheckQuery.data) {
+      setLatestRiskCheck(paperOrderRiskCheckQuery.data);
+      setWorkflowIds({
+        workflowId: paperOrderRiskCheckQuery.data.workflow_id,
+        riskCheckId: paperOrderRiskCheckQuery.data.id,
+        backtestId: paperOrderRiskCheckQuery.data.backtest_id ?? backtestId,
+        hypothesisId: paperOrderRiskCheckQuery.data.hypothesis_id,
+      });
+    }
+  }, [backtestId, paperOrderRiskCheckQuery.data, setLatestRiskCheck, setWorkflowIds]);
 
   useEffect(() => {
     if (auditReportQuery.data) {
@@ -288,9 +298,6 @@ export function PageWorkspace({ route }: PageWorkspaceProps) {
       return runRiskCheck({
         hypothesis_id: currentHypothesisId,
         backtest_id: currentBacktestId,
-        account_equity: 10000,
-        risk_per_trade: 0.011,
-        position_size: tradeLevels.quantity,
         entry_price: tradeLevels.entryPrice,
         stop_loss: tradeLevels.stopLoss,
         take_profit: tradeLevels.takeProfit,
@@ -300,9 +307,9 @@ export function PageWorkspace({ route }: PageWorkspaceProps) {
       setActionNotice(null);
       setWorkflowIds({ workflowId: data.workflow_id, riskCheckId: data.id, hypothesisId: data.hypothesis_id, backtestId: data.backtest_id ?? backtestId });
       setLatestRiskCheck(data);
-      setLastRiskBlockReason(data.decision === "BLOCK" ? data.block_reasons.join("; ") : undefined);
+      setLastRiskBlockReason(data.decision === "BLOCK" || data.decision === "REJECTED" ? data.block_reasons.join("; ") : undefined);
       showToast({
-        variant: data.decision === "BLOCK" ? "warning" : "success",
+        variant: data.decision === "BLOCK" || data.decision === "REJECTED" ? "warning" : "success",
         message: workflowMessage(i18n.language, `风控检查完成：${data.decision}`, `Risk check completed: ${data.decision}`),
       });
       navigate(`/risk-firewall/${data.id}`);
@@ -329,10 +336,10 @@ export function PageWorkspace({ route }: PageWorkspaceProps) {
         symbol: activeSymbol,
         side: "buy",
         order_type: "limit",
-        price: tradeLevels.entryPrice,
-        quantity: tradeLevels.quantity,
-        stop_loss: tradeLevels.stopLoss,
-        take_profit: tradeLevels.takeProfit,
+        price: latestRiskCheck?.entry_price ?? tradeLevels.entryPrice,
+        quantity: latestRiskCheck?.position_size ?? tradeLevels.quantity,
+        stop_loss: latestRiskCheck?.stop_loss ?? tradeLevels.stopLoss,
+        take_profit: latestRiskCheck?.take_profit ?? tradeLevels.takeProfit,
       });
     },
     onSuccess: (data) => {
@@ -352,6 +359,30 @@ export function PageWorkspace({ route }: PageWorkspaceProps) {
         setLastRiskBlockReason(message);
       }
       showToast({ variant: "error", message });
+    },
+  });
+
+  const rejectStrategyMutation = useMutation({
+    mutationFn: () => {
+      const currentHypothesisId = latestRiskCheck?.hypothesis_id ?? params.hypothesisId ?? hypothesisId;
+      if (!currentHypothesisId) {
+        throw new ApiError(
+          workflowMessage(i18n.language, "璇峰厛閫夋嫨涓€涓氦鏄撳亣璁俱€?", "Select a hypothesis before rejecting the strategy."),
+          "MISSING_HYPOTHESIS",
+        );
+      }
+      return rejectAgentHypothesis(currentHypothesisId);
+    },
+    onSuccess: (data) => {
+      setActionNotice(null);
+      showToast({
+        variant: "warning",
+        message: workflowMessage(i18n.language, `绛栫暐宸叉嫆缁濓細${data.id}`, `Strategy rejected: ${data.id}`),
+      });
+      navigate(`/agent-lab/${data.id}`);
+    },
+    onError: (error) => {
+      showToast({ variant: "error", message: errorMessage(error) });
     },
   });
 
@@ -415,9 +446,10 @@ export function PageWorkspace({ route }: PageWorkspaceProps) {
     createBacktestMutation.isPending ||
     runRiskCheckMutation.isPending ||
     createPaperOrderMutation.isPending ||
+    rejectStrategyMutation.isPending ||
     createAuditReportMutation.isPending ||
     saveSettingsMutation.isPending;
-  const isRiskBlocked = latestRiskCheck?.decision === "BLOCK";
+  const isRiskBlocked = latestRiskCheck?.decision === "BLOCK" || latestRiskCheck?.decision === "REJECTED";
 
   const headerLabel = (() => {
     if (generateHypothesisMutation.isPending) return t("loadingStates.generating");
@@ -426,6 +458,7 @@ export function PageWorkspace({ route }: PageWorkspaceProps) {
     if (createPaperOrderMutation.isPending) return t("loadingStates.creatingOrder");
     if (createAuditReportMutation.isPending) return workflowMessage(i18n.language, "正在生成审计报告...", "Generating Audit Report...");
     if (saveSettingsMutation.isPending) return workflowMessage(i18n.language, "正在保存设置...", "Saving Settings...");
+    if (isRiskFirewall && !latestRiskCheck) return t("riskFirewall.empty.disconnectedTitle");
     return t(headerCtaKey);
   })();
 
@@ -476,7 +509,7 @@ export function PageWorkspace({ route }: PageWorkspaceProps) {
             <h1>{t(route.titleKey)}</h1>
             <p>{t(route.summaryKey)}</p>
           </div>
-          <button className="primary-action" type="button" disabled={headerPending || (isRiskFirewall && isRiskBlocked)} onClick={handleHeaderAction}>
+          <button className="primary-action" type="button" disabled={headerPending || (isRiskFirewall && (!latestRiskCheck || isRiskBlocked))} onClick={handleHeaderAction}>
             <span>{headerLabel}</span>
             <ArrowRight size={15} aria-hidden="true" />
           </button>
@@ -506,12 +539,22 @@ export function PageWorkspace({ route }: PageWorkspaceProps) {
       ) : isAgentLab ? (
         <StructuredAgentLabContent />
       ) : isBacktestStudio ? (
-        <BacktestStudioContent backtest={latestBacktest} />
+        <BacktestStudioContent
+          backtest={latestBacktest}
+          onSendToRiskFirewall={() => runRiskCheckMutation.mutate()}
+          isSendingToRiskFirewall={runRiskCheckMutation.isPending}
+        />
       ) : isRiskFirewall ? (
         <RiskFirewallContent
           riskCheck={latestRiskCheck}
           onSendToPaperExecution={() => createPaperOrderMutation.mutate()}
+          onRejectStrategy={() => rejectStrategyMutation.mutate()}
+          onReturnToAgentLab={() => {
+            const targetHypothesisId = latestRiskCheck?.hypothesis_id ?? hypothesisId;
+            navigate(targetHypothesisId ? `/agent-lab/${targetHypothesisId}` : "/agent-lab");
+          }}
           isSendingPaperOrder={createPaperOrderMutation.isPending}
+          isRejectingStrategy={rejectStrategyMutation.isPending}
         />
       ) : isPaperExecution ? (
         <PaperExecutionContent
@@ -519,6 +562,10 @@ export function PageWorkspace({ route }: PageWorkspaceProps) {
           riskCheck={latestRiskCheck}
           blockReason={lastRiskBlockReason}
           onExecutePaperTrade={() => createPaperOrderMutation.mutate()}
+          onReturnToAgentLab={() => {
+            const targetHypothesisId = latestPaperOrder?.hypothesis_id ?? latestRiskCheck?.hypothesis_id ?? hypothesisId;
+            navigate(targetHypothesisId ? `/agent-lab/${targetHypothesisId}` : "/agent-lab");
+          }}
           isCreatingPaperOrder={createPaperOrderMutation.isPending}
           canExecutePaperOrder={Boolean(riskCheckId) && !isRiskBlocked}
           disabledReason={
@@ -564,264 +611,5 @@ export function PageWorkspace({ route }: PageWorkspaceProps) {
         </section>
       )}
     </div>
-  );
-}
-
-type AgentLabContentProps = {
-  hypothesis?: Hypothesis;
-  onSendToBacktest: () => void;
-  isSendingBacktest: boolean;
-};
-
-function AgentLabContent({ hypothesis, onSendToBacktest, isSendingBacktest }: AgentLabContentProps) {
-  const { t } = useTranslation();
-  const activeSymbol = useMarketDataStore((state) => state.activeSymbol);
-  const activeTimeframe = useMarketDataStore((state) => state.activeTimeframe);
-  const connectionStatus = useMarketDataStore((state) => state.connectionStatus);
-  const dataSource = useMarketDataStore((state) => state.dataSource);
-  const generatedFields = hypothesis
-    ? [
-        ["Provider", hypothesis.provider],
-        ["Model", hypothesis.model],
-        ["Direction", hypothesis.direction],
-        ["Confidence", `${hypothesis.confidence}/100`],
-        ["Feasibility", `${hypothesis.feasibility}/100`],
-        ["Risk", `${hypothesis.risk}/100`],
-        ["Entry", hypothesis.entry_condition],
-        ["Invalid", hypothesis.invalid_condition],
-      ]
-    : [];
-
-  return (
-    <section className="agent-lab" aria-label={t("agentLab.aria")}>
-      <div className="agent-lab__brief">
-        <div className="research-brief">
-          <span className="research-brief__eyebrow">{t("agentLab.sections.researchTicket")}</span>
-          <h2>{hypothesis ? hypothesis.summary : t("feedback.backendRequiredGenerateHypothesis")}</h2>
-          <p>{hypothesis ? `${hypothesis.provider}/${hypothesis.model}` : t("feedback.dataSourceCheckLocal")}</p>
-          <div className="research-brief__meta" aria-label={t("agentLab.sections.briefMeta")}>
-            <span>{activeSymbol}</span>
-            <span>HTX</span>
-            <span>{activeTimeframe}</span>
-            <StatusPill variant={connectionStatus === "live" ? "success" : "danger"}>{connectionStatus}</StatusPill>
-          </div>
-        </div>
-
-        <div className="agent-lab__metrics">
-          {[
-            { id: "market", title: "Market source", value: dataSource, meta: connectionStatus, variant: connectionStatus === "live" ? "success" : "danger" },
-            { id: "ai", title: "AI provider", value: hypothesis?.provider ?? "disconnected", meta: hypothesis?.model ?? "No generated hypothesis", variant: hypothesis ? "success" : "warning" },
-            { id: "risk", title: "AI confidence", value: hypothesis ? `${hypothesis.confidence}/100` : "--", meta: hypothesis ? "Real provider response" : "Unavailable", variant: hypothesis ? "info" : "warning" },
-          ].map((metric, index) => {
-            const MetricIcon = labMetricIcons[index % labMetricIcons.length];
-            return (
-              <article className="lab-metric" key={metric.id}>
-                <span className={`lab-metric__icon command-state--${metric.variant}`}>
-                  <MetricIcon size={15} aria-hidden="true" />
-                </span>
-                <div>
-                  <h3>{metric.title}</h3>
-                  <strong>{metric.value}</strong>
-                  <p>{metric.meta}</p>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="agent-lab__grid">
-        <section className="lab-panel lab-panel--context" aria-labelledby="lab-context">
-          <div className="lab-panel__heading">
-            <span>
-              <Database size={15} aria-hidden="true" />
-              {t("agentLab.sections.context")}
-            </span>
-            <StatusPill variant="info">{t("agentLab.status.structured")}</StatusPill>
-          </div>
-          <div className="context-stack">
-            <article className={`context-row context-row--${connectionStatus === "live" ? "success" : "danger"}`}>
-              <span>Market</span>
-              <strong>{activeSymbol}</strong>
-              <p>{connectionStatus === "live" ? `Live HTX WebSocket via ${dataSource}` : "Market stream is not connected."}</p>
-            </article>
-            <article className={`context-row context-row--${hypothesis ? "success" : "warning"}`}>
-              <span>Hypothesis</span>
-              <strong>{hypothesis?.id ?? "disconnected"}</strong>
-              <p>{hypothesis ? "Loaded from backend AI provider response." : "No backend hypothesis is connected yet."}</p>
-            </article>
-          </div>
-        </section>
-
-        <section className="lab-panel lab-panel--evidence" aria-labelledby="lab-evidence">
-          <div className="lab-panel__heading">
-            <span id="lab-evidence">
-              <ListChecks size={15} aria-hidden="true" />
-              {t("agentLab.sections.evidenceMatrix")}
-            </span>
-            <StatusPill variant="success">{t("agentLab.status.evidenceMode")}</StatusPill>
-          </div>
-          <div className="evidence-table">
-            <div className="evidence-table__header">
-              <span>{t("agentLab.labels.signal")}</span>
-              <span>{t("agentLab.labels.source")}</span>
-              <span>{t("agentLab.labels.weight")}</span>
-            </div>
-            {hypothesis ? (
-              <article className="evidence-row evidence-row--success">
-                <div>
-                  <strong>{hypothesis.summary}</strong>
-                  <p>{hypothesis.reasons.join("; ") || "No reasons returned."}</p>
-                </div>
-                <span>{hypothesis.provider}</span>
-                <StatusPill variant="success">{hypothesis.confidence}/100</StatusPill>
-              </article>
-            ) : (
-              <article className="evidence-row evidence-row--warning">
-                <div>
-                  <strong>Disconnected</strong>
-                  <p>No real AI evidence is available until a backend provider returns a hypothesis.</p>
-                </div>
-                <span>backend</span>
-                <StatusPill variant="warning">--</StatusPill>
-              </article>
-            )}
-          </div>
-        </section>
-
-        <section className="lab-panel lab-panel--reasoning" aria-labelledby="lab-reasoning">
-          <div className="lab-panel__heading">
-            <span id="lab-reasoning">
-              <Brain size={15} aria-hidden="true" />
-              {t("agentLab.sections.reasoningTrace")}
-            </span>
-            <StatusPill variant="warning">{t("agentLab.status.noChat")}</StatusPill>
-          </div>
-          <div className="reasoning-rail">
-            {(hypothesis?.reasons.length ? hypothesis.reasons : ["No connected AI reasoning yet."]).map((reason, index) => (
-              <article className={`reasoning-step reasoning-step--${hypothesis ? "success" : "warning"}`} key={`${reason}-${index}`}>
-                <span className="reasoning-step__index">{index + 1}</span>
-                <div>
-                  <header>
-                    <h3>{hypothesis ? "Provider reason" : "Disconnected"}</h3>
-                    <StatusPill variant={hypothesis ? "success" : "warning"}>{hypothesis ? hypothesis.provider : "unavailable"}</StatusPill>
-                  </header>
-                  <p>{reason}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="lab-panel lab-panel--hypotheses" aria-labelledby="lab-hypotheses">
-          <div className="lab-panel__heading">
-            <span id="lab-hypotheses">
-              <FlaskConical size={15} aria-hidden="true" />
-              {t("agentLab.sections.hypothesisQueue")}
-            </span>
-            <StatusPill variant={hypothesis ? "success" : "warning"}>{hypothesis ? "connected" : "disconnected"}</StatusPill>
-          </div>
-          <div className="hypothesis-stack">
-            {hypothesis ? (
-              <article className="hypothesis-card hypothesis-card--success">
-                <header>
-                  <span>AI</span>
-                  <div>
-                    <h3>{hypothesis.summary}</h3>
-                    <p>
-                      {hypothesis.symbol} - {hypothesis.timeframe} - {hypothesis.provider}/{hypothesis.model}
-                    </p>
-                  </div>
-                  <strong>{hypothesis.confidence}</strong>
-                </header>
-                <dl>
-                  {generatedFields.map(([label, value]) => (
-                    <div key={label}>
-                      <dt>{label}</dt>
-                      <dd>{value}</dd>
-                    </div>
-                  ))}
-                </dl>
-                <div className="ai-result-lists">
-                  <strong>Reasons</strong>
-                  <ul>
-                    {hypothesis.reasons.map((reason) => (
-                      <li key={reason}>{reason}</li>
-                    ))}
-                  </ul>
-                  <strong>Warnings</strong>
-                  <ul>
-                    {hypothesis.warnings.map((warning) => (
-                      <li key={warning}>{warning}</li>
-                    ))}
-                  </ul>
-                </div>
-              </article>
-            ) : (
-              <article className="hypothesis-card hypothesis-card--warning">
-                <header>
-                  <span>--</span>
-                  <div>
-                    <h3>Disconnected</h3>
-                    <p>No real hypothesis has been generated by a configured AI provider.</p>
-                  </div>
-                  <strong>--</strong>
-                </header>
-              </article>
-            )}
-          </div>
-        </section>
-
-        <section className="lab-panel lab-panel--rules" aria-labelledby="lab-rules">
-          <div className="lab-panel__heading">
-            <span id="lab-rules">
-              <SlidersHorizontal size={15} aria-hidden="true" />
-              {t("agentLab.sections.rulePacket")}
-            </span>
-            <button className="secondary-action" type="button" disabled={isSendingBacktest} onClick={onSendToBacktest}>
-              <span>{isSendingBacktest ? t("loadingStates.backtesting") : t("actions.sendToBacktest")}</span>
-              <ArrowRight size={14} aria-hidden="true" />
-            </button>
-          </div>
-          <div className="rule-packet">
-            <div className="rule-packet__row">
-              <span>Backtest</span>
-              <strong>disconnected</strong>
-              <StatusPill variant="warning">unavailable</StatusPill>
-            </div>
-            <div className="rule-packet__row">
-              <span>Market data</span>
-              <strong>{connectionStatus}</strong>
-              <StatusPill variant={connectionStatus === "live" ? "success" : "danger"}>{dataSource}</StatusPill>
-            </div>
-          </div>
-        </section>
-
-        <section className="lab-panel lab-panel--handoff" aria-labelledby="lab-handoff">
-          <div className="lab-panel__heading">
-            <span id="lab-handoff">
-              <GitBranch size={15} aria-hidden="true" />
-              {t("agentLab.sections.handoff")}
-            </span>
-            <StatusPill variant="info">{t("agentLab.status.auditReady")}</StatusPill>
-          </div>
-          <div className="handoff-list">
-            {[
-              { title: "Hypothesis", meta: hypothesis?.id ?? "not connected", complete: Boolean(hypothesis) },
-              { title: "Backtest", meta: "not connected", complete: false },
-              { title: "Risk check", meta: "not connected", complete: false },
-            ].map((item) => (
-              <article className={item.complete ? "handoff-item is-complete" : "handoff-item"} key={item.title}>
-                <CheckCircle2 size={16} aria-hidden="true" />
-                <div>
-                  <h3>{item.title}</h3>
-                  <p>{item.meta}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      </div>
-    </section>
   );
 }

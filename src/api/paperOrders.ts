@@ -1,4 +1,5 @@
 import { apiJson, apiRequest } from "./client";
+import type { RiskCheck } from "./risk";
 
 export type PaperOrderCreateRequest = {
   hypothesis_id: string;
@@ -29,6 +30,7 @@ export type PaperOrder = {
   take_profit?: number | null;
   is_real_trade: boolean;
   execution_mode: string;
+  risk_check?: Partial<RiskCheck> | null;
   created_at: string;
   is_mock: boolean;
   source: string;

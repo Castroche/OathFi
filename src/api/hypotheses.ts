@@ -16,9 +16,12 @@ export type Hypothesis = {
   ai_analysis_id?: string | null;
   provider: string;
   model: string;
+  title: string;
   symbol: string;
+  side: string;
   timeframe: string;
   direction: string;
+  thesis: string;
   entry_condition: string;
   invalid_condition: string;
   stop_loss?: number | null;
@@ -31,6 +34,9 @@ export type Hypothesis = {
   summary: string;
   reasons: string[];
   warnings: string[];
+  latest_backtest_result_id?: string | null;
+  latest_risk_check_id?: string | null;
+  latest_paper_order_id?: string | null;
   created_at: string;
   is_mock: boolean;
   source: string;
