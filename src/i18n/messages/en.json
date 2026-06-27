@@ -1,0 +1,1726 @@
+{
+  "common": {
+    "stageOne": "App Shell",
+    "stageTwo": "Command Center",
+    "stageThree": "Market Monitor",
+    "stageFour": "Agent Lab",
+    "stageFive": "Backtest Studio",
+    "stageSix": "Risk Firewall",
+    "stageSeven": "Paper Execution",
+    "stageEight": "Audit Reports",
+    "stageNine": "HTX Ecosystem",
+    "stageSettings": "Settings",
+    "version": "Version {{version}}"
+  },
+  "brand": {
+    "name": "OathFi",
+    "subtitle": "HTX Ecosystem AI Trading Research & Risk Agent"
+  },
+  "language": {
+    "switcher": "Language switcher",
+    "englishShort": "EN",
+    "chineseShort": "ZH",
+    "english": "English",
+    "chinese": "Simplified Chinese"
+  },
+  "navigation": {
+    "label": "Primary navigation",
+    "commandCenter": "Command Center",
+    "marketMonitor": "Market Monitor",
+    "agentLab": "Agent Lab",
+    "backtestStudio": "Backtest Studio",
+    "riskFirewall": "Risk Firewall",
+    "paperExecution": "Paper Execution",
+    "auditReports": "Audit Reports",
+    "htxEcosystem": "HTX Ecosystem",
+    "settings": "Settings"
+  },
+  "topBar": {
+    "tickerStrip": "Market ticker strip",
+    "activeStream": "Active stream: {{source}}",
+    "watchlistTickers": "Watchlist tickers: {{source}}",
+    "symbolRegistry": "Symbol registry: {{state}}",
+    "publicMarketData": "Public market data: {{state}}",
+    "lightweightMarket": "Lightweight market"
+  },
+  "workflow": {
+    "label": "Trading research workflow",
+    "marketEvent": "Market Intelligence",
+    "aiHypothesis": "Live Judgment / AI Hypothesis",
+    "backtest": "Backtest",
+    "riskCheck": "Risk Check",
+    "paperTrade": "Paper Trade",
+    "review": "Review"
+  },
+  "status": {
+    "htxApiConnected": "HTX API Connected",
+    "agentRunning": "Agent Running",
+    "riskModeGuarded": "Risk Mode Guarded",
+    "paperTradingOnly": "Paper Trading Only",
+    "liveTradingDisabled": "Live Trading Disabled",
+    "allSystemsOperational": "All Systems Operational",
+    "marketDataPublic": "Public market data stream",
+    "safetyMode": "Safety mode",
+    "noRealFunds": "No real funds involved.",
+    "roadmap": "Roadmap",
+    "planned": "Planned",
+    "active": "Active",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "mockData": "Mock Data",
+    "dataSourceNotConnected": "Data Source Not Connected",
+    "staticMockSnapshot": "Static Mock Snapshot"
+  },
+  "feedback": {
+    "backendRequiredGeneric": "Backend integration is not connected yet. This action will be available after the API handoff.",
+    "backendRequiredGenerateHypothesis": "Backend integration is not connected yet. Hypothesis generation will use POST /api/hypotheses/generate later.",
+    "backendRequiredBacktest": "Backend integration is not connected yet. Backtest creation will use POST /api/backtests later.",
+    "backendRequiredRisk": "Backend integration is not connected yet. Risk checks will use POST /api/risk/check later.",
+    "backendRequiredPaperExecution": "Backend integration is not connected yet. Paper execution will be enabled after risk and order APIs are connected.",
+    "backendRequiredAuditReport": "Backend integration is not connected yet. Audit report generation will use POST /api/audit-reports later.",
+    "backendRequiredPaperOrder": "Backend not connected. Paper order creation is disabled; live trading remains disabled.",
+    "paperExecutionBlocked": "Paper execution is blocked by the current hard-block decision.",
+    "strategyRejectedLocal": "Strategy rejection is recorded locally for this demo view; backend audit logging is not connected yet.",
+    "auditLogVisible": "Audit log is visible in this page. Backend replay will be connected later.",
+    "roadmapPlanned": "HTX ecosystem items are roadmap-only and do not trigger backend actions in this round.",
+    "settingsLocalOnly": "Settings changes are local to this frontend demo until the settings API is connected.",
+    "dataSourceCheckLocal": "Data source status is shown from the current frontend store. Backend health checks are not connected yet."
+  },
+  "actions": {
+    "startDemoFlow": "Start Demo Flow",
+    "generateHypothesis": "Generate Hypothesis",
+    "sendToBacktest": "Send to Backtest",
+    "sendToRiskFirewall": "Send to Risk Firewall",
+    "sendToPaperExecution": "Send to Paper Execution",
+    "generateReviewReport": "Generate Review Report",
+    "openAuditLog": "Open Audit Log",
+    "viewRoadmap": "View Roadmap",
+    "saveSettings": "Save Settings",
+    "copySummary": "Copy Summary",
+    "summaryCopied": "Summary Copied",
+    "rejectStrategy": "Reject Strategy",
+    "returnToAgentLab": "Return to Agent Lab",
+    "executePaperTrade": "Execute Paper Trade"
+  },
+  "tables": {
+    "symbol": "Symbol",
+    "rule": "Rule",
+    "threshold": "Threshold",
+    "actual": "Actual",
+    "status": "Status",
+    "notes": "Notes",
+    "price": "Price",
+    "size": "Size",
+    "total": "Total",
+    "time": "Time",
+    "side": "Side",
+    "entry": "Entry",
+    "exit": "Exit",
+    "pnl": "PnL",
+    "rr": "R/R"
+  },
+  "pages": {
+    "commandCenter": {
+      "title": "Command Center",
+      "summary": "Global operating surface for market events, agent status, risk posture, and demo workflow entry."
+    },
+    "marketMonitor": {
+      "title": "Market Monitor",
+      "summary": "HTX market-data workspace for charts, order book depth, indicators, and event detection."
+    },
+    "agentLab": {
+      "title": "Agent Lab",
+      "summary": "Structured research workspace for market context, reasoning, hypotheses, and strategy rules."
+    },
+    "backtestStudio": {
+      "title": "Backtest Studio",
+      "summary": "Validation workspace for strategy rules, historical metrics, verdicts, and trade lists."
+    },
+    "riskFirewall": {
+      "title": "Risk Firewall",
+      "summary": "Institutional risk-review layer for position sizing, rule checks, and paper-trading approval."
+    },
+    "paperExecution": {
+      "title": "Paper Execution",
+      "summary": "Controlled simulated execution surface for order preview, positions, and execution logs."
+    },
+    "auditReports": {
+      "title": "Audit Reports",
+      "summary": "Review layer for market event, hypothesis, backtest, risk decision, execution, and final notes."
+    },
+    "htxEcosystem": {
+      "title": "HTX Ecosystem",
+      "summary": "Integration and roadmap view for HTX market data, AI compute, and future utility tiers."
+    },
+    "settings": {
+      "title": "Settings",
+      "summary": "Configuration surface for data source, agent behavior, risk controls, demo mode, and language."
+    }
+  },
+  "panels": {
+    "marketPulse": "Market Pulse",
+    "agentStatus": "Agent Status",
+    "riskSummary": "Risk Summary",
+    "klineChart": "ETH/USDT K-line",
+    "orderBook": "Order Book",
+    "indicators": "Indicators",
+    "marketContext": "Market Context",
+    "agentReasoning": "Agent Reasoning",
+    "hypotheses": "Hypothesis Queue",
+    "strategyRule": "Strategy Rule",
+    "backtestResult": "Backtest Result",
+    "equityCurve": "Equity Curve",
+    "riskDecision": "Risk Decision",
+    "positionSizing": "Position Sizing",
+    "ruleEvaluation": "Rule Evaluation",
+    "orderTicket": "Order Ticket",
+    "executionPreview": "Execution Preview",
+    "executionLog": "Execution Log",
+    "reportList": "Report List",
+    "reportDetail": "Report Detail",
+    "auditTimeline": "Audit Timeline",
+    "htxApi": "HTX API Integration",
+    "aiCompute": "AI Compute Layer",
+    "htxUtility": "$HTX Utility Model",
+    "dataSource": "Data Source",
+    "agentSettings": "Agent Settings",
+    "riskSettings": "Risk Settings",
+    "demoMode": "Demo Mode",
+    "languageSettings": "Language Settings"
+  },
+  "panelValues": {
+    "marketPulse": "ETH +2.35%",
+    "agentStatus": "Running",
+    "riskSummary": "Guarded",
+    "klineChart": "MA20 / MA50 / MA200",
+    "orderBook": "Spread 0.018%",
+    "indicators": "RSI 58.4",
+    "marketContext": "ETH/USDT",
+    "agentReasoning": "Evidence Mode",
+    "hypotheses": "3 Drafts",
+    "strategyRule": "Breakout Rule",
+    "backtestResult": "PF 1.84",
+    "equityCurve": "+12.6%",
+    "riskDecision": "PAPER ONLY",
+    "positionSizing": "0.65 ETH",
+    "ruleEvaluation": "7 PASS / 1 WARNING",
+    "orderTicket": "Limit Preview",
+    "executionPreview": "Simulated Fill",
+    "executionLog": "Audit Ready",
+    "reportList": "5 Reports",
+    "reportDetail": "Traceable",
+    "auditTimeline": "6 Records",
+    "htxApi": "Connected",
+    "aiCompute": "Configurable",
+    "htxUtility": "Planned",
+    "dataSource": "Public Market Data",
+    "agentSettings": "Evidence Mode",
+    "riskSettings": "Guarded Mode",
+    "demoMode": "Enabled",
+    "languageSettings": "Persistent"
+  },
+  "panelMeta": {
+    "marketPulse": "Dense market snapshot prepared for the Command Center.",
+    "agentStatus": "Agent loop is visible in the global shell and ready for later workflow wiring.",
+    "riskSummary": "Default mode stays guarded with live trading disabled.",
+    "klineChart": "Chart surface belongs to the Market Monitor module.",
+    "orderBook": "Depth, spread, imbalance, and liquidity score will attach here.",
+    "indicators": "RSI, MACD, ATR, VWAP, and trend scoring belong in this panel.",
+    "marketContext": "Selected symbol and market inputs feed structured hypothesis generation.",
+    "agentReasoning": "The agent area is prepared as a research console, not a chat window.",
+    "hypotheses": "Trigger, invalidation, risk, and backtest rule cards will land here.",
+    "strategyRule": "Entry, exit, and risk controls are reserved for backtest validation.",
+    "backtestResult": "Core metrics will include win rate, profit factor, expected value, drawdown, and trades.",
+    "equityCurve": "The chart area is reserved for equity, drawdown, and distribution visuals.",
+    "riskDecision": "Default decision remains approved for paper trading only.",
+    "positionSizing": "Sizing will remain constrained by risk controls and demo mode.",
+    "ruleEvaluation": "Rule-by-rule checks will use PASS, WARNING, and FAIL states.",
+    "orderTicket": "Paper order fields will remain simulated by default.",
+    "executionPreview": "Execution preview will never imply real live execution.",
+    "executionLog": "Timestamps and audit records will attach to simulated fills.",
+    "reportList": "Audit reports will summarize the full decision path.",
+    "reportDetail": "Each detail view will cover event, hypothesis, backtest, risk, execution, and review.",
+    "auditTimeline": "The review sequence mirrors the workflow stepper.",
+    "htxApi": "Ticker, kline, order book, and trades connections are represented as public data integrations.",
+    "aiCompute": "Provider settings remain demo, local, or configurable until integration.",
+    "htxUtility": "Future tiers are shown as roadmap, not completed commerce.",
+    "dataSource": "Public HTX market data is the default source.",
+    "agentSettings": "Agent output stays structured, auditable, and constrained to research workflow fields.",
+    "riskSettings": "Live trading remains disabled by default.",
+    "demoMode": "Demo mode keeps orders, balances, and fills inside the simulator.",
+    "languageSettings": "The selected language is stored locally and restored after refresh."
+  },
+  "commandCenter": {
+    "name": "Command Center",
+    "aria": "Command Center closed-loop overview",
+    "badges": {
+      "demoFeed": "Demo Feed",
+      "paperOnly": "Paper Only"
+    },
+    "labels": {
+      "trigger": "Trigger",
+      "invalidation": "Invalidation",
+      "risk": "Risk",
+      "spread": "Spread 0.018%"
+    },
+    "status": {
+      "success": "PASS",
+      "warning": "CHECK",
+      "info": "INFO",
+      "danger": "ALERT",
+      "neutral": "LOG"
+    },
+    "sections": {
+      "activeMarketEvents": "Active Market Events",
+      "mainOpportunity": "Live Decision Card",
+      "marketSnapshot": "Mini Chart / Order Book Snapshot",
+      "miniChart": "ETH momentum mini chart",
+      "agentDecisions": "Recent Agent Decisions / Audit Trail",
+      "auditTrail": "Audit trail"
+    },
+    "metrics": {
+      "marketPulse": {
+        "title": "Market Pulse",
+        "meta": "ETH leads the current HTX demo event cluster."
+      },
+      "agentStatus": {
+        "title": "Agent Status",
+        "value": "Running",
+        "meta": "Research loop is ready to turn events into hypotheses."
+      },
+      "riskSummary": {
+        "title": "Risk Summary",
+        "value": "Guarded",
+        "meta": "Live trading remains disabled; only paper flow is available."
+      },
+      "activeEvents": {
+        "title": "Active Market Events",
+        "meta": "Three symbol-level events are queued for review."
+      }
+    },
+    "loop": {
+      "aria": "OathFi market to audit loop",
+      "market": {
+        "title": "Market",
+        "meta": "Public HTX data detects the move and liquidity context."
+      },
+      "agent": {
+        "title": "Agent",
+        "value": "3 Hypotheses",
+        "meta": "Evidence mode proposes testable trade ideas."
+      },
+      "risk": {
+        "title": "Risk",
+        "value": "Paper Only",
+        "meta": "Firewall constrains sizing, max loss, and execution mode."
+      },
+      "opportunity": {
+        "title": "Opportunity",
+        "meta": "One lead setup is ready for hypothesis generation."
+      },
+      "audit": {
+        "title": "Audit",
+        "value": "6-Record Trace",
+        "meta": "Every decision can be reviewed from event to paper outcome."
+      }
+    },
+    "marketEvents": {
+      "ethBreakout": {
+        "title": "Breakout with rising volume",
+        "meta": "MA20 reclaim, bid depth expansion, and momentum confirmation."
+      },
+      "btcVolatility": {
+        "title": "Volatility guard active",
+        "meta": "ATR expansion asks the agent to reduce confidence."
+      },
+      "htxLiquidity": {
+        "title": "Liquidity watch",
+        "meta": "Thin book conditions are marked before any hypothesis."
+      }
+    },
+    "opportunity": {
+      "title": "Breakout continuation after retest",
+      "thesis": "Agent sees a conditional ETH setup, but it must pass backtest and risk firewall before paper execution.",
+      "trigger": "Close holds above MA20 with bid depth above demo threshold.",
+      "invalidation": "Break below the retest zone or volume fades for two checks.",
+      "risk": "Max loss stays capped; live trading remains disabled.",
+      "action": "Generate Hypothesis"
+    },
+    "decisions": {
+      "hypothesis": {
+        "title": "Hypothesis drafted",
+        "meta": "Trigger, invalidation, risk, and backtest rule prepared."
+      },
+      "backtest": {
+        "title": "Backtest signal accepted",
+        "meta": "Profit factor and drawdown stay inside demo thresholds."
+      },
+      "risk": {
+        "title": "Risk firewall limited size",
+        "meta": "Decision stays approved for paper trading only."
+      }
+    },
+    "audit": {
+      "market": {
+        "title": "Market Event",
+        "meta": "Source, symbol, and timestamp captured."
+      },
+      "agent": {
+        "title": "Agent Hypothesis",
+        "meta": "Reasoning path and rules attached."
+      },
+      "risk": {
+        "title": "Risk Firewall",
+        "meta": "Rule checks and paper decision stored."
+      },
+      "review": {
+        "title": "Review",
+        "meta": "Report can explain the full decision path."
+      }
+    }
+  },
+  "dashboard": {
+    "sections": {
+      "statusBar": "Command Center status bar",
+      "ethOneHour": "ETH/USDT 1H K-line / Order Book"
+    },
+    "labels": {
+      "activeEvents": "active events",
+      "executionMode": "Execution",
+      "volatility": "Volatility",
+      "liquidity": "Liquidity",
+      "direction": "Direction",
+      "confidence": "Confidence",
+      "setupQuality": "Setup quality",
+      "timeHorizon": "Horizon",
+      "demoModeOn": "Demo Mode ON"
+    },
+    "actions": {
+      "viewAllEvents": "View All Events",
+      "analyze": "Analyze",
+      "viewSupportingData": "View Supporting Data",
+      "viewAudit": "View Audit"
+    },
+    "empty": {
+      "noAgentRun": "No real agent run has been recorded yet.",
+      "noMarketEvents": "No database market events are available.",
+      "noOpportunity": "No backend opportunity is available. Generate a hypothesis from live market context or a database event.",
+      "noKline": "Waiting for ETH/USDT 1H kline updates.",
+      "noOrderBook": "Waiting for live ETH/USDT order book depth.",
+      "noDecisions": "No action logs or audit reports are available yet."
+    },
+    "feedback": {
+      "hypothesisGenerated": "Hypothesis generated: {{id}}"
+    }
+  },
+  "marketMonitor": {
+    "name": "Market Monitor",
+    "aria": "Market Monitor professional trading workspace",
+    "header": {
+      "venue": "HTX Demo Market",
+      "streamMeta": "Public demo feed, paper-only workflow, live trading disabled.",
+      "lastPrice": "Last Price",
+      "high24h": "24h High",
+      "low24h": "24h Low",
+      "volume24h": "24h Volume",
+      "fundingRate": "Funding Rate",
+      "spotFundingMeta": "Spot pair; derivatives funding planned",
+      "spread": "Spread",
+      "liquidity": "Liquidity Score"
+    },
+    "sections": {
+      "klineChart": "Candlestick Chart",
+      "orderBook": "Order Book",
+      "tradesStream": "Trades Stream",
+      "indicators": "Indicators Panel",
+      "eventTimeline": "Market Event Timeline"
+    },
+    "chart": {
+      "title": "ETH/USDT K-line with MA and event markers",
+      "aria": "ETH USDT candlestick chart with moving averages, volume bars, current price line, and event markers",
+      "controls": "Chart controls",
+      "crosshair": "Toggle crosshair",
+      "measure": "Measure price range",
+      "expand": "Expand chart",
+      "legend": "Chart legend",
+      "currentPrice": "Current Price"
+    },
+    "orderBook": {
+      "title": "Depth and spread",
+      "imbalance": "Bid Depth +18.7%"
+    },
+    "trades": {
+      "title": "Recent fills",
+      "realTime": "Real Time"
+    },
+    "indicators": {
+      "title": "Signal quality and market structure",
+      "riskAdjusted": "Risk Adjusted",
+      "rsi": "RSI",
+      "rsiMeta": "Healthy momentum, not overheated.",
+      "macd": "MACD",
+      "macdMeta": "Bullish histogram expansion.",
+      "atr": "ATR",
+      "atrMeta": "Volatility elevated; size should stay constrained.",
+      "vwap": "VWAP",
+      "vwapMeta": "Price holds above intraday fair value.",
+      "depth": "Depth Imbalance",
+      "depthMeta": "Bid-side liquidity is expanding near support.",
+      "trend": "Trend Score",
+      "trendMeta": "Continuation setup remains conditionally valid."
+    },
+    "timeline": {
+      "title": "Detected events feeding the agent workflow",
+      "agentTagged": "Agent Tagged"
+    },
+    "events": {
+      "volumeSpike": {
+        "short": "Volume Spike",
+        "title": "Volume Spike",
+        "meta": "15-minute volume reached 2.4x baseline while price held above MA20."
+      },
+      "breakoutWatch": {
+        "short": "Breakout Watch",
+        "title": "Breakout Watch",
+        "meta": "Close is testing the upper range with stronger bid depth and stable spread."
+      },
+      "agentAnalysis": {
+        "short": "Agent Analysis",
+        "title": "Agent Analysis Queued",
+        "meta": "Market context is ready to generate a testable hypothesis."
+      },
+      "riskAlert": {
+        "short": "Risk Alert",
+        "title": "Risk Alert",
+        "meta": "ATR expansion requires guarded sizing before any paper execution."
+      }
+    },
+    "status": {
+      "liveDemoFeed": "Live Demo Feed",
+      "deepBook": "Deep Book",
+      "success": "PASS",
+      "warning": "WATCH",
+      "info": "INFO",
+      "danger": "RISK",
+      "neutral": "LOG"
+    }
+  },
+  "agentLab": {
+    "name": "Agent Lab",
+    "aria": "Agent Lab structured research workbench",
+    "brief": {
+      "question": "Can ETH/USDT sustain a breakout continuation after the retest?",
+      "scope": "Research is constrained to public HTX market data, demo indicators, paper-only risk limits, and a backtest-ready rule packet.",
+      "mode": "Structured Research"
+    },
+    "sections": {
+      "researchTicket": "Research Ticket",
+      "briefMeta": "Research brief metadata",
+      "context": "Market Context Inputs",
+      "evidenceMatrix": "Evidence Matrix",
+      "reasoningTrace": "Reasoning Trace",
+      "hypothesisQueue": "Hypothesis Queue",
+      "rulePacket": "Backtest Rule Packet",
+      "handoff": "Handoff Checklist"
+    },
+    "status": {
+      "structured": "Structured",
+      "evidenceMode": "Evidence Mode",
+      "noChat": "Checklist Only",
+      "locked": "LOCKED",
+      "review": "REVIEW",
+      "ready": "READY",
+      "auditReady": "Audit Ready"
+    },
+    "labels": {
+      "signal": "Signal",
+      "source": "Source",
+      "weight": "Weight",
+      "trigger": "Trigger",
+      "invalidation": "Invalidation",
+      "risk": "Risk"
+    },
+    "actions": {
+      "newAnalysis": "New Analysis",
+      "saveDraft": "Save as Draft",
+      "sendToBacktest": "Send to Backtest",
+      "runBacktest": "Run Backtest",
+      "editRule": "Edit Rule",
+      "reject": "Reject",
+      "rejecting": "Rejecting..."
+    },
+    "feedback": {
+      "generated": "Agent run created and hypotheses stored.",
+      "rejected": "Hypothesis rejected and persisted.",
+      "ruleSaved": "Strategy rule draft saved: {{id}}",
+      "rejectedCannotBacktest": "Rejected hypotheses cannot be sent to backtest.",
+      "backtestCreated": "Backtest created: {{id}}"
+    },
+    "provider": {
+      "aria": "AI provider controls",
+      "provider": "Provider",
+      "model": "Model",
+      "modelPlaceholder": "Model name",
+      "test": "Test Provider",
+      "configureHint": "Configure this provider API key in backend/.env."
+    },
+    "empty": {
+      "noRun": "Run a new analysis to generate structured A/B/C hypotheses.",
+      "noRunShort": "No Agent Run",
+      "awaitingRun": "Awaiting a new analysis",
+      "noProviderOutput": "No provider output yet",
+      "noHypotheses": "No stored hypotheses yet.",
+      "generateFirst": "Create a new analysis to store Hypothesis A/B/C in the database.",
+      "selectHypothesis": "Select or generate a hypothesis first."
+    },
+    "fields": {
+      "asset": "Asset",
+      "currentPrice": "Current Price",
+      "timeframe": "Timeframe",
+      "keyLevels": "Key Levels",
+      "volume": "Volume",
+      "rsi": "RSI",
+      "macd": "MACD",
+      "orderBookSummary": "Order Book Summary",
+      "btcCorrelation": "BTC Correlation",
+      "fundingRate": "Funding Rate",
+      "recentEvents": "Recent Events",
+      "currentTask": "Current Task",
+      "outputMode": "Output Mode",
+      "confidenceCalibration": "Confidence Calibration",
+      "aiSummary": "AI Summary",
+      "breakoutValidity": "Breakout Validity",
+      "overallConfidence": "Overall Confidence",
+      "inputSources": "Input Sources",
+      "strategyName": "Strategy Name",
+      "entryConditions": "Entry Conditions",
+      "exitConditions": "Exit Conditions",
+      "riskControls": "Risk Controls",
+      "strategyPreview": "Strategy Preview",
+      "trigger": "Trigger",
+      "invalidation": "Invalidation",
+      "risk": "Risk",
+      "backtestRule": "Backtest Rule",
+      "suggestedAction": "Suggested Action"
+    },
+    "metrics": {
+      "context": {
+        "title": "Context Inputs",
+        "meta": "Symbol, timeframe, volatility, liquidity, and regime are pinned."
+      },
+      "evidence": {
+        "title": "Evidence Checks",
+        "meta": "Five checks pass before the lead setup can move forward."
+      },
+      "hypothesis": {
+        "title": "Draft Hypotheses",
+        "meta": "Ranked candidates include triggers, invalidation, and risk notes."
+      }
+    },
+    "inputs": {
+      "marketStructure": {
+        "label": "Market Structure",
+        "value": "Higher-low retest",
+        "meta": "Price reclaimed MA20 while MA50 continues rising."
+      },
+      "liquidity": {
+        "label": "Liquidity",
+        "value": "Bid depth +18.7%",
+        "meta": "Support-side depth improved near the retest zone."
+      },
+      "volatility": {
+        "label": "Volatility",
+        "value": "ATR elevated",
+        "meta": "Sizing must remain guarded until volatility compresses."
+      },
+      "regime": {
+        "label": "Regime",
+        "value": "Momentum watch",
+        "meta": "Trend score is constructive but still conditional."
+      }
+    },
+    "evidence": {
+      "ma": {
+        "title": "MA20 reclaim confirmed",
+        "detail": "Latest close holds above MA20 with MA50 support below."
+      },
+      "book": {
+        "title": "Depth imbalance supports retest",
+        "detail": "Bid-side liquidity expanded while spread stayed stable."
+      },
+      "atr": {
+        "title": "Volatility requires capped size",
+        "detail": "ATR expansion reduces confidence until the next check."
+      },
+      "audit": {
+        "title": "Decision path is traceable",
+        "detail": "Every hypothesis field maps to a backtest or risk rule."
+      }
+    },
+    "reasoning": {
+      "context": {
+        "title": "Separate facts from assumptions",
+        "detail": "Market inputs are pinned before the agent ranks any trade idea."
+      },
+      "counter": {
+        "title": "Force the counter-thesis",
+        "detail": "The lab records why the setup could fail before approving a rule packet."
+      },
+      "rule": {
+        "title": "Convert thesis into testable rules",
+        "detail": "Entry, invalidation, sizing, and audit fields must be explicit."
+      }
+    },
+    "hypotheses": {
+      "continuation": {
+        "title": "Breakout continuation after retest",
+        "summary": "Lead candidate if price keeps MA20 support and bid depth remains constructive.",
+        "trigger": "15m close above 3,446 with depth imbalance above +12%.",
+        "invalidation": "Close below 3,392 or two checks with fading volume.",
+        "risk": "Paper-only size capped at 0.65 ETH."
+      },
+      "meanRevert": {
+        "title": "Mean reversion into VWAP",
+        "summary": "Secondary candidate if breakout momentum stalls but liquidity remains orderly.",
+        "trigger": "Failed breakout with spread below 0.025%.",
+        "invalidation": "Momentum score recovers above 76/100.",
+        "risk": "Reduced confidence due to trend alignment."
+      },
+      "reject": {
+        "title": "Reject trade until volatility cools",
+        "summary": "Defensive option if ATR keeps expanding and the order book thins.",
+        "trigger": "ATR check fails or bid depth falls under threshold.",
+        "invalidation": "Volatility compresses and market structure stays intact.",
+        "risk": "No paper execution until checks recover."
+      }
+    },
+    "rules": {
+      "entry": {
+        "label": "Entry Rule",
+        "value": "Close > MA20 + retest hold + depth confirmation"
+      },
+      "exit": {
+        "label": "Exit Rule",
+        "value": "Stop below retest; take-profit at 1.8R or momentum fade"
+      },
+      "position": {
+        "label": "Position Limit",
+        "value": "Max 0.65 ETH, paper-only, no live execution"
+      },
+      "audit": {
+        "label": "Audit Fields",
+        "value": "Source event, evidence IDs, hypothesis rank, risk cap"
+      }
+    },
+    "handoff": {
+      "rule": {
+        "title": "Rule packet complete",
+        "meta": "Backtest can consume entry, exit, size, and invalidation."
+      },
+      "backtest": {
+        "title": "Backtest scope attached",
+        "meta": "Timeframe, indicators, and benchmark are ready."
+      },
+      "risk": {
+        "title": "Risk firewall pending",
+        "meta": "Final paper-only approval belongs to the next module."
+      }
+    }
+  },
+  "backtestStudio": {
+    "name": "Backtest Studio",
+    "aria": "Backtest Studio validation workspace",
+    "brief": {
+      "question": "Does the ETH/USDT breakout continuation rule survive historical validation?",
+      "scope": "Backtest uses the Agent Lab rule packet, public HTX demo data, paper-only constraints, fees, slippage, and drawdown gates.",
+      "mode": "Demo Backtest"
+    },
+    "sections": {
+      "validationTicket": "Validation Ticket",
+      "briefMeta": "Backtest brief metadata",
+      "metrics": "Backtest Result Metrics",
+      "strategyRule": "Strategy Rule",
+      "verdict": "Backtest Verdict",
+      "equityCurve": "Equity Curve",
+      "drawdownCurve": "Drawdown Curve",
+      "tradeDistribution": "Trade Distribution",
+      "tradeList": "Trade List"
+    },
+    "status": {
+      "success": "PASS",
+      "warning": "WATCH",
+      "info": "INFO",
+      "danger": "FAIL",
+      "neutral": "LOG",
+      "ruleLocked": "Rule Locked",
+      "rMultiple": "R-Multiple",
+      "auditReady": "Audit Ready"
+    },
+    "rules": {
+      "title": "Breakout continuation after retest",
+      "entry": {
+        "label": "Entry Conditions",
+        "value": "15m close above 3,446, MA20 reclaim, retest hold, and depth imbalance above +12%."
+      },
+      "exit": {
+        "label": "Exit Conditions",
+        "value": "Stop below retest zone; take-profit at 1.8R or exit on two momentum-fade checks."
+      },
+      "risk": {
+        "label": "Risk Controls",
+        "value": "Paper-only size cap 0.65 ETH, max 1.1% account risk, no live execution."
+      },
+      "filter": {
+        "label": "Sample Filter",
+        "value": "Exclude thin-liquidity windows and ATR spikes above the guarded threshold."
+      }
+    },
+    "metrics": {
+      "winRate": {
+        "title": "Win Rate",
+        "meta": "Winning trades divided by completed samples."
+      },
+      "profitFactor": {
+        "title": "Profit Factor",
+        "meta": "Gross wins over gross losses after fees."
+      },
+      "expectedValue": {
+        "title": "Expected Value",
+        "meta": "Average expectancy per trade in R."
+      },
+      "maxDrawdown": {
+        "title": "Max Drawdown",
+        "meta": "Largest peak-to-trough equity decline."
+      },
+      "totalTrades": {
+        "title": "Total Trades",
+        "meta": "Completed trades across the 180-day sample."
+      },
+      "averageRr": {
+        "title": "Average R/R",
+        "meta": "Mean planned reward versus defined risk."
+      },
+      "sampleQuality": {
+        "title": "Sample Quality",
+        "meta": "Coverage after liquidity and volatility filters."
+      },
+      "sharpeRatio": {
+        "title": "Sharpe Ratio",
+        "meta": "Risk-adjusted return for the demo sample."
+      }
+    },
+    "verdict": {
+      "status": "Conditionally Valid",
+      "title": "Send to Risk Firewall with guarded sizing",
+      "summary": "The rule has positive historical edge, but elevated drawdown periods require position limits before paper execution.",
+      "checks": {
+        "edge": {
+          "title": "Historical Edge",
+          "value": "Profit factor and expected value pass the validation threshold."
+        },
+        "drawdown": {
+          "title": "Drawdown Gate",
+          "value": "Max drawdown is acceptable but must remain guarded."
+        },
+        "sample": {
+          "title": "Sample Integrity",
+          "value": "Trade count and liquidity filters are sufficient for demo review."
+        }
+      }
+    },
+    "charts": {
+      "equityTitle": "Equity curve after fees and slippage",
+      "drawdownTitle": "Drawdown curve with guarded threshold",
+      "distributionTitle": "Trade outcome distribution by R",
+      "equityAria": "Backtest equity curve",
+      "drawdownAria": "Backtest drawdown curve",
+      "distributionAria": "Trade distribution by R multiple"
+    },
+    "labels": {
+      "wins": "Wins",
+      "losses": "Losses"
+    },
+    "tradeSides": {
+      "long": "Long"
+    },
+    "tradeStatus": {
+      "takeProfit": "Take Profit",
+      "stopLoss": "Stop Loss",
+      "momentumFade": "Momentum Fade",
+      "ruleExit": "Rule Exit"
+    },
+    "tradeList": {
+      "title": "Recent backtest trades"
+    }
+  },
+  "riskFirewall": {
+    "name": "Risk Firewall",
+    "aria": "Risk Firewall institutional review workspace",
+    "brief": {
+      "question": "Should the validated ETH/USDT rule be approved for paper execution?",
+      "scope": "Risk review uses the backtest verdict, demo account limits, paper-only execution mode, live-trading lockout, and audit requirements."
+    },
+    "sections": {
+      "reviewTicket": "Risk Review Ticket",
+      "positionSizing": "Position Sizing",
+      "ruleEvaluation": "Rule-by-Rule Evaluation",
+      "finalDecision": "Final Risk Decision",
+      "actions": "Risk firewall actions"
+    },
+    "decision": {
+      "label": "Default Decision",
+      "value": "APPROVED FOR PAPER TRADING"
+    },
+    "status": {
+      "guarded": "Guarded",
+      "ruleByRule": "Rule-by-Rule"
+    },
+    "metrics": {
+      "riskLevel": {
+        "title": "Risk Level",
+        "value": "Guarded Medium",
+        "meta": "Drawdown warning keeps sizing below the normal demo cap."
+      },
+      "decision": {
+        "title": "Risk Decision",
+        "value": "Paper Only",
+        "meta": "Default approval is limited to simulated execution."
+      },
+      "rules": {
+        "title": "Rule Checks",
+        "meta": "Every gate is evaluated before handoff to Paper Execution."
+      },
+      "liveStatus": {
+        "title": "Live Trading",
+        "meta": "The firewall does not expose real-money order approval."
+      }
+    },
+    "position": {
+      "accountEquity": "Account Equity",
+      "accountEquityMeta": "Demo account value used only for risk math.",
+      "riskPerTrade": "Risk Per Trade",
+      "riskPerTradeMeta": "Hard cap applied before suggested size is calculated.",
+      "suggestedSize": "Suggested Position Size",
+      "suggestedSizeMeta": "Reduced by volatility and drawdown checks.",
+      "maxLoss": "Max Loss",
+      "maxLossMeta": "Worst-case simulated loss allowed by the firewall."
+    },
+    "rules": {
+      "executionMode": {
+        "rule": "Execution Mode",
+        "threshold": "Paper only",
+        "actual": "Paper only",
+        "notes": "Live trading remains disabled by default."
+      },
+      "accountRisk": {
+        "rule": "Account Risk",
+        "threshold": "<= 1.25%",
+        "actual": "1.10%",
+        "notes": "Risk per trade stays under the guarded account limit."
+      },
+      "positionCap": {
+        "rule": "Position Cap",
+        "threshold": "<= 0.70 ETH",
+        "actual": "0.65 ETH",
+        "notes": "Suggested size is inside the paper-only cap."
+      },
+      "drawdown": {
+        "rule": "Drawdown Gate",
+        "threshold": "<= 6.5%",
+        "actual": "6.8%",
+        "notes": "Warning keeps approval limited and prevents size increase."
+      },
+      "liquidity": {
+        "rule": "Liquidity Filter",
+        "threshold": "Depth +12%",
+        "actual": "Depth +18.7%",
+        "notes": "Order book depth is sufficient for demo review."
+      },
+      "volatility": {
+        "rule": "Volatility Guard",
+        "threshold": "ATR below spike band",
+        "actual": "ATR elevated but controlled",
+        "notes": "Guarded size absorbs the elevated ATR reading."
+      },
+      "stopLoss": {
+        "rule": "Stop Definition",
+        "threshold": "Explicit invalidation",
+        "actual": "Retest break at 3,392",
+        "notes": "Stop level maps to the backtest rule packet."
+      },
+      "audit": {
+        "rule": "Audit Trail",
+        "threshold": "Event, hypothesis, backtest, risk",
+        "actual": "All linked",
+        "notes": "Decision can be traced before paper execution."
+      }
+    },
+    "final": {
+      "status": "PAPER ONLY",
+      "title": "APPROVED FOR PAPER TRADING",
+      "summary": "The strategy may move to Paper Execution with constrained size. No live-trading permission is granted.",
+      "controls": {
+        "paperOnly": "Execution mode locked to paper trading.",
+        "sizeCap": "Suggested size capped at 0.65 ETH.",
+        "stop": "Stop and invalidation must remain attached to the order ticket.",
+        "audit": "Risk decision is stored for audit review."
+      }
+    },
+    "externalRisk": {
+      "newsRisk": {
+        "rule": "News Risk",
+        "threshold": "Hard block false; news risk below 55%",
+        "notes": "Reads NewsRiskContext from the news intelligence module."
+      },
+      "onChainRisk": {
+        "rule": "On-chain Risk",
+        "threshold": "OnChainRisk below 55%",
+        "notes": "Uses whale, exchange inflow, unlock, and bridge-warning context."
+      },
+      "macroRisk": {
+        "rule": "Macro Risk",
+        "threshold": "MacroRisk below 45%",
+        "notes": "Uses Fed, CPI, rates, DXY, and geopolitical event context."
+      },
+      "htxRisk": {
+        "rule": "HTX Ecosystem Risk",
+        "threshold": "HTX ecosystem risk below 45%",
+        "notes": "Tracks HTX announcements, pair operations, and ecosystem events as context."
+      }
+    },
+    "decisionEngine": {
+      "confidence": {
+        "rule": "Confidence threshold",
+        "threshold": "Confidence at or above 60",
+        "notes": "Reads the shared Decision Engine result without recalculating it."
+      },
+      "feasibility": {
+        "rule": "Feasibility threshold",
+        "threshold": "Feasibility at or above 50",
+        "notes": "Uses execution feasibility from spread, liquidity, data quality, R/R, and risk."
+      },
+      "risk": {
+        "rule": "Risk threshold",
+        "threshold": "Risk below 80",
+        "notes": "Risk at 80 or higher must block the paper handoff."
+      },
+      "hardBlock": {
+        "rule": "HardBlock",
+        "threshold": "HardBlock must be false",
+        "notes": "A hard block forces BLOCK or NO_TRADE and cannot be overridden by high Confidence."
+      }
+    }
+  },
+  "paperExecution": {
+    "name": "Paper Execution",
+    "aria": "Paper Execution simulated execution workspace",
+    "brief": {
+      "question": "Create a simulated ETH/USDT order from the approved risk decision?",
+      "scope": "Paper Execution uses the risk-approved rule, demo account math, simulated fills, and audit logging only. No real funds, exchange orders, or wallet transfers are involved.",
+      "decision": "NO REAL FUNDS INVOLVED",
+      "lockLabel": "Execution Boundary"
+    },
+    "sections": {
+      "executionTicket": "Execution Ticket",
+      "ticketMeta": "Paper execution ticket metadata",
+      "orderTicket": "Order Ticket",
+      "executionPreview": "Execution Preview",
+      "activePositions": "Active Paper Positions",
+      "executionLog": "Execution Log"
+    },
+    "status": {
+      "paperOnly": "Paper Trading Only",
+      "simulatorRoute": "Simulator Route",
+      "previewOnly": "Preview Only",
+      "demoAccount": "Demo Account",
+      "auditReady": "Audit Ready",
+      "simulatedOpen": "Simulated Open",
+      "watchOnly": "Watch Only"
+    },
+    "metrics": {
+      "funds": {
+        "title": "Funds",
+        "value": "No Real Funds",
+        "meta": "The order ticket reads demo balances and cannot touch user capital."
+      },
+      "mode": {
+        "title": "Execution Mode",
+        "value": "Paper Only",
+        "meta": "All fills are simulator records created for research review."
+      },
+      "live": {
+        "title": "Live Trading",
+        "meta": "No live order endpoint, wallet transfer, or exchange trade is available here."
+      },
+      "audit": {
+        "title": "Audit Link",
+        "value": "Risk Approved",
+        "meta": "Every simulated fill links back to market, hypothesis, backtest, and risk decisions."
+      }
+    },
+    "ticket": {
+      "symbol": "Symbol",
+      "side": "Side",
+      "orderType": "Order Type",
+      "entry": "Limit Entry",
+      "size": "Paper Size",
+      "stop": "Stop",
+      "takeProfit": "Take Profit",
+      "route": "Execution Route",
+      "executeNote": "This creates a simulated paper-trade record only; it does not send a live exchange order."
+    },
+    "values": {
+      "long": "Long",
+      "limit": "Limit",
+      "simulatorRoute": "Internal paper simulator",
+      "noPosition": "No Position"
+    },
+    "preview": {
+      "estimatedFill": "Estimated Fill",
+      "estimatedFillMeta": "Calculated from demo spread and slippage assumptions.",
+      "slippage": "Modeled Slippage",
+      "slippageMeta": "Applied to the simulator only, not an exchange book.",
+      "fees": "Paper Fee",
+      "feesMeta": "Demo fee estimate for audit math.",
+      "maxSimulatedLoss": "Max Simulated Loss",
+      "maxSimulatedLossMeta": "Derived from stop distance and paper size.",
+      "noExchangeOrder": "Live exchange routing is disabled; this preview never becomes a real-money order."
+    },
+    "tables": {
+      "mark": "Mark"
+    },
+    "log": {
+      "orderCreated": {
+        "title": "Paper order created",
+        "meta": "Order ticket stored in the internal simulator."
+      },
+      "safetyLock": {
+        "title": "Live-trading lock verified",
+        "meta": "Execution route confirmed as paper only before fill simulation."
+      },
+      "fillSimulated": {
+        "title": "Fill simulated",
+        "meta": "Position opened in demo ledger with no real funds involved."
+      },
+      "auditLinked": {
+        "title": "Audit record linked",
+        "meta": "Execution log attached to the approved risk-firewall decision."
+      }
+    }
+  },
+  "auditReports": {
+    "name": "Audit Reports",
+    "aria": "Audit Reports review workspace",
+    "sections": {
+      "reportList": "Report List",
+      "reportDetail": "Report Detail",
+      "marketEvent": "Market Event",
+      "agentHypothesis": "Agent Hypothesis",
+      "backtestResult": "Backtest Result",
+      "riskFirewall": "Risk Firewall",
+      "execution": "Execution",
+      "review": "Review",
+      "auditLog": "Audit Log",
+      "actions": "Audit report actions"
+    },
+    "status": {
+      "demoArchive": "Demo Archive",
+      "reviewComplete": "Review Complete",
+      "needsReview": "Needs Review",
+      "watchOnly": "Watch Only",
+      "immutable": "Immutable Trail",
+      "success": "PASS",
+      "warning": "WATCH",
+      "info": "INFO",
+      "danger": "LOCKED",
+      "neutral": "LOG"
+    },
+    "labels": {
+      "symbol": "Symbol",
+      "actor": "Actor",
+      "recordHash": "Record Hash"
+    },
+    "metrics": {
+      "reports": {
+        "title": "Reports",
+        "meta": "Closed-loop reports are available for the demo workspace."
+      },
+      "coverage": {
+        "title": "Trace Coverage",
+        "meta": "Market, agent, backtest, risk, execution, and review are linked."
+      },
+      "exceptions": {
+        "title": "Exceptions",
+        "meta": "One drawdown warning is retained for follow-up review."
+      },
+      "live": {
+        "title": "Live Trading",
+        "meta": "Audit records confirm the workflow stayed paper-only."
+      }
+    },
+    "reports": {
+      "ethBreakout": {
+        "title": "ETH breakout continuation review",
+        "summary": "Full six-step trace from detected market event to paper execution review."
+      },
+      "btcVolatility": {
+        "title": "BTC volatility guard review",
+        "summary": "Risk exception review for elevated ATR and reduced confidence."
+      },
+      "htxLiquidity": {
+        "title": "HTX liquidity watch review",
+        "summary": "Watch-only report for thin order book conditions before hypothesis approval."
+      }
+    },
+    "detail": {
+      "marketEvent": {
+        "value": "Breakout with rising volume and bid-depth expansion.",
+        "meta": "HTX public demo feed captured price, volume, order book context, and timestamp before the agent generated a hypothesis."
+      },
+      "agentHypothesis": {
+        "value": "Breakout continuation after retest.",
+        "meta": "The agent recorded trigger, invalidation, counter-thesis, risk note, and backtest-ready rule fields."
+      },
+      "backtestResult": {
+        "value": "Profit factor 1.84, win rate 57.8%, max drawdown 6.8%.",
+        "meta": "Historical validation passed with a guarded drawdown warning and sufficient sample quality."
+      },
+      "riskFirewall": {
+        "value": "Approved for paper trading only with 0.65 ETH suggested size.",
+        "meta": "The firewall kept live trading disabled, capped account risk, and preserved the warning."
+      },
+      "execution": {
+        "value": "Simulated limit order created in the internal paper route.",
+        "meta": "No exchange order, wallet transfer, or real funds were involved in the execution record."
+      },
+      "review": {
+        "value": "Decision path complete and ready for operator review.",
+        "meta": "The report links every market, AI, backtest, risk, execution, and audit artifact for replay."
+      }
+    },
+    "log": {
+      "actors": {
+        "market": "Market",
+        "agent": "Agent",
+        "backtest": "Backtest",
+        "risk": "Risk",
+        "execution": "Execution",
+        "review": "Review"
+      },
+      "market": {
+        "title": "Market event snapshot sealed"
+      },
+      "agent": {
+        "title": "Hypothesis and counter-thesis attached"
+      },
+      "backtest": {
+        "title": "Backtest verdict and trade sample linked"
+      },
+      "risk": {
+        "title": "Paper-only firewall decision stored"
+      },
+      "execution": {
+        "title": "Simulated execution log appended"
+      },
+      "review": {
+        "title": "Final review summary generated"
+      }
+    },
+    "news": {
+      "title": "Referenced News / On-chain Alerts",
+      "references": "referencedNews",
+      "onChainReferences": "referencedOnChainAlerts",
+      "none": "none",
+      "hardBlockReferenced": "Hard block referenced",
+      "referencedFields": "referencedNews / referencedOnChainAlerts reserved"
+    },
+    "decision": {
+      "title": "Decision Engine Record"
+    }
+  },
+  "htxEcosystem": {
+    "name": "HTX Ecosystem"
+  },
+  "settings": {
+    "name": "Settings",
+    "aria": "Settings control plane",
+    "brief": {
+      "title": "Workspace configuration with live trading locked out",
+      "summary": "Settings expose data source, AI provider, risk, and language controls while market data and intelligence use real sources only."
+    },
+    "sections": {
+      "controlPlane": "Settings Control Plane",
+      "dataSource": "Data Source",
+      "agent": "Agent Settings",
+      "aiProvider": "AI Provider",
+      "risk": "Risk Settings",
+      "demoMode": "Demo Mode",
+      "language": "Language Settings"
+    },
+    "labels": {
+      "executionBoundary": "Execution Boundary",
+      "languageOptions": "Language options"
+    },
+    "values": {
+      "evidenceMode": "Evidence Mode",
+      "guarded": "Guarded",
+      "persistent": "Persistent",
+      "required": "Required",
+      "disabled": "Disabled"
+    },
+    "status": {
+      "connected": "Connected",
+      "standby": "Standby",
+      "active": "Active",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "locked": "Locked",
+      "guarded": "Guarded",
+      "synced": "Synced",
+      "publicOnly": "Public Only",
+      "evidenceMode": "Evidence Mode",
+      "guardrailsLocked": "Guardrails Locked",
+      "configurable": "Configurable"
+    },
+    "actions": {
+      "testDataSource": "Test Data Source"
+    },
+    "feedback": {
+      "saved": "Settings saved and synced to runtime"
+    },
+    "metrics": {
+      "data": {
+        "title": "Data Route",
+        "meta": "Public HTX feed is the default market source."
+      },
+      "agent": {
+        "title": "Agent Mode",
+        "meta": "Outputs remain structured for backtest and risk review."
+      },
+      "risk": {
+        "title": "Risk Mode",
+        "meta": "Live execution is blocked before every handoff."
+      },
+      "language": {
+        "title": "Language",
+        "meta": "Locale preference is persisted in local storage."
+      }
+    },
+    "dataSource": {
+      "stream": {
+        "label": "Ticker / K-line Stream",
+        "meta": "Receives public market updates for charts, events, and indicators."
+      },
+      "rest": {
+        "label": "Snapshot Fallback",
+        "meta": "Provides order book and recent trades when the stream is unavailable."
+      },
+      "symbol": {
+        "label": "Default Symbol",
+        "meta": "Feeds the Command Center, Agent Lab, Backtest Studio, and paper ticket."
+      }
+    },
+    "agent": {
+      "researchMode": {
+        "label": "Research Mode",
+        "meta": "Agent output must include evidence, trigger, invalidation, and risk notes."
+      },
+      "counterThesis": {
+        "label": "Counter-thesis Check",
+        "meta": "Each hypothesis must record why the setup could fail."
+      },
+      "chatSurface": {
+        "label": "Open Chat Surface",
+        "meta": "The product remains a structured workflow, not a generic chatbot."
+      }
+    },
+    "ai": {
+      "provider": "Default provider",
+      "model": "Model",
+      "modelPlaceholder": "Enter model name",
+      "apiBase": "API base URL",
+      "apiBasePlaceholder": "Enter compatible API endpoint",
+      "apiKey": "API key",
+      "apiKeyPlaceholder": "Enter the backend runtime key",
+      "persistenceNote": "Settings are saved to the backend and used by the next AI analysis or hypothesis generation."
+    },
+    "risk": {
+      "liveTrading": {
+        "label": "Live Trading",
+        "meta": "No exchange order, wallet transfer, or real-money approval is available."
+      },
+      "riskPerTrade": {
+        "label": "Risk Per Trade",
+        "meta": "Demo account risk is capped before paper size is calculated."
+      },
+      "positionCap": {
+        "label": "Position Cap",
+        "meta": "Suggested paper size remains below the guarded threshold."
+      }
+    },
+    "demo": {
+      "enabledTitle": "Demo mode is active",
+      "disabledTitle": "Demo mode is off",
+      "toggleMeta": "Turning demo mode off does not enable live trading; the live lock stays in place.",
+      "paperLedger": {
+        "title": "Paper ledger only",
+        "meta": "Balances, fills, fees, and PnL are simulator records."
+      },
+      "noSecrets": {
+        "title": "No secrets stored",
+        "meta": "Settings do not expose exchange secrets, wallet keys, or private credentials."
+      },
+      "auditTrail": {
+        "title": "Audit trail retained",
+        "meta": "Configuration state is visible to reports and review screens."
+      }
+    },
+    "language": {
+      "persistenceNote": "Language choice updates immediately and persists after refresh."
+    }
+  },
+  "decision": {
+    "card": {
+      "title": "Live Decision Card"
+    },
+    "panel": {
+      "kicker": "Rule-based Decision Engine",
+      "title": "Live Decision Panel"
+    },
+    "labels": {
+      "confidence": "Confidence",
+      "feasibility": "Feasibility",
+      "risk": "Risk",
+      "action": "Action",
+      "nextConfirmation": "Next Confirmation",
+      "longShort": "Long / Short",
+      "hardBlockActive": "HardBlock active",
+      "noHardBlock": "No hard block",
+      "mockAi": "Mock AI"
+    },
+    "sections": {
+      "topEvidence": "Top Evidence",
+      "warnings": "Warnings",
+      "blockingReasons": "Blocking Reason",
+      "scoreBreakdown": "Score Breakdown",
+      "hardBlock": "HardBlock"
+    },
+    "metrics": {
+      "longConfidence": "LongConfidence",
+      "shortConfidence": "ShortConfidence",
+      "marketConfidence": "MarketConfidence",
+      "finalConfidence": "FinalConfidence",
+      "feasibilityScore": "FeasibilityScore",
+      "riskScore": "RiskScore",
+      "newsRisk": "NewsRisk",
+      "onChainRisk": "OnChainRisk",
+      "macroRisk": "MacroRisk",
+      "dataReliabilityMultiplier": "DataReliabilityMultiplier",
+      "conflictMultiplier": "ConflictMultiplier",
+      "eventRiskMultiplier": "EventRiskMultiplier"
+    },
+    "breakdown": {
+      "trend": "Trend / Structure",
+      "momentum": "Momentum",
+      "volume": "Volume Confirmation",
+      "liquidity": "Liquidity / Book",
+      "volatilityQuality": "Volatility Quality",
+      "riskReward": "Risk / Reward"
+    },
+    "actions": {
+      "OBSERVE": "OBSERVE",
+      "WAIT": "WAIT",
+      "ALLOW_PAPER_LONG": "ALLOW_PAPER_LONG",
+      "ALLOW_PAPER_SHORT": "ALLOW_PAPER_SHORT",
+      "REDUCE_SIZE": "REDUCE_SIZE",
+      "BLOCK": "BLOCK",
+      "NO_TRADE": "NO_TRADE"
+    },
+    "regimes": {
+      "breakout-attempt": "Breakout Attempt",
+      "pullback-watch": "Pullback Watch",
+      "range-bound": "Range Bound",
+      "volatility-expansion": "Volatility Expansion",
+      "liquidity-thin": "Thin Liquidity",
+      "risk-off": "Risk Off"
+    },
+    "empty": {
+      "noBlockingReasons": "No blocking reason is active for the current decision."
+    }
+  },
+  "errors": {
+    "generic": "The workspace could not load."
+  },
+  "emptyStates": {
+    "generic": "No records available in this module."
+  },
+  "loadingStates": {
+    "syncing": "Syncing HTX WebSocket...",
+    "generating": "Generating Hypothesis...",
+    "backtesting": "Running Backtest...",
+    "riskChecking": "Checking Risk Rules...",
+    "creatingOrder": "Creating Paper Order..."
+  },
+  "marketLive": {
+    "status": {
+      "live": "Live Market Connected",
+      "degraded": "Market Degraded",
+      "restSnapshot": "REST Snapshot",
+      "stale": "Stale",
+      "mock": "Mock",
+      "loading": "Loading",
+      "notListed": "Not Listed",
+      "reconnecting": "Reconnecting",
+      "disconnected": "Disconnected",
+      "fallback": "Backup Data",
+      "error": "Error"
+    },
+    "header": {
+      "venue": "HTX Public Market Data",
+      "streamMeta": "Real market data source: {{source}}; last updated {{updated}}; latency {{latency}} ms. Live trading remains disabled.",
+      "source": "Source",
+      "updated": "Updated",
+      "latency": "Latency",
+      "lastPrice": "Last Price",
+      "high24h": "24h High",
+      "low24h": "24h Low",
+      "volume24h": "24h Volume",
+      "fundingRate": "Funding Rate",
+      "spotFundingMeta": "Spot pair; derivatives funding is planned",
+      "spread": "Spread",
+      "bookLevels": "Book Levels",
+      "quoteVolume": "quote volume",
+      "bestBidAsk": "best bid / ask",
+      "bidAskVisible": "bid / ask visible"
+    },
+    "sections": {
+      "orderBook": "Order Book",
+      "tradesStream": "Trades Stream",
+      "indicators": "Indicators Panel",
+      "eventTimeline": "Market Event Timeline"
+    },
+    "tickerBar": {
+      "aria": "Live HTX ticker bar"
+    },
+    "panel": {
+      "collapseReserved": "Collapse panel preview"
+    },
+    "selector": {
+      "aria": "HTX symbol selector",
+      "searchPlaceholder": "Search HTX pairs",
+      "defaultSymbols": "Default symbols",
+      "filters": "Symbol filters",
+      "symbolList": "HTX symbols"
+    },
+    "chart": {
+      "terminal": "Professional K-line Terminal",
+      "title": "{{symbol}} live K-line workspace",
+      "controls": "Kline controls",
+      "crosshair": "Crosshair enabled",
+      "zoomPan": "Zoom and pan enabled",
+      "scrollLatest": "Scroll to latest",
+      "indicatorsDrawings": "Indicators and drawing tools",
+      "dataStatus": "Chart data status",
+      "ohlc": "OHLC"
+    },
+    "orderBook": {
+      "title": "Live depth and spread",
+      "precision": "Aggregation",
+      "auto": "Auto",
+      "imbalance": "Bid / Ask Imbalance",
+      "liquidityScore": "Liquidity Score",
+      "decreaseAggregation": "Decrease aggregation precision",
+      "increaseAggregation": "Increase aggregation precision"
+    },
+    "trades": {
+      "title": "Live Trades Stream",
+      "buffered": "{{count}} buffered",
+      "emptyLarge": "Waiting for live trades"
+    },
+    "indicators": {
+      "title": "Signal quality and market structure",
+      "riskAdjusted": "Risk Adjusted",
+      "rsiMeta": "Throttled display metric for momentum context.",
+      "macdMeta": "Live delta from HTX 24h open.",
+      "atrMeta": "24h range proxy; chart ATR is available in the terminal.",
+      "vwapMeta": "Public volume-weighted reference.",
+      "depthMeta": "Visible bid/ask depth imbalance.",
+      "depth": "Depth Imbalance",
+      "ma20Meta": "Short-term moving average from HTX klines.",
+      "ma50Meta": "Medium-term moving average from HTX klines.",
+      "ma200Meta": "Long-term moving average from HTX klines.",
+      "timeframe": "Timeframe",
+      "timeframeMeta": "Switches REST bootstrap and live kline subscription.",
+      "errorMeta": "Indicator snapshot is degraded."
+    },
+    "timeline": {
+      "title": "Detected events feeding the agent workflow",
+      "detect": "Detect Events",
+      "detecting": "Detecting...",
+      "showLess": "Show Less",
+      "empty": "No detected events are stored for this symbol yet.",
+      "error": "Market events could not be loaded."
+    },
+    "workspace": {
+      "resizeBottom": "Resize chart and bottom panels",
+      "resizeRight": "Resize chart and market depth panels",
+      "resizeOrderBookTrades": "Resize order book and trades panels",
+      "gridHint": "Drag panel handles and resize corners; layout is saved locally.",
+      "resetLayout": "Reset Layout",
+      "resizePanel": "Resize panel"
+    },
+    "panels": {
+      "chart": "MarketChartPanel",
+      "orderBook": "OrderBookPanel",
+      "trades": "TradesStreamPanel",
+      "indicators": "IndicatorPanel",
+      "events": "MarketEventTimelinePanel",
+      "diagnostics": "DiagnosticsPanel",
+      "candles": "candles",
+      "depthSubtitle": "Live HTX depth with spread and imbalance",
+      "tradesSubtitle": "{{count}} recent trades retained",
+      "indicatorsSubtitle": "REST-derived indicators plus live depth context",
+      "eventsSubtitle": "Backend detected events linked to workflow IDs",
+      "diagnosticsSubtitle": "Stream freshness, source, and reconnect counters"
+    },
+    "diagnostics": {
+      "aria": "Market stream diagnostics",
+      "maxStreamAge": "Maximum stream age",
+      "staleDrops": "Retries and stale stream tracking"
+    },
+    "drawing": {
+      "trend": "Trend",
+      "horizontal": "H-Line",
+      "vertical": "V-Line",
+      "rectangle": "Rect",
+      "fibonacci": "Fib",
+      "text": "Text",
+      "clear": "Clear"
+    },
+    "indicatorManager": {
+      "aria": "Indicator Manager",
+      "title": "Indicators",
+      "clearAll": "Clear all",
+      "empty": "No active indicators",
+      "settings": "Settings",
+      "hide": "Hide indicator",
+      "show": "Show indicator",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "resetDefault": "Default"
+    },
+    "indicatorParams": {
+      "period": "Period",
+      "source": "Source",
+      "offset": "Offset",
+      "stdDev": "Std dev",
+      "basisType": "Basis",
+      "anchor": "Anchor",
+      "step": "Increment",
+      "max": "Max",
+      "showMA": "Show MA",
+      "ma1": "MA1",
+      "ma2": "MA2",
+      "fast": "Fast",
+      "slow": "Slow",
+      "signal": "Signal",
+      "overbought": "Overbought",
+      "oversold": "Oversold",
+      "kSmoothing": "K smooth",
+      "dSmoothing": "D smooth"
+    },
+    "indicatorParamOptions": {
+      "open": "Open",
+      "high": "High",
+      "low": "Low",
+      "close": "Close",
+      "hl2": "HL2",
+      "hlc3": "HLC3",
+      "ohlc4": "OHLC4",
+      "session": "Session",
+      "week": "Week",
+      "month": "Month",
+      "SMA": "SMA",
+      "EMA": "EMA"
+    }
+  },
+  "newsIntelligence": {
+    "kicker": "Market Intelligence Input Layer",
+    "title": "News & On-chain Intelligence",
+    "subtitle": "Real-source news, on-chain, macro, funding, and HTX ecosystem context for later decision scoring.",
+    "feedAria": "News and on-chain intelligence feed",
+    "empty": "No related intelligence items. News risk context is neutral.",
+    "labels": {
+      "marketIntelligenceInput": "Market Intelligence",
+      "mockVisible": "Real source",
+      "mockItem": "Mock item",
+      "liveItem": "Live item",
+      "nonLiveItem": "Non-live source",
+      "relatedSymbols": "Related symbols",
+      "marketWide": "Market-wide",
+      "hardBlock": "Hard Block",
+      "severity": "Severity",
+      "freshness": "Freshness",
+      "sourceType": "Source type",
+      "sourceDomain": "Source domain",
+      "syntheticSource": "Synthetic demo feed",
+      "urlVerification": "URL verification",
+      "urlVerified": "Verified",
+      "urlNotVerified": "Not verified"
+    },
+    "actions": {
+      "openSource": "Original source"
+    },
+    "filters": {
+      "aria": "News category filters",
+      "all": "All",
+      "crypto": "Crypto",
+      "onchain": "On-chain",
+      "macro": "Macro",
+      "funding": "Funding",
+      "htx": "HTX",
+      "risk": "Risk Events"
+    },
+    "categories": {
+      "crypto": "Crypto / Web3",
+      "onchain": "On-chain Alerts",
+      "macro": "Macro Events",
+      "funding": "Funding / VC",
+      "htx": "HTX Ecosystem",
+      "risk": "Risk Events"
+    },
+    "sentiment": {
+      "positive": "Positive",
+      "neutral": "Neutral",
+      "negative": "Negative",
+      "mixed": "Mixed"
+    },
+    "riskLevel": {
+      "neutral": "Risk",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "sourceStatus": {
+      "live": "Live",
+      "mock": "Mock",
+      "planned": "Planned",
+      "backend-required": "Backend Required",
+      "unavailable": "Unavailable",
+      "error": "Error"
+    },
+    "summary": {
+      "riskEvents": "Risk events",
+      "onChainWarnings": "On-chain warnings",
+      "macroEvents": "Macro events",
+      "htxEcosystem": "HTX ecosystem",
+      "hardBlockActive": "Hard block event active"
+    },
+    "sources": {
+      "aria": "News source adapter statuses",
+      "title": "Source adapter plan",
+      "noSecrets": "No API key or secret required by default"
+    }
+  }
+}

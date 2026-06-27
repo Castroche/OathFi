@@ -1,0 +1,45 @@
+from sqlalchemy import Boolean, Column, Float, Integer, JSON, String, Text
+
+from app.db.base import Base, TimestampMixin
+
+
+class Hypothesis(Base, TimestampMixin):
+    __tablename__ = "hypotheses"
+
+    id = Column(String, primary_key=True)
+    workflow_id = Column(String, nullable=False, index=True)
+    market_event_id = Column(String, nullable=True)
+    ai_analysis_id = Column(String, nullable=True)
+    agent_run_id = Column(String, nullable=True, index=True)
+    symbol = Column(String, nullable=False, index=True)
+    timeframe = Column(String, nullable=False)
+    label = Column(String, nullable=True)
+    hypothesis_type = Column(String, nullable=True)
+    direction = Column(String, nullable=False)
+    trigger = Column(Text, nullable=True)
+    invalidation = Column(Text, nullable=True)
+    risk_note = Column(Text, nullable=True)
+    backtest_rule = Column(Text, nullable=True)
+    suggested_action = Column(Text, nullable=True)
+    entry_condition = Column(Text, nullable=False)
+    invalid_condition = Column(Text, nullable=False)
+    stop_loss = Column(Float, nullable=True)
+    take_profit = Column(Float, nullable=True)
+    confidence = Column(Integer, nullable=False)
+    feasibility = Column(Integer, nullable=False)
+    risk = Column(Integer, nullable=False)
+    long_confidence = Column(Integer, nullable=True)
+    short_confidence = Column(Integer, nullable=True)
+    summary = Column(Text, nullable=False)
+    reasons_json = Column(JSON, nullable=False)
+    warnings_json = Column(JSON, nullable=False)
+    raw_json = Column(JSON, nullable=True)
+    source = Column(String, default="backend", nullable=False)
+    status = Column(String, default="disconnected", nullable=False)
+    is_mock = Column(Boolean, default=False, nullable=False)
+    provider = Column(String, nullable=True)
+    model = Column(String, nullable=True)
+    is_ai_generated = Column(Boolean, default=True, nullable=False)
+    analysis_mode = Column(String, default="ai", nullable=False)
+    bias = Column(String, nullable=True)
+    suggested_rule_json = Column(JSON, nullable=True)

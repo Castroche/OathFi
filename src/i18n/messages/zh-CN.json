@@ -1,0 +1,1722 @@
+{
+  "common": {
+    "stageSeven": "模拟执行",
+    "stageEight": "审计报告",
+    "stageNine": "HTX 生态",
+    "stageSettings": "设置",
+    "stageOne": "应用壳层",
+    "stageTwo": "控制中心",
+    "stageThree": "市场监控",
+    "stageFour": "Agent 实验室",
+    "version": "版本 {{version}}",
+    "stageFive": "回测工作台",
+    "stageSix": "风控火墙"
+  },
+  "brand": {
+    "name": "OathFi",
+    "subtitle": "HTX 生态 AI 交易研究与风控 Agent"
+  },
+  "language": {
+    "switcher": "语言切换",
+    "englishShort": "EN",
+    "chineseShort": "中文",
+    "english": "英文",
+    "chinese": "简体中文"
+  },
+  "navigation": {
+    "label": "主导航",
+    "commandCenter": "控制中心",
+    "marketMonitor": "市场监控",
+    "agentLab": "Agent 实验室",
+    "backtestStudio": "回测工作台",
+    "riskFirewall": "风控防火墙",
+    "paperExecution": "模拟执行",
+    "auditReports": "审计报告",
+    "htxEcosystem": "HTX 生态",
+    "settings": "设置"
+  },
+  "topBar": {
+    "tickerStrip": "市场行情条",
+    "activeStream": "Active stream: {{source}}",
+    "watchlistTickers": "Watchlist tickers: {{source}}",
+    "symbolRegistry": "Symbol registry: {{state}}",
+    "publicMarketData": "Public market data: {{state}}",
+    "lightweightMarket": "轻量行情"
+  },
+  "workflow": {
+    "label": "交易研究工作流",
+    "marketEvent": "市场情报",
+    "aiHypothesis": "实时判断 / AI 假设",
+    "backtest": "回测验证",
+    "riskCheck": "风控检查",
+    "paperTrade": "模拟交易",
+    "review": "复盘审计"
+  },
+  "status": {
+    "htxApiConnected": "HTX API 已连接",
+    "agentRunning": "Agent 运行中",
+    "riskModeGuarded": "守护风控模式",
+    "paperTradingOnly": "仅模拟交易",
+    "liveTradingDisabled": "实盘交易已禁用",
+    "allSystemsOperational": "全部系统运行正常",
+    "marketDataPublic": "公共市场数据流",
+    "safetyMode": "安全模式",
+    "noRealFunds": "不涉及真实资金。",
+    "roadmap": "路线图",
+    "planned": "规划中",
+    "active": "启用中",
+    "enabled": "已启用",
+    "disabled": "已禁用",
+    "mockData": "模拟数据",
+    "dataSourceNotConnected": "数据源未连接",
+    "staticMockSnapshot": "静态模拟快照"
+  },
+  "feedback": {
+    "backendRequiredGeneric": "后端尚未接入。该操作会在 API 桥接后开放。",
+    "backendRequiredGenerateHypothesis": "后端尚未接入。交易假设生成后续会调用 POST /api/hypotheses/generate。",
+    "backendRequiredBacktest": "后端尚未接入。回测任务后续会调用 POST /api/backtests。",
+    "backendRequiredRisk": "后端尚未接入。风控检查后续会调用 POST /api/risk/check。",
+    "backendRequiredPaperExecution": "后端尚未接入。模拟执行会在风控与订单接口接入后开放。",
+    "backendRequiredAuditReport": "后端尚未接入。审计报告后续会调用 POST /api/audit-reports。",
+    "backendRequiredPaperOrder": "后端未接入，模拟订单创建已禁用；真实交易仍保持禁用。",
+    "paperExecutionBlocked": "当前硬阻断决策不允许进入模拟执行。",
+    "strategyRejectedLocal": "策略拒绝已在当前 Demo 页面内记录；后端审计日志尚未接入。",
+    "auditLogVisible": "审计日志已在当前页面显示；后端回放能力后续接入。",
+    "roadmapPlanned": "HTX 生态功能仅为路线图展示，本轮不触发后端动作。",
+    "settingsLocalOnly": "设置变更仅保存在当前前端 Demo；设置 API 后续接入。",
+    "dataSourceCheckLocal": "当前仅展示前端数据源状态；后端健康检查尚未接入。"
+  },
+  "actions": {
+    "executePaperTrade": "执行模拟交易",
+    "startDemoFlow": "开始演示流程",
+    "generateHypothesis": "生成交易假设",
+    "sendToBacktest": "发送至回测",
+    "sendToRiskFirewall": "发送至风控防火墙",
+    "sendToPaperExecution": "发送至模拟执行",
+    "generateReviewReport": "生成复盘报告",
+    "openAuditLog": "打开审计日志",
+    "viewRoadmap": "查看路线图",
+    "saveSettings": "保存设置",
+    "copySummary": "复制摘要",
+    "summaryCopied": "摘要已复制",
+    "rejectStrategy": "拒绝策略",
+    "returnToAgentLab": "返回 Agent 实验室"
+  },
+  "tables": {
+    "symbol": "交易对",
+    "rule": "规则",
+    "threshold": "阈值",
+    "actual": "实际值",
+    "status": "状态",
+    "notes": "备注",
+    "price": "价格",
+    "size": "数量",
+    "total": "合计",
+    "time": "时间",
+    "side": "方向",
+    "entry": "入场",
+    "exit": "出场",
+    "pnl": "PnL",
+    "rr": "R/R"
+  },
+  "pages": {
+    "commandCenter": {
+      "title": "控制中心",
+      "summary": "全局操作台，用于查看市场事件、Agent 状态、风控姿态和演示流程入口。"
+    },
+    "marketMonitor": {
+      "title": "市场监控",
+      "summary": "面向 HTX 市场数据的图表、订单簿、指标和事件检测工作区。"
+    },
+    "agentLab": {
+      "title": "Agent 实验室",
+      "summary": "用于市场上下文、推理、交易假设和策略规则的结构化研究工作区。"
+    },
+    "backtestStudio": {
+      "title": "回测工作台",
+      "summary": "用于策略规则、历史指标、回测结论和交易列表的验证工作区。"
+    },
+    "riskFirewall": {
+      "title": "风控防火墙",
+      "summary": "用于仓位规模、逐条规则检查和模拟交易批准的机构级风控层。"
+    },
+    "paperExecution": {
+      "title": "模拟执行",
+      "summary": "用于订单预览、模拟持仓和执行日志的受控模拟执行界面。"
+    },
+    "auditReports": {
+      "title": "审计报告",
+      "summary": "用于复盘市场事件、交易假设、回测、风控决策、执行和结论的审计层。"
+    },
+    "htxEcosystem": {
+      "title": "HTX 生态",
+      "summary": "展示 HTX 市场数据、AI 计算层和未来权益模型的集成与路线图。"
+    },
+    "settings": {
+      "title": "设置",
+      "summary": "配置数据源、Agent 行为、风控规则、演示模式和语言。"
+    }
+  },
+  "panels": {
+    "marketPulse": "市场脉冲",
+    "agentStatus": "Agent 状态",
+    "riskSummary": "风险摘要",
+    "klineChart": "ETH/USDT K 线",
+    "orderBook": "订单簿",
+    "indicators": "指标面板",
+    "marketContext": "市场上下文",
+    "agentReasoning": "Agent 推理",
+    "hypotheses": "假设队列",
+    "strategyRule": "策略规则",
+    "backtestResult": "回测结果",
+    "equityCurve": "权益曲线",
+    "riskDecision": "风险决策",
+    "positionSizing": "仓位规模",
+    "ruleEvaluation": "规则评估",
+    "orderTicket": "订单票据",
+    "executionPreview": "执行预览",
+    "executionLog": "执行日志",
+    "reportList": "报告列表",
+    "reportDetail": "报告详情",
+    "auditTimeline": "审计时间线",
+    "htxApi": "HTX API 集成",
+    "aiCompute": "AI 计算层",
+    "htxUtility": "$HTX 权益模型",
+    "dataSource": "数据源",
+    "agentSettings": "Agent 设置",
+    "riskSettings": "风控设置",
+    "demoMode": "演示模式",
+    "languageSettings": "语言设置"
+  },
+  "panelValues": {
+    "marketPulse": "ETH +2.35%",
+    "agentStatus": "运行中",
+    "riskSummary": "守护模式",
+    "klineChart": "MA20 / MA50 / MA200",
+    "orderBook": "价差 0.018%",
+    "indicators": "RSI 58.4",
+    "marketContext": "ETH/USDT",
+    "agentReasoning": "证据模式",
+    "hypotheses": "3 个草案",
+    "strategyRule": "突破规则",
+    "backtestResult": "PF 1.84",
+    "equityCurve": "+12.6%",
+    "riskDecision": "仅模拟",
+    "positionSizing": "0.65 ETH",
+    "ruleEvaluation": "7 通过 / 1 警告",
+    "orderTicket": "限价预览",
+    "executionPreview": "模拟成交",
+    "executionLog": "审计就绪",
+    "reportList": "5 份报告",
+    "reportDetail": "可追溯",
+    "auditTimeline": "6 个步骤",
+    "htxApi": "已连接",
+    "aiCompute": "可配置",
+    "htxUtility": "规划中",
+    "dataSource": "公共市场数据",
+    "agentSettings": "证据模式",
+    "riskSettings": "守护模式",
+    "demoMode": "已启用",
+    "languageSettings": "持久化"
+  },
+  "panelMeta": {
+    "marketPulse": "为控制中心准备的高密度市场快照。",
+    "agentStatus": "Agent 循环已在全局壳层中可见，等待后续工作流接入。",
+    "riskSummary": "默认保持守护模式，并禁用实盘交易。",
+    "klineChart": "图表区域属于市场监控模块。",
+    "orderBook": "深度、价差、不平衡和流动性评分将接入此处。",
+    "indicators": "RSI、MACD、ATR、VWAP 和趋势评分将放入此面板。",
+    "marketContext": "选中交易对和市场输入会进入结构化假设生成。",
+    "agentReasoning": "Agent 区域被设计为研究控制台，而不是聊天窗口。",
+    "hypotheses": "触发条件、失效条件、风险和回测规则卡片将放在这里。",
+    "strategyRule": "入场、出场和风控条件将用于回测验证。",
+    "backtestResult": "核心指标将包括胜率、盈利因子、期望值、回撤和交易次数。",
+    "equityCurve": "图表区域已为权益、回撤和分布可视化预留。",
+    "riskDecision": "默认决策保持为仅批准模拟交易。",
+    "positionSizing": "仓位将继续受风控规则和演示模式约束。",
+    "ruleEvaluation": "逐条规则检查会使用通过、警告和失败状态。",
+    "orderTicket": "模拟订单字段默认不涉及真实交易。",
+    "executionPreview": "执行预览不会暗示真实实盘执行。",
+    "executionLog": "时间戳和审计记录将绑定到模拟成交。",
+    "reportList": "审计报告将总结完整决策路径。",
+    "reportDetail": "每个详情视图都会覆盖事件、假设、回测、风控、执行和复盘。",
+    "auditTimeline": "复盘顺序与工作流步骤保持一致。",
+    "htxApi": "Ticker、K 线、订单簿和成交流以公共数据集成方式展示。",
+    "aiCompute": "提供方设置在集成前保持为演示、本地或可配置。",
+    "htxUtility": "未来权益分层以路线图形式展示，不标记为已完成商业功能。",
+    "dataSource": "默认使用 HTX 公共市场数据。",
+    "agentSettings": "Agent 输出保持结构化、可审计，并受研究工作流字段约束。",
+    "riskSettings": "实盘交易默认保持禁用。",
+    "demoMode": "演示模式会把订单、余额和成交限制在模拟器内。",
+    "languageSettings": "所选语言会存储在本地，并在刷新后恢复。"
+  },
+  "commandCenter": {
+    "name": "控制中心",
+    "aria": "控制中心闭环总览",
+    "badges": {
+      "demoFeed": "演示数据流",
+      "paperOnly": "仅模拟"
+    },
+    "labels": {
+      "trigger": "触发",
+      "invalidation": "失效",
+      "risk": "风险",
+      "spread": "价差 0.018%"
+    },
+    "status": {
+      "success": "通过",
+      "warning": "检查",
+      "info": "信息",
+      "danger": "警报",
+      "neutral": "日志"
+    },
+    "sections": {
+      "activeMarketEvents": "活跃市场事件",
+      "mainOpportunity": "实时决策卡",
+      "marketSnapshot": "迷你图表 / 订单簿快照",
+      "miniChart": "ETH 动量迷你图表",
+      "agentDecisions": "近期 Agent 决策 / 审计轨迹",
+      "auditTrail": "审计轨迹"
+    },
+    "metrics": {
+      "marketPulse": {
+        "title": "市场脉冲",
+        "meta": "ETH 领跑当前 HTX 演示事件簇。"
+      },
+      "agentStatus": {
+        "title": "Agent 状态",
+        "value": "运行中",
+        "meta": "研究循环已准备将事件转成交易假设。"
+      },
+      "riskSummary": {
+        "title": "风险摘要",
+        "value": "守护模式",
+        "meta": "实盘交易保持禁用，仅开放模拟流程。"
+      },
+      "activeEvents": {
+        "title": "活跃市场事件",
+        "meta": "三个交易对级事件正在等待复核。"
+      }
+    },
+    "loop": {
+      "aria": "OathFi 从市场到审计的闭环",
+      "market": {
+        "title": "市场",
+        "meta": "HTX 公共数据识别波动与流动性上下文。"
+      },
+      "agent": {
+        "title": "Agent",
+        "value": "3 个假设",
+        "meta": "证据模式提出可测试的交易想法。"
+      },
+      "risk": {
+        "title": "风控",
+        "value": "仅模拟",
+        "meta": "防火墙约束仓位、最大损失和执行模式。"
+      },
+      "opportunity": {
+        "title": "机会",
+        "meta": "一个主机会已准备进入假设生成。"
+      },
+      "audit": {
+        "title": "审计",
+        "value": "6 步追踪",
+        "meta": "每次决策都能从事件复盘到模拟结果。"
+      }
+    },
+    "marketEvents": {
+      "ethBreakout": {
+        "title": "放量突破",
+        "meta": "收复 MA20，买盘深度扩张，动量确认。"
+      },
+      "btcVolatility": {
+        "title": "波动守护已启用",
+        "meta": "ATR 扩张要求 Agent 降低置信度。"
+      },
+      "htxLiquidity": {
+        "title": "流动性观察",
+        "meta": "薄订单簿条件会在任何假设前被标记。"
+      }
+    },
+    "opportunity": {
+      "title": "回踩后的突破延续",
+      "thesis": "Agent 看到一个有条件的 ETH 机会，但必须先通过回测与风控防火墙，才可进入模拟执行。",
+      "trigger": "收盘价站稳 MA20，买盘深度高于演示阈值。",
+      "invalidation": "跌破回踩区域，或连续两次检查成交量衰减。",
+      "risk": "最大损失保持封顶，实盘交易继续禁用。",
+      "action": "生成交易假设"
+    },
+    "decisions": {
+      "hypothesis": {
+        "title": "假设已起草",
+        "meta": "触发、失效、风险和回测规则已准备。"
+      },
+      "backtest": {
+        "title": "回测信号已接受",
+        "meta": "盈利因子和回撤保持在演示阈值内。"
+      },
+      "risk": {
+        "title": "风控防火墙限制仓位",
+        "meta": "决策保持为仅批准模拟交易。"
+      }
+    },
+    "audit": {
+      "market": {
+        "title": "市场事件",
+        "meta": "来源、交易对和时间戳已记录。"
+      },
+      "agent": {
+        "title": "Agent 假设",
+        "meta": "推理路径和规则已绑定。"
+      },
+      "risk": {
+        "title": "风控防火墙",
+        "meta": "规则检查和模拟决策已存档。"
+      },
+      "review": {
+        "title": "复盘",
+        "meta": "报告可以解释完整决策路径。"
+      }
+    }
+  },
+  "dashboard": {
+    "sections": {
+      "statusBar": "控制中心状态栏",
+      "ethOneHour": "ETH/USDT 1H K线 / 订单簿"
+    },
+    "labels": {
+      "activeEvents": "活跃事件",
+      "executionMode": "执行模式",
+      "volatility": "波动",
+      "liquidity": "流动性",
+      "direction": "方向",
+      "confidence": "置信度",
+      "setupQuality": "机会质量",
+      "timeHorizon": "周期",
+      "demoModeOn": "Demo Mode ON"
+    },
+    "actions": {
+      "viewAllEvents": "查看全部事件",
+      "analyze": "分析",
+      "viewSupportingData": "查看支撑数据",
+      "viewAudit": "查看审计"
+    },
+    "empty": {
+      "noAgentRun": "尚未记录真实 Agent 运行。",
+      "noMarketEvents": "数据库中暂无市场事件。",
+      "noOpportunity": "后端暂无主机会。可以基于实时市场上下文或数据库事件生成假设。",
+      "noKline": "等待 ETH/USDT 1H K线更新。",
+      "noOrderBook": "等待实时 ETH/USDT 订单簿深度。",
+      "noDecisions": "暂无 action_logs 或 audit_reports 记录。"
+    },
+    "feedback": {
+      "hypothesisGenerated": "交易假设已生成：{{id}}"
+    }
+  },
+  "marketMonitor": {
+    "name": "市场监控",
+    "aria": "市场监控专业交易工作区",
+    "header": {
+      "venue": "HTX 演示市场",
+      "streamMeta": "公共演示数据流，仅模拟工作流，实盘交易禁用。",
+      "lastPrice": "最新价",
+      "volume24h": "24h 成交量",
+      "spread": "价差",
+      "liquidity": "流动性评分"
+    },
+    "sections": {
+      "klineChart": "K 线图",
+      "orderBook": "订单簿",
+      "tradesStream": "成交流",
+      "indicators": "指标面板",
+      "eventTimeline": "市场事件时间线"
+    },
+    "chart": {
+      "title": "ETH/USDT K 线、均线与事件标记",
+      "aria": "ETH USDT K 线图，包含移动均线、成交量柱、当前价格线和事件标记",
+      "controls": "图表控制",
+      "crosshair": "切换十字光标",
+      "measure": "测量价格区间",
+      "expand": "展开图表",
+      "legend": "图例",
+      "currentPrice": "当前价"
+    },
+    "orderBook": {
+      "title": "深度与价差",
+      "imbalance": "买盘深度 +18.7%"
+    },
+    "trades": {
+      "title": "近期成交",
+      "realTime": "实时"
+    },
+    "indicators": {
+      "title": "信号质量与市场结构",
+      "riskAdjusted": "已做风险校正",
+      "rsi": "RSI",
+      "rsiMeta": "动量健康，尚未过热。",
+      "macd": "MACD",
+      "macdMeta": "多头柱状图扩张。",
+      "atr": "ATR",
+      "atrMeta": "波动抬升，仓位应保持受限。",
+      "vwap": "VWAP",
+      "vwapMeta": "价格保持在日内公允价值上方。",
+      "depth": "深度不平衡",
+      "depthMeta": "支撑附近买盘流动性正在扩张。",
+      "trend": "趋势评分",
+      "trendMeta": "延续形态仍然有条件有效。"
+    },
+    "timeline": {
+      "title": "进入 Agent 工作流的已检测事件",
+      "agentTagged": "Agent 已标记"
+    },
+    "events": {
+      "volumeSpike": {
+        "short": "放量",
+        "title": "成交量突增",
+        "meta": "15 分钟成交量达到基线 2.4 倍，同时价格保持在 MA20 上方。"
+      },
+      "breakoutWatch": {
+        "short": "突破观察",
+        "title": "突破观察",
+        "meta": "收盘价正在测试区间上沿，买盘深度增强且价差稳定。"
+      },
+      "agentAnalysis": {
+        "short": "Agent 分析",
+        "title": "Agent 分析排队",
+        "meta": "市场上下文已准备好生成可测试假设。"
+      },
+      "riskAlert": {
+        "short": "风险提示",
+        "title": "风险提示",
+        "meta": "ATR 扩张要求在任何模拟执行前采用守护仓位。"
+      }
+    },
+    "status": {
+      "liveDemoFeed": "实时演示数据",
+      "deepBook": "深度充足",
+      "success": "通过",
+      "warning": "观察",
+      "info": "信息",
+      "danger": "风险",
+      "neutral": "日志"
+    }
+  },
+  "agentLab": {
+    "name": "Agent 实验室",
+    "aria": "Agent Lab 结构化研究工作台",
+    "brief": {
+      "question": "ETH/USDT 回踩后是否可以延续突破？",
+      "scope": "研究范围限定为 HTX 公共市场数据、演示指标、仅模拟交易的风控限制，以及可送回测的规则包。",
+      "mode": "结构化研究"
+    },
+    "sections": {
+      "researchTicket": "研究工单",
+      "briefMeta": "研究工单元数据",
+      "context": "市场上下文输入",
+      "evidenceMatrix": "证据矩阵",
+      "reasoningTrace": "推理轨迹",
+      "hypothesisQueue": "假设队列",
+      "rulePacket": "回测规则包",
+      "handoff": "交付检查清单"
+    },
+    "status": {
+      "structured": "结构化",
+      "evidenceMode": "证据模式",
+      "noChat": "清单模式",
+      "locked": "已锁定",
+      "review": "待复核",
+      "ready": "就绪",
+      "auditReady": "审计就绪"
+    },
+    "labels": {
+      "signal": "信号",
+      "source": "数据源",
+      "weight": "权重",
+      "trigger": "触发",
+      "invalidation": "失效",
+      "risk": "风险"
+    },
+    "actions": {
+      "newAnalysis": "新建分析",
+      "saveDraft": "保存草稿",
+      "sendToBacktest": "发送到回测",
+      "runBacktest": "运行回测",
+      "editRule": "编辑规则",
+      "reject": "拒绝",
+      "rejecting": "正在拒绝..."
+    },
+    "feedback": {
+      "generated": "Agent 运行已创建，假设已保存。",
+      "rejected": "假设已拒绝并保存。",
+      "ruleSaved": "策略规则草稿已保存：{{id}}",
+      "rejectedCannotBacktest": "已拒绝的假设不能发送到回测。",
+      "backtestCreated": "回测已创建：{{id}}"
+    },
+    "provider": {
+      "aria": "AI Provider 控件",
+      "provider": "Provider",
+      "model": "模型",
+      "modelPlaceholder": "模型名称",
+      "test": "测试 Provider",
+      "configureHint": "请在 backend/.env 配置该 Provider 的 API Key。"
+    },
+    "empty": {
+      "noRun": "运行一次新分析以生成结构化 A/B/C 假设。",
+      "noRunShort": "暂无 Agent 运行",
+      "awaitingRun": "等待新分析",
+      "noProviderOutput": "暂无 Provider 输出",
+      "noHypotheses": "暂无已保存假设。",
+      "generateFirst": "创建一次新分析，将 Hypothesis A/B/C 保存到数据库。",
+      "selectHypothesis": "请先选择或生成一个假设。"
+    },
+    "fields": {
+      "asset": "资产",
+      "currentPrice": "当前价格",
+      "timeframe": "周期",
+      "keyLevels": "关键价位",
+      "volume": "成交量",
+      "rsi": "RSI",
+      "macd": "MACD",
+      "orderBookSummary": "订单簿摘要",
+      "btcCorrelation": "BTC 相关性",
+      "fundingRate": "资金费率",
+      "recentEvents": "最近事件",
+      "currentTask": "当前任务",
+      "outputMode": "输出模式",
+      "confidenceCalibration": "置信度校准",
+      "aiSummary": "AI 摘要",
+      "breakoutValidity": "突破有效性",
+      "overallConfidence": "整体置信度",
+      "inputSources": "输入来源",
+      "strategyName": "策略名称",
+      "entryConditions": "入场条件",
+      "exitConditions": "出场条件",
+      "riskControls": "风险控制",
+      "strategyPreview": "策略预览",
+      "trigger": "触发条件",
+      "invalidation": "失效条件",
+      "risk": "风险",
+      "backtestRule": "回测规则",
+      "suggestedAction": "建议动作"
+    },
+    "metrics": {
+      "context": {
+        "title": "上下文输入",
+        "meta": "交易对、周期、波动、流动性和市场状态已固定。"
+      },
+      "evidence": {
+        "title": "证据检查",
+        "meta": "主假设进入后续模块前，五项检查需要通过。"
+      },
+      "hypothesis": {
+        "title": "假设草稿",
+        "meta": "候选假设包含触发、失效和风险说明。"
+      }
+    },
+    "inputs": {
+      "marketStructure": {
+        "label": "市场结构",
+        "value": "更高低点回踩",
+        "meta": "价格重新站上 MA20，MA50 继续上行。"
+      },
+      "liquidity": {
+        "label": "流动性",
+        "value": "买盘深度 +18.7%",
+        "meta": "回踩区附近的支撑侧深度改善。"
+      },
+      "volatility": {
+        "label": "波动率",
+        "value": "ATR 抬升",
+        "meta": "波动收敛前仓位必须保持守护模式。"
+      },
+      "regime": {
+        "label": "市场状态",
+        "value": "动量观察",
+        "meta": "趋势评分偏积极，但仍然是有条件假设。"
+      }
+    },
+    "evidence": {
+      "ma": {
+        "title": "MA20 收复已确认",
+        "detail": "最新收盘站上 MA20，下方仍有 MA50 支撑。"
+      },
+      "book": {
+        "title": "深度不平衡支持回踩",
+        "detail": "买盘流动性扩张，同时价差保持稳定。"
+      },
+      "atr": {
+        "title": "波动率要求限制仓位",
+        "detail": "ATR 扩张会降低下一次检查前的置信度。"
+      },
+      "audit": {
+        "title": "决策路径可追溯",
+        "detail": "每个假设字段都映射到回测或风控规则。"
+      }
+    },
+    "reasoning": {
+      "context": {
+        "title": "区分事实与假设",
+        "detail": "Agent 排序任何交易想法前，先锁定市场输入。"
+      },
+      "counter": {
+        "title": "强制记录反向论点",
+        "detail": "批准规则包前，实验室先记录这个机会可能失败的原因。"
+      },
+      "rule": {
+        "title": "把论点转为可测试规则",
+        "detail": "入场、失效、仓位和审计字段必须明确。"
+      }
+    },
+    "hypotheses": {
+      "continuation": {
+        "title": "回踩后的突破延续",
+        "summary": "若价格保持 MA20 支撑且买盘深度继续健康，这是主候选。",
+        "trigger": "15m 收盘高于 3,446，深度不平衡高于 +12%。",
+        "invalidation": "收盘跌破 3,392，或连续两次检查量能衰减。",
+        "risk": "仅模拟交易，仓位上限 0.65 ETH。"
+      },
+      "meanRevert": {
+        "title": "回归 VWAP 的均值回归",
+        "summary": "若突破动量停滞但流动性仍有序，则作为次级候选。",
+        "trigger": "突破失败且价差低于 0.025%。",
+        "invalidation": "动量评分恢复到 76/100 以上。",
+        "risk": "趋势方向不完全一致，降低置信度。"
+      },
+      "reject": {
+        "title": "等待波动冷却后再交易",
+        "summary": "如果 ATR 持续扩张且订单簿变薄，选择防御方案。",
+        "trigger": "ATR 检查失败，或买盘深度低于阈值。",
+        "invalidation": "波动压缩且市场结构保持完整。",
+        "risk": "检查恢复前不进入模拟执行。"
+      }
+    },
+    "rules": {
+      "entry": {
+        "label": "入场规则",
+        "value": "收盘 > MA20 + 回踩守住 + 深度确认"
+      },
+      "exit": {
+        "label": "出场规则",
+        "value": "止损在回踩区下方；1.8R 或动量衰减止盈"
+      },
+      "position": {
+        "label": "仓位限制",
+        "value": "最大 0.65 ETH，仅模拟交易，无实盘执行"
+      },
+      "audit": {
+        "label": "审计字段",
+        "value": "来源事件、证据 ID、假设排名、风险上限"
+      }
+    },
+    "handoff": {
+      "rule": {
+        "title": "规则包已完成",
+        "meta": "回测可读取入场、出场、仓位和失效条件。"
+      },
+      "backtest": {
+        "title": "回测范围已附加",
+        "meta": "周期、指标和基准已经准备就绪。"
+      },
+      "risk": {
+        "title": "风控防火墙待处理",
+        "meta": "最终的仅模拟审批属于后续模块。"
+      }
+    }
+  },
+  "backtestStudio": {
+    "name": "回测工作台",
+    "aria": "Backtest Studio 回测验证工作区",
+    "brief": {
+      "question": "ETH/USDT 回踩后的突破延续规则是否通过历史验证？",
+      "scope": "回测使用 Agent Lab 规则包、HTX 公共演示数据、仅模拟约束、手续费、滑点与回撤阈值。",
+      "mode": "演示回测"
+    },
+    "sections": {
+      "validationTicket": "验证工单",
+      "briefMeta": "回测工单元数据",
+      "metrics": "回测结果指标",
+      "strategyRule": "策略规则",
+      "verdict": "回测结论",
+      "equityCurve": "权益曲线",
+      "drawdownCurve": "回撤曲线",
+      "tradeDistribution": "交易分布",
+      "tradeList": "交易列表"
+    },
+    "status": {
+      "success": "通过",
+      "warning": "观察",
+      "info": "信息",
+      "danger": "失败",
+      "neutral": "日志",
+      "ruleLocked": "规则已锁定",
+      "rMultiple": "R 倍数",
+      "auditReady": "审计就绪"
+    },
+    "rules": {
+      "title": "回踩后的突破延续",
+      "entry": {
+        "label": "入场条件",
+        "value": "15m 收盘高于 3,446，收复 MA20，回踩守住，深度不平衡高于 +12%。"
+      },
+      "exit": {
+        "label": "出场条件",
+        "value": "止损位于回踩区下方；达到 1.8R 止盈，或连续两次动量衰减检查后退出。"
+      },
+      "risk": {
+        "label": "风控约束",
+        "value": "仅模拟仓位上限 0.65 ETH，账户风险不超过 1.1%，不允许实盘执行。"
+      },
+      "filter": {
+        "label": "样本过滤",
+        "value": "排除流动性过薄窗口，以及 ATR 高于守护阈值的波动尖峰。"
+      }
+    },
+    "metrics": {
+      "winRate": {
+        "title": "胜率",
+        "meta": "盈利交易占已完成样本的比例。"
+      },
+      "profitFactor": {
+        "title": "盈利因子",
+        "meta": "扣除费用后，总盈利与总亏损的比值。"
+      },
+      "expectedValue": {
+        "title": "期望值",
+        "meta": "每笔交易的平均 R 期望。"
+      },
+      "maxDrawdown": {
+        "title": "最大回撤",
+        "meta": "权益曲线从峰值到低点的最大下降。"
+      },
+      "totalTrades": {
+        "title": "交易次数",
+        "meta": "180 天样本中的已完成交易数。"
+      },
+      "averageRr": {
+        "title": "平均 R/R",
+        "meta": "计划收益与定义风险的平均比值。"
+      },
+      "sampleQuality": {
+        "title": "样本质量",
+        "meta": "经过流动性与波动过滤后的覆盖质量。"
+      },
+      "sharpeRatio": {
+        "title": "夏普比率",
+        "meta": "演示样本的风险调整收益。"
+      }
+    },
+    "verdict": {
+      "status": "有条件有效",
+      "title": "以守护仓位发送至 Risk Firewall",
+      "summary": "该规则具备正向历史优势，但高回撤区间要求先限制仓位，再进入模拟执行。",
+      "checks": {
+        "edge": {
+          "title": "历史优势",
+          "value": "盈利因子与期望值通过验证阈值。"
+        },
+        "drawdown": {
+          "title": "回撤阈值",
+          "value": "最大回撤可接受，但必须保持守护模式。"
+        },
+        "sample": {
+          "title": "样本完整性",
+          "value": "交易次数与流动性过滤足以支持演示复核。"
+        }
+      }
+    },
+    "charts": {
+      "equityTitle": "扣除费用与滑点后的权益曲线",
+      "drawdownTitle": "带守护阈值的回撤曲线",
+      "distributionTitle": "按 R 倍数统计的交易结果分布",
+      "equityAria": "回测权益曲线",
+      "drawdownAria": "回测回撤曲线",
+      "distributionAria": "按 R 倍数统计的交易分布"
+    },
+    "labels": {
+      "wins": "盈利",
+      "losses": "亏损"
+    },
+    "tradeSides": {
+      "long": "做多"
+    },
+    "tradeStatus": {
+      "takeProfit": "止盈",
+      "stopLoss": "止损",
+      "momentumFade": "动量衰减",
+      "ruleExit": "规则退出"
+    },
+    "tradeList": {
+      "title": "近期回测交易"
+    }
+  },
+  "riskFirewall": {
+    "name": "风控防火墙",
+    "aria": "风控防火墙机构级复核工作区",
+    "brief": {
+      "question": "已经通过回测的 ETH/USDT 规则是否可以进入模拟执行？",
+      "scope": "风控复核使用回测结论、演示账户限制、仅模拟执行模式、实盘禁用锁定和审计要求。"
+    },
+    "sections": {
+      "reviewTicket": "风控复核工单",
+      "positionSizing": "仓位规模",
+      "ruleEvaluation": "逐条规则评估",
+      "finalDecision": "最终风险决策",
+      "actions": "风控防火墙操作"
+    },
+    "decision": {
+      "label": "默认决策",
+      "value": "批准模拟交易"
+    },
+    "status": {
+      "guarded": "守护模式",
+      "ruleByRule": "逐条评估"
+    },
+    "metrics": {
+      "riskLevel": {
+        "title": "风险等级",
+        "value": "中等守护",
+        "meta": "回撤预警要求仓位低于常规演示上限。"
+      },
+      "decision": {
+        "title": "风险决策",
+        "value": "仅模拟",
+        "meta": "默认批准仅限模拟执行。"
+      },
+      "rules": {
+        "title": "规则检查",
+        "meta": "进入模拟执行前，每道闸门都会被评估。"
+      },
+      "liveStatus": {
+        "title": "实盘交易",
+        "meta": "防火墙不提供真实资金订单审批。"
+      }
+    },
+    "position": {
+      "accountEquity": "账户权益",
+      "accountEquityMeta": "仅用于风险计算的演示账户价值。",
+      "riskPerTrade": "单笔风险",
+      "riskPerTradeMeta": "计算建议仓位前先应用硬性上限。",
+      "suggestedSize": "建议仓位",
+      "suggestedSizeMeta": "受波动率与回撤检查影响后下调。",
+      "maxLoss": "最大损失",
+      "maxLossMeta": "防火墙允许的最坏模拟损失。"
+    },
+    "rules": {
+      "executionMode": {
+        "rule": "执行模式",
+        "threshold": "仅模拟",
+        "actual": "仅模拟",
+        "notes": "实盘交易默认保持禁用。"
+      },
+      "accountRisk": {
+        "rule": "账户风险",
+        "threshold": "<= 1.25%",
+        "actual": "1.10%",
+        "notes": "单笔风险低于守护账户上限。"
+      },
+      "positionCap": {
+        "rule": "仓位上限",
+        "threshold": "<= 0.70 ETH",
+        "actual": "0.65 ETH",
+        "notes": "建议仓位位于仅模拟上限内。"
+      },
+      "drawdown": {
+        "rule": "回撤闸门",
+        "threshold": "<= 6.5%",
+        "actual": "6.8%",
+        "notes": "预警会限制批准范围，并阻止仓位增加。"
+      },
+      "liquidity": {
+        "rule": "流动性过滤",
+        "threshold": "深度 +12%",
+        "actual": "深度 +18.7%",
+        "notes": "订单簿深度足以支持演示复核。"
+      },
+      "volatility": {
+        "rule": "波动守护",
+        "threshold": "ATR 低于尖峰区间",
+        "actual": "ATR 偏高但受控",
+        "notes": "守护仓位可以吸收偏高的 ATR 读数。"
+      },
+      "stopLoss": {
+        "rule": "止损定义",
+        "threshold": "明确失效条件",
+        "actual": "3,392 回踩跌破",
+        "notes": "止损位映射到回测规则包。"
+      },
+      "audit": {
+        "rule": "审计轨迹",
+        "threshold": "事件、假设、回测、风控",
+        "actual": "全部已关联",
+        "notes": "进入模拟执行前，决策路径可追溯。"
+      }
+    },
+    "final": {
+      "status": "仅模拟",
+      "title": "批准模拟交易",
+      "summary": "该策略可以在受限仓位下进入模拟执行，不授予任何实盘交易权限。",
+      "controls": {
+        "paperOnly": "执行模式锁定为模拟交易。",
+        "sizeCap": "建议仓位封顶为 0.65 ETH。",
+        "stop": "止损与失效条件必须随订单票据保留。",
+        "audit": "风控决策已保存，用于审计复盘。"
+      }
+    },
+    "externalRisk": {
+      "newsRisk": {
+        "rule": "新闻风险",
+        "threshold": "无硬阻断；新闻风险低于 55%",
+        "notes": "读取新闻情报模块输出的 NewsRiskContext。"
+      },
+      "onChainRisk": {
+        "rule": "链上风险",
+        "threshold": "OnChainRisk 低于 55%",
+        "notes": "使用鲸鱼转账、交易所流入、解锁和跨链桥告警上下文。"
+      },
+      "macroRisk": {
+        "rule": "宏观风险",
+        "threshold": "MacroRisk 低于 45%",
+        "notes": "使用美联储、CPI、利率、美元指数和地缘事件上下文。"
+      },
+      "htxRisk": {
+        "rule": "HTX 生态风险",
+        "threshold": "HTX 生态风险低于 45%",
+        "notes": "跟踪 HTX 公告、交易对操作和生态事件作为上下文。"
+      }
+    },
+    "decisionEngine": {
+      "confidence": {
+        "rule": "置信度阈值",
+        "threshold": "置信度不低于 60",
+        "notes": "读取共享 Decision Engine 结果，不在风控页重复计算。"
+      },
+      "feasibility": {
+        "rule": "可行度阈值",
+        "threshold": "可行度不低于 50",
+        "notes": "可行度来自价差、流动性、数据质量、R/R 和风险。"
+      },
+      "risk": {
+        "rule": "风险度阈值",
+        "threshold": "风险度低于 80",
+        "notes": "风险度达到 80 或以上必须阻断模拟交付。"
+      },
+      "hardBlock": {
+        "rule": "HardBlock",
+        "threshold": "HardBlock 必须为 false",
+        "notes": "硬阻断会强制 BLOCK 或 NO_TRADE，不能被高置信度覆盖。"
+      }
+    }
+  },
+  "paperExecution": {
+    "name": "模拟执行",
+    "aria": "模拟执行工作区",
+    "brief": {
+      "question": "是否基于已通过风控的决策创建 ETH/USDT 模拟订单？",
+      "scope": "Paper Execution 仅使用风控批准的规则、演示账户计算、模拟成交和审计日志。不涉及真实资金、交易所实盘订单或钱包转账。",
+      "decision": "不涉及真实资金",
+      "lockLabel": "执行边界"
+    },
+    "sections": {
+      "executionTicket": "执行工单",
+      "ticketMeta": "模拟执行工单元数据",
+      "orderTicket": "订单票",
+      "executionPreview": "执行预览",
+      "activePositions": "模拟持仓",
+      "executionLog": "执行日志"
+    },
+    "status": {
+      "paperOnly": "仅模拟交易",
+      "simulatorRoute": "模拟器路径",
+      "previewOnly": "仅预览",
+      "demoAccount": "演示账户",
+      "auditReady": "审计就绪",
+      "simulatedOpen": "模拟持仓中",
+      "watchOnly": "仅观察"
+    },
+    "metrics": {
+      "funds": {
+        "title": "资金",
+        "value": "无真实资金",
+        "meta": "订单票只读取演示余额，不能触碰用户真实资产。"
+      },
+      "mode": {
+        "title": "执行模式",
+        "value": "仅模拟",
+        "meta": "所有成交都是为研究复盘创建的模拟器记录。"
+      },
+      "live": {
+        "title": "实盘交易",
+        "meta": "此处不提供实盘下单接口、钱包转账或交易所成交。"
+      },
+      "audit": {
+        "title": "审计链接",
+        "value": "风控已批准",
+        "meta": "每条模拟成交都会关联市场、假设、回测和风控决策。"
+      }
+    },
+    "ticket": {
+      "symbol": "交易对",
+      "side": "方向",
+      "orderType": "订单类型",
+      "entry": "限价入场",
+      "size": "模拟数量",
+      "stop": "止损",
+      "takeProfit": "止盈",
+      "route": "执行路径",
+      "executeNote": "此操作只创建模拟交易记录，不会发送交易所实盘订单。"
+    },
+    "values": {
+      "long": "做多",
+      "limit": "限价",
+      "simulatorRoute": "内部模拟交易器",
+      "noPosition": "无持仓"
+    },
+    "preview": {
+      "estimatedFill": "预计成交",
+      "estimatedFillMeta": "基于演示价差和滑点假设计算。",
+      "slippage": "模拟滑点",
+      "slippageMeta": "仅作用于模拟器，不作用于交易所订单簿。",
+      "fees": "模拟手续费",
+      "feesMeta": "用于审计计算的演示费用估算。",
+      "maxSimulatedLoss": "最大模拟损失",
+      "maxSimulatedLossMeta": "由止损距离和模拟数量推导。",
+      "noExchangeOrder": "实盘交易路由已禁用，此预览不会变成真实资金订单。"
+    },
+    "tables": {
+      "mark": "标记价"
+    },
+    "log": {
+      "orderCreated": {
+        "title": "模拟订单已创建",
+        "meta": "订单票已写入内部模拟器。"
+      },
+      "safetyLock": {
+        "title": "已验证实盘锁定",
+        "meta": "成交模拟前确认执行路径仅为模拟。"
+      },
+      "fillSimulated": {
+        "title": "成交已模拟",
+        "meta": "持仓写入演示账本，不涉及真实资金。"
+      },
+      "auditLinked": {
+        "title": "审计记录已关联",
+        "meta": "执行日志已绑定到通过风控防火墙的决策。"
+      }
+    }
+  },
+  "auditReports": {
+    "name": "审计报告",
+    "aria": "审计报告复盘工作区",
+    "sections": {
+      "reportList": "报告列表",
+      "reportDetail": "报告详情",
+      "marketEvent": "市场事件",
+      "agentHypothesis": "AI 假设",
+      "backtestResult": "回测结果",
+      "riskFirewall": "风控防火墙",
+      "execution": "执行",
+      "review": "复盘",
+      "auditLog": "审计日志",
+      "actions": "审计报告操作"
+    },
+    "status": {
+      "demoArchive": "演示归档",
+      "reviewComplete": "复盘完成",
+      "needsReview": "待复核",
+      "watchOnly": "仅观察",
+      "immutable": "不可变轨迹",
+      "success": "通过",
+      "warning": "观察",
+      "info": "信息",
+      "danger": "已锁定",
+      "neutral": "日志"
+    },
+    "labels": {
+      "symbol": "交易对",
+      "actor": "执行方",
+      "recordHash": "记录哈希"
+    },
+    "metrics": {
+      "reports": {
+        "title": "报告数",
+        "meta": "演示工作区中已有闭环报告可供查看。"
+      },
+      "coverage": {
+        "title": "链路覆盖",
+        "meta": "市场、Agent、回测、风控、执行与复盘均已关联。"
+      },
+      "exceptions": {
+        "title": "异常项",
+        "meta": "保留一条回撤预警，供后续复核。"
+      },
+      "live": {
+        "title": "实盘交易",
+        "meta": "审计记录确认整个流程保持仅模拟。"
+      }
+    },
+    "reports": {
+      "ethBreakout": {
+        "title": "ETH 突破延续复盘",
+        "summary": "从市场事件识别到模拟执行复盘的完整六段链路。"
+      },
+      "btcVolatility": {
+        "title": "BTC 波动风控复盘",
+        "summary": "针对 ATR 抬升和置信度下调的风险异常复核。"
+      },
+      "htxLiquidity": {
+        "title": "HTX 流动性观察复盘",
+        "summary": "在假设批准前，对订单簿偏薄状态生成仅观察报告。"
+      }
+    },
+    "detail": {
+      "marketEvent": {
+        "value": "放量突破，并伴随买盘深度扩张。",
+        "meta": "HTX 公共演示数据在 Agent 生成假设前记录了价格、成交量、订单簿上下文和时间戳。"
+      },
+      "agentHypothesis": {
+        "value": "回踩后的突破延续。",
+        "meta": "Agent 记录了触发、失效、反向论点、风险说明和可回测规则字段。"
+      },
+      "backtestResult": {
+        "value": "盈利因子 1.84，胜率 57.8%，最大回撤 6.8%。",
+        "meta": "历史验证通过，同时保留守护模式下的回撤预警，并确认样本质量充足。"
+      },
+      "riskFirewall": {
+        "value": "仅批准模拟交易，建议仓位 0.65 ETH。",
+        "meta": "风控防火墙保持实盘禁用、限制账户风险，并保留预警状态。"
+      },
+      "execution": {
+        "value": "通过内部模拟路径创建限价订单。",
+        "meta": "执行记录不涉及交易所订单、钱包转账或真实资金。"
+      },
+      "review": {
+        "value": "决策路径完整，可供操作员复盘。",
+        "meta": "报告关联市场、AI、回测、风控、执行和审计产物，支持完整回放。"
+      }
+    },
+    "log": {
+      "actors": {
+        "market": "市场",
+        "agent": "Agent",
+        "backtest": "回测",
+        "risk": "风控",
+        "execution": "执行",
+        "review": "复盘"
+      },
+      "market": {
+        "title": "市场事件快照已封存"
+      },
+      "agent": {
+        "title": "假设与反向论点已附加"
+      },
+      "backtest": {
+        "title": "回测结论与交易样本已关联"
+      },
+      "risk": {
+        "title": "仅模拟的风控决策已存档"
+      },
+      "execution": {
+        "title": "模拟执行日志已追加"
+      },
+      "review": {
+        "title": "最终复盘摘要已生成"
+      }
+    },
+    "news": {
+      "title": "引用新闻 / 链上告警",
+      "references": "referencedNews",
+      "onChainReferences": "referencedOnChainAlerts",
+      "none": "无",
+      "hardBlockReferenced": "已引用硬阻断",
+      "referencedFields": "已预留 referencedNews / referencedOnChainAlerts"
+    },
+    "decision": {
+      "title": "决策引擎记录"
+    }
+  },
+  "htxEcosystem": {
+    "name": "HTX 生态"
+  },
+  "settings": {
+    "name": "设置",
+    "aria": "设置控制台",
+    "brief": {
+      "title": "工作区配置，实盘交易保持锁定",
+      "summary": "设置页提供数据源、AI 厂商、风控和语言控制；实盘交易保持锁定，行情与情报只使用真实来源。"
+    },
+    "sections": {
+      "controlPlane": "设置控制台",
+      "dataSource": "数据源",
+      "agent": "Agent 设置",
+      "aiProvider": "AI 厂商",
+      "risk": "风控设置",
+      "demoMode": "演示模式",
+      "language": "语言设置"
+    },
+    "labels": {
+      "executionBoundary": "执行边界",
+      "languageOptions": "语言选项"
+    },
+    "values": {
+      "evidenceMode": "证据模式",
+      "guarded": "守护模式",
+      "persistent": "持久化",
+      "required": "必需",
+      "disabled": "已禁用"
+    },
+    "status": {
+      "connected": "已连接",
+      "standby": "备用",
+      "active": "启用中",
+      "enabled": "已启用",
+      "disabled": "已禁用",
+      "locked": "已锁定",
+      "guarded": "守护中",
+      "synced": "已同步",
+      "publicOnly": "仅公共数据",
+      "evidenceMode": "证据模式",
+      "guardrailsLocked": "护栏已锁定",
+      "configurable": "可配置"
+    },
+    "actions": {
+      "testDataSource": "测试数据源"
+    },
+    "feedback": {
+      "saved": "设置已保存并同步到运行时"
+    },
+    "metrics": {
+      "data": {
+        "title": "数据路径",
+        "meta": "HTX 公共数据流是默认市场来源。"
+      },
+      "agent": {
+        "title": "Agent 模式",
+        "meta": "输出保持结构化，便于回测和风控复核。"
+      },
+      "risk": {
+        "title": "风控模式",
+        "meta": "每次交付前都会阻断实盘执行。"
+      },
+      "language": {
+        "title": "语言",
+        "meta": "语言偏好会持久化到本地存储。"
+      }
+    },
+    "dataSource": {
+      "stream": {
+        "label": "Ticker / K 线数据流",
+        "meta": "接收图表、事件和指标所需的公共市场更新。"
+      },
+      "rest": {
+        "label": "快照备用源",
+        "meta": "当数据流不可用时提供订单簿和近期成交。"
+      },
+      "symbol": {
+        "label": "默认交易对",
+        "meta": "供控制中心、Agent Lab、回测工作台和模拟订单使用。"
+      }
+    },
+    "agent": {
+      "researchMode": {
+        "label": "研究模式",
+        "meta": "Agent 输出必须包含证据、触发条件、失效条件和风险说明。"
+      },
+      "counterThesis": {
+        "label": "反向论点检查",
+        "meta": "每个假设都必须记录该交易思路可能失败的原因。"
+      },
+      "chatSurface": {
+        "label": "开放聊天界面",
+        "meta": "产品保持结构化工作流，而不是通用聊天机器人。"
+      }
+    },
+    "ai": {
+      "provider": "默认厂商",
+      "model": "模型",
+      "modelPlaceholder": "填写模型名称",
+      "apiBase": "API 地址",
+      "apiBasePlaceholder": "填写兼容接口地址",
+      "apiKey": "API 密钥",
+      "apiKeyPlaceholder": "填写后端调用所需密钥",
+      "persistenceNote": "设置会保存到后端，并用于下一次 AI 分析或交易假设生成。"
+    },
+    "risk": {
+      "liveTrading": {
+        "label": "实盘交易",
+        "meta": "不提供交易所下单、钱包转账或真实资金审批能力。"
+      },
+      "riskPerTrade": {
+        "label": "单笔风险",
+        "meta": "计算模拟仓位前会先限制演示账户风险。"
+      },
+      "positionCap": {
+        "label": "仓位上限",
+        "meta": "建议模拟仓位保持低于守护阈值。"
+      }
+    },
+    "demo": {
+      "enabledTitle": "演示模式已启用",
+      "disabledTitle": "演示模式已关闭",
+      "toggleMeta": "关闭演示模式不会启用实盘交易，实盘锁定仍然生效。",
+      "paperLedger": {
+        "title": "仅模拟账本",
+        "meta": "余额、成交、费用和 PnL 都是模拟器记录。"
+      },
+      "noSecrets": {
+        "title": "不存储密钥",
+        "meta": "设置页不会暴露交易所密钥、钱包私钥或私人凭证。"
+      },
+      "auditTrail": {
+        "title": "保留审计轨迹",
+        "meta": "配置状态会在报告和复核页面中保持可见。"
+      }
+    },
+    "language": {
+      "persistenceNote": "语言选择会立即生效，并在刷新后保持。"
+    }
+  },
+  "decision": {
+    "card": {
+      "title": "实时决策卡"
+    },
+    "panel": {
+      "kicker": "规则决策引擎",
+      "title": "实时决策面板"
+    },
+    "labels": {
+      "confidence": "置信度 Confidence",
+      "feasibility": "可行度 Feasibility",
+      "risk": "风险度 Risk",
+      "action": "动作",
+      "nextConfirmation": "下一确认条件",
+      "longShort": "多 / 空",
+      "hardBlockActive": "HardBlock 已触发",
+      "noHardBlock": "无硬阻断",
+      "mockAi": "模拟 AI"
+    },
+    "sections": {
+      "topEvidence": "核心证据",
+      "warnings": "警告",
+      "blockingReasons": "阻断原因",
+      "scoreBreakdown": "评分拆解",
+      "hardBlock": "HardBlock"
+    },
+    "metrics": {
+      "longConfidence": "做多置信度",
+      "shortConfidence": "做空置信度",
+      "marketConfidence": "市场置信度",
+      "finalConfidence": "最终置信度",
+      "feasibilityScore": "可行性评分",
+      "riskScore": "风险评分",
+      "newsRisk": "新闻风险",
+      "onChainRisk": "链上风险",
+      "macroRisk": "宏观风险",
+      "dataReliabilityMultiplier": "数据可靠性系数",
+      "conflictMultiplier": "信号冲突系数",
+      "eventRiskMultiplier": "事件风险系数"
+    },
+    "breakdown": {
+      "trend": "趋势 / 结构",
+      "momentum": "动量",
+      "volume": "成交确认",
+      "liquidity": "流动性 / 盘口",
+      "volatilityQuality": "波动质量",
+      "riskReward": "风险收益比"
+    },
+    "actions": {
+      "OBSERVE": "观察",
+      "WAIT": "等待",
+      "ALLOW_PAPER_LONG": "允许模拟做多",
+      "ALLOW_PAPER_SHORT": "允许模拟做空",
+      "REDUCE_SIZE": "降低仓位",
+      "BLOCK": "阻断",
+      "NO_TRADE": "不交易"
+    },
+    "regimes": {
+      "breakout-attempt": "突破尝试",
+      "pullback-watch": "回踩观察",
+      "range-bound": "区间震荡",
+      "volatility-expansion": "波动扩张",
+      "liquidity-thin": "流动性偏薄",
+      "risk-off": "风险回避"
+    },
+    "empty": {
+      "noBlockingReasons": "当前决策没有触发阻断原因。"
+    }
+  },
+  "errors": {
+    "generic": "工作区无法加载。"
+  },
+  "emptyStates": {
+    "generic": "当前模块暂无记录。"
+  },
+  "loadingStates": {
+    "syncing": "正在同步 HTX WebSocket...",
+    "generating": "正在生成交易假设...",
+    "backtesting": "正在运行回测...",
+    "riskChecking": "正在检查风控规则...",
+    "creatingOrder": "正在创建模拟订单..."
+  },
+  "marketLive": {
+    "status": {
+      "live": "实时行情已连接",
+      "degraded": "行情降级",
+      "restSnapshot": "REST 快照",
+      "stale": "数据过期",
+      "mock": "模拟",
+      "loading": "加载中",
+      "notListed": "Not Listed",
+      "reconnecting": "正在重连",
+      "disconnected": "已断开",
+      "fallback": "备用数据",
+      "error": "错误"
+    },
+    "header": {
+      "venue": "HTX 公共行情数据",
+      "streamMeta": "真实行情数据源：{{source}}；更新于 {{updated}}；延迟 {{latency}} ms。实盘交易保持禁用。",
+      "source": "来源",
+      "updated": "更新于",
+      "latency": "延迟",
+      "lastPrice": "最新价",
+      "high24h": "24h 最高",
+      "low24h": "24h 最低",
+      "volume24h": "24h 成交额",
+      "fundingRate": "资金费率",
+      "spotFundingMeta": "现货交易对；衍生品资金费率规划中",
+      "spread": "价差",
+      "bookLevels": "盘口档位",
+      "quoteVolume": "计价成交额",
+      "bestBidAsk": "最佳买价 / 卖价",
+      "bidAskVisible": "买盘 / 卖盘可见"
+    },
+    "sections": {
+      "orderBook": "订单簿",
+      "tradesStream": "实时成交流",
+      "indicators": "指标面板",
+      "eventTimeline": "市场事件"
+    },
+    "tickerBar": {
+      "aria": "HTX 实时行情条"
+    },
+    "panel": {
+      "collapseReserved": "折叠面板预留"
+    },
+    "selector": {
+      "aria": "HTX 交易对选择器",
+      "searchPlaceholder": "搜索 HTX 交易对",
+      "defaultSymbols": "默认交易对",
+      "filters": "交易对筛选",
+      "symbolList": "HTX 交易对"
+    },
+    "chart": {
+      "terminal": "专业K线终端",
+      "title": "{{symbol}} 实时K线工作区",
+      "controls": "K线控件",
+      "crosshair": "十字光标与缩放",
+      "zoomPan": "缩放与拖动",
+      "scrollLatest": "回到最新",
+      "indicatorsDrawings": "指标与画线",
+      "dataStatus": "数据状态",
+      "ohlc": "OHLC"
+    },
+    "orderBook": {
+      "title": "实时深度与价差",
+      "precision": "聚合粒度",
+      "auto": "自动",
+      "imbalance": "买卖盘不平衡",
+      "liquidityScore": "流动性评分",
+      "decreaseAggregation": "降低聚合精度",
+      "increaseAggregation": "提高聚合精度"
+    },
+    "trades": {
+      "title": "实时成交流",
+      "buffered": "已缓存 {{count}} 条",
+      "emptyLarge": "等待实时成交"
+    },
+    "indicators": {
+      "title": "信号质量与市场结构",
+      "riskAdjusted": "风险调整",
+      "rsiMeta": "用于动量参考的节流显示指标。",
+      "macdMeta": "相对 HTX 24h 开盘价的实时差值。",
+      "atrMeta": "24h 区间代理；终端内提供图表 ATR。",
+      "vwapMeta": "公共成交量加权参考价。",
+      "depthMeta": "可见买卖盘深度失衡。",
+      "depth": "深度不平衡",
+      "ma20Meta": "来自 HTX K 线的短期均线。",
+      "ma50Meta": "来自 HTX K 线的中期均线。",
+      "ma200Meta": "来自 HTX K 线的长期均线。",
+      "timeframe": "周期",
+      "timeframeMeta": "切换 REST 初始化和实时 K 线订阅。",
+      "errorMeta": "指标快照已降级。"
+    },
+    "timeline": {
+      "title": "输入 Agent 工作流的检测事件",
+      "detect": "检测事件",
+      "detecting": "检测中...",
+      "showLess": "收起",
+      "empty": "当前交易对暂无已入库的检测事件。",
+      "error": "市场事件加载失败。"
+    },
+    "workspace": {
+      "resizeBottom": "调整图表和底部面板高度",
+      "resizeRight": "调整图表和盘口区域宽度",
+      "resizeOrderBookTrades": "调整订单簿和成交流高度",
+      "gridHint": "拖拽面板手柄并缩放角标；布局会保存在本地。",
+      "resetLayout": "恢复默认布局",
+      "resizePanel": "缩放面板"
+    },
+    "panels": {
+      "chart": "MarketChartPanel",
+      "orderBook": "OrderBookPanel",
+      "trades": "TradesStreamPanel",
+      "indicators": "IndicatorPanel",
+      "events": "MarketEventTimelinePanel",
+      "diagnostics": "DiagnosticsPanel",
+      "candles": "根 K 线",
+      "depthSubtitle": "HTX 实时深度、价差与不平衡",
+      "tradesSubtitle": "保留最近 {{count}} 条成交",
+      "indicatorsSubtitle": "REST 指标快照叠加实时深度上下文",
+      "eventsSubtitle": "后端检测事件并关联工作流 ID",
+      "diagnosticsSubtitle": "流新鲜度、数据源与重连计数"
+    },
+    "diagnostics": {
+      "aria": "行情流诊断",
+      "maxStreamAge": "最大流延迟",
+      "staleDrops": "重试与过期流跟踪"
+    },
+    "drawing": {
+      "trend": "趋势线",
+      "horizontal": "水平线",
+      "vertical": "垂直线",
+      "rectangle": "矩形",
+      "fibonacci": "斐波那契",
+      "text": "文本",
+      "clear": "清除"
+    },
+    "indicatorManager": {
+      "aria": "指标管理器",
+      "title": "指标",
+      "clearAll": "清空全部",
+      "empty": "暂无指标",
+      "settings": "设置",
+      "hide": "隐藏指标",
+      "show": "显示指标",
+      "delete": "删除",
+      "save": "保存",
+      "cancel": "取消",
+      "resetDefault": "恢复默认"
+    },
+    "indicatorParams": {
+      "period": "周期",
+      "source": "数据源",
+      "offset": "偏移",
+      "stdDev": "标准差",
+      "basisType": "基准类型",
+      "anchor": "锚定周期",
+      "step": "步长",
+      "max": "最大值",
+      "showMA": "显示均量线",
+      "ma1": "均量线1",
+      "ma2": "均量线2",
+      "fast": "快线",
+      "slow": "慢线",
+      "signal": "信号线",
+      "overbought": "超买",
+      "oversold": "超卖",
+      "kSmoothing": "K平滑",
+      "dSmoothing": "D平滑"
+    },
+    "indicatorParamOptions": {
+      "open": "开盘",
+      "high": "最高",
+      "low": "最低",
+      "close": "收盘",
+      "hl2": "HL2",
+      "hlc3": "HLC3",
+      "ohlc4": "OHLC4",
+      "session": "日内",
+      "week": "周",
+      "month": "月",
+      "SMA": "SMA",
+      "EMA": "EMA"
+    }
+  },
+  "newsIntelligence": {
+    "kicker": "市场情报输入层",
+    "title": "新闻与链上情报",
+    "subtitle": "展示来自真实来源的新闻、链上、宏观、融资和 HTX 生态上下文，供后续决策评分使用。",
+    "feedAria": "新闻与链上情报列表",
+    "empty": "暂无相关情报，新闻风险上下文保持中性。",
+    "labels": {
+      "marketIntelligenceInput": "市场情报",
+      "mockVisible": "真实来源",
+      "mockItem": "模拟条目",
+      "liveItem": "实时条目",
+      "nonLiveItem": "非实时来源",
+      "relatedSymbols": "相关币种",
+      "marketWide": "全市场",
+      "hardBlock": "硬阻断",
+      "severity": "严重度",
+      "freshness": "新鲜度",
+      "sourceType": "来源类型",
+      "sourceDomain": "来源域名",
+      "syntheticSource": "未提供来源",
+      "urlVerification": "链接验证",
+      "urlVerified": "已验证",
+      "urlNotVerified": "未验证"
+    },
+    "actions": {
+      "openSource": "原文链接"
+    },
+    "filters": {
+      "aria": "新闻分类筛选",
+      "all": "全部",
+      "crypto": "Crypto",
+      "onchain": "链上",
+      "macro": "宏观",
+      "funding": "融资",
+      "htx": "HTX",
+      "risk": "风险事件"
+    },
+    "categories": {
+      "crypto": "Crypto / Web3",
+      "onchain": "链上告警",
+      "macro": "宏观事件",
+      "funding": "融资 / VC",
+      "htx": "HTX 生态",
+      "risk": "风险事件"
+    },
+    "sentiment": {
+      "positive": "正面",
+      "neutral": "中性",
+      "negative": "负面",
+      "mixed": "混合"
+    },
+    "riskLevel": {
+      "neutral": "风险",
+      "low": "低",
+      "medium": "中",
+      "high": "高"
+    },
+    "sourceStatus": {
+      "live": "实时",
+      "mock": "模拟",
+      "planned": "计划接入",
+      "backend-required": "需要后端",
+      "unavailable": "不可用",
+      "error": "错误"
+    },
+    "summary": {
+      "riskEvents": "风险事件",
+      "onChainWarnings": "链上警告",
+      "macroEvents": "宏观事件",
+      "htxEcosystem": "HTX 生态",
+      "hardBlockActive": "硬阻断事件已触发"
+    },
+    "sources": {
+      "aria": "新闻源适配器状态",
+      "title": "新闻源接入规划",
+      "noSecrets": "默认不需要 API Key 或 Secret"
+    }
+  }
+}
