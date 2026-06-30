@@ -51,6 +51,9 @@ export type SymbolStatus = {
 };
 
 type MarketDataState = {
+  runtimeStartedAt: number;
+  coldStartMs: number | null;
+  storeUpdateCount: number;
   activeSymbol: string;
   activeTimeframe: HtxTimeframe;
   availableSymbols: HtxSymbol[];
@@ -99,6 +102,8 @@ type MarketDataState = {
   applyFallback: (symbol: string, reason: string) => void;
   clearSymbolData: (symbol: string) => void;
 };
+
+const MARKET_RUNTIME_STARTED_AT = Date.now();
 
 function createFallbackSymbols(): HtxSymbol[] {
   return DEFAULT_SYMBOLS.map((symbol) => {
@@ -355,6 +360,9 @@ function updateIntervalAverage(previousAverage: number | null, previousCount: nu
 }
 
 export const useMarketDataStore = create<MarketDataState>((set, get) => ({
+  runtimeStartedAt: MARKET_RUNTIME_STARTED_AT,
+  coldStartMs: null,
+  storeUpdateCount: 0,
   activeSymbol: "ETH/USDT",
   activeTimeframe: "1m",
   availableSymbols: createFallbackSymbols(),
@@ -488,6 +496,8 @@ export const useMarketDataStore = create<MarketDataState>((set, get) => ({
         dataSource: hasLiveStream ? state.dataSource : snapshot.dataSource ?? state.dataSource,
         connectionStatus,
         lastUpdated: now,
+        coldStartMs: state.coldStartMs ?? Math.max(0, now - state.runtimeStartedAt),
+        storeUpdateCount: state.storeUpdateCount + 1,
         isFallbackMode: snapshot.isMock ?? false,
         error: snapshot.status === "disconnected" ? state.error : null,
         snapshotVersion: state.snapshotVersion + 1,
@@ -543,6 +553,8 @@ export const useMarketDataStore = create<MarketDataState>((set, get) => ({
         connectionStatus: nextStatus,
         isFallbackMode: Boolean(meta?.isMock ?? ticker.isMock),
         lastUpdated: storeUpdatedAt,
+        coldStartMs: state.coldStartMs ?? Math.max(0, storeUpdatedAt - state.runtimeStartedAt),
+        storeUpdateCount: state.storeUpdateCount + 1,
         error: null,
         latencyMetrics: {
           ...withMessageMetrics(state.latencyMetrics, meta, storeUpdatedAt),
@@ -593,6 +605,8 @@ export const useMarketDataStore = create<MarketDataState>((set, get) => ({
         connectionStatus: nextStatus,
         isFallbackMode: Boolean(meta?.isMock),
         lastUpdated: storeUpdatedAt,
+        coldStartMs: current.coldStartMs ?? Math.max(0, storeUpdatedAt - current.runtimeStartedAt),
+        storeUpdateCount: current.storeUpdateCount + 1,
         error: null,
         latencyMetrics: {
           ...withMessageMetrics(current.latencyMetrics, meta, storeUpdatedAt),
@@ -657,6 +671,8 @@ export const useMarketDataStore = create<MarketDataState>((set, get) => ({
         connectionStatus: nextStatus,
         isFallbackMode: Boolean(meta?.isMock ?? orderBook.isMock),
         lastUpdated: storeUpdatedAt,
+        coldStartMs: state.coldStartMs ?? Math.max(0, storeUpdatedAt - state.runtimeStartedAt),
+        storeUpdateCount: state.storeUpdateCount + 1,
         error: null,
         latencyMetrics: {
           ...withMessageMetrics(state.latencyMetrics, meta, storeUpdatedAt),
@@ -731,6 +747,8 @@ export const useMarketDataStore = create<MarketDataState>((set, get) => ({
         connectionStatus: nextStatus,
         isFallbackMode: Boolean(meta?.isMock),
         lastUpdated: storeUpdatedAt,
+        coldStartMs: state.coldStartMs ?? Math.max(0, storeUpdatedAt - state.runtimeStartedAt),
+        storeUpdateCount: state.storeUpdateCount + 1,
         error: null,
         latencyMetrics: {
           ...withMessageMetrics(state.latencyMetrics, meta, storeUpdatedAt),
@@ -795,6 +813,7 @@ export const useMarketDataStore = create<MarketDataState>((set, get) => ({
           chartUpdateCount: nextCount,
         },
         connectionStatus: marketStatusFromDiagnostics(streamDiagnostics, state.isFallbackMode),
+        storeUpdateCount: state.storeUpdateCount + 1,
       };
     }),
 

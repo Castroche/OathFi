@@ -1,18 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { fetchMarketEvents } from "../../api/market";
+import { eventTypeLabel } from "../../lib/displayLabels";
 import { useMarketDataStore } from "../../stores/marketDataStore";
 
 const markerSlots = [18, 42, 66, 82];
 
-function markerLabel(eventType: string) {
-  if (eventType === "volume_spike") return "Volume Spike";
-  if (eventType === "breakout_watch") return "Breakout Watch";
-  if (eventType === "agent_analysis") return "Agent Analysis";
-  if (eventType === "liquidity_shift") return "Liquidity Shift";
-  return eventType.replace(/_/g, " ");
-}
-
 export function MarketEventMarkerLayer() {
+  const { t } = useTranslation();
   const activeSymbol = useMarketDataStore((state) => state.activeSymbol);
   const eventsQuery = useQuery({
     queryKey: ["market-events", activeSymbol, "markers"],
@@ -33,10 +28,9 @@ export function MarketEventMarkerLayer() {
           key={event.id}
           style={{ left: `${markerSlots[index % markerSlots.length]}%` }}
         >
-          {markerLabel(event.event_type)}
+          {eventTypeLabel(t, event.event_type)}
         </span>
       ))}
     </div>
   );
 }
-

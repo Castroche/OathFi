@@ -10,7 +10,8 @@
     "stageEight": "Audit Reports",
     "stageNine": "HTX Ecosystem",
     "stageSettings": "Settings",
-    "version": "Version {{version}}"
+    "version": "Version {{version}}",
+    "loading": "Loading"
   },
   "brand": {
     "name": "OathFi",
@@ -100,6 +101,7 @@
     "summaryCopied": "Summary Copied",
     "rejectStrategy": "Reject Strategy",
     "returnToAgentLab": "Return to Agent Lab",
+    "returnToRiskFirewall": "Return to Risk Firewall",
     "executePaperTrade": "Execute Paper Trade"
   },
   "tables": {
@@ -401,6 +403,32 @@
       "viewSupportingData": "View Supporting Data",
       "viewAudit": "View Audit"
     },
+    "newsOverview": {
+      "title": "News Intelligence",
+      "subtitle": "On-chain / Macro / Regulation / Market alerts",
+      "latestNews": "Latest News",
+      "highPriority": "High Priority",
+      "sentimentTilt": "Sentiment",
+      "viewMore": "View More",
+      "refresh": "Refresh",
+      "retry": "Retry",
+      "sendToAgent": "Inject Agent Context",
+      "empty": "No news available",
+      "error": "Failed to load news",
+      "categories": {
+        "onchain": "On-chain",
+        "macro": "Macro",
+        "regulation": "Regulation",
+        "funding": "Funding",
+        "market": "Market",
+        "exchange": "Exchange"
+      },
+      "sentiment": {
+        "bullish": "Bullish",
+        "bearish": "Bearish",
+        "neutral": "Neutral"
+      }
+    },
     "empty": {
       "noAgentRun": "No real agent run has been recorded yet.",
       "noMarketEvents": "No database market events are available.",
@@ -520,7 +548,10 @@
       "evidenceMatrix": "Evidence Matrix",
       "reasoningTrace": "Reasoning Trace",
       "hypothesisQueue": "Hypothesis Queue",
+      "recentHypotheses": "Recent Hypotheses",
       "rulePacket": "Backtest Rule Packet",
+      "backtestRules": "Backtest Rules",
+      "providerRawOutput": "Provider Raw Output",
       "handoff": "Handoff Checklist"
     },
     "status": {
@@ -545,6 +576,7 @@
       "saveDraft": "Save as Draft",
       "sendToBacktest": "Send to Backtest",
       "runBacktest": "Run Backtest",
+      "viewDetails": "View Details",
       "editRule": "Edit Rule",
       "reject": "Reject",
       "rejecting": "Rejecting..."
@@ -554,7 +586,12 @@
       "rejected": "Hypothesis rejected and persisted.",
       "ruleSaved": "Strategy rule draft saved: {{id}}",
       "rejectedCannotBacktest": "Rejected hypotheses cannot be sent to backtest.",
-      "backtestCreated": "Backtest created: {{id}}"
+      "notTradeableHypothesis": "Non-tradeable hypothesis",
+      "missingExecutableStrategy": "Missing executable strategy; backtest is disabled.",
+      "backtestCreated": "Backtest created: {{id}}",
+      "ruleBasedFallback": "Rule-based fallback, not AI provider output.",
+      "providerError": "Provider returned an error before structured output was ready.",
+      "marketDataFailed": "Market data failed: {{error}}"
     },
     "provider": {
       "aria": "AI provider controls",
@@ -570,6 +607,7 @@
       "awaitingRun": "Awaiting a new analysis",
       "noProviderOutput": "No provider output yet",
       "noHypotheses": "No stored hypotheses yet.",
+      "emptyShort": "empty",
       "generateFirst": "Create a new analysis to store Hypothesis A/B/C in the database.",
       "selectHypothesis": "Select or generate a hypothesis first."
     },
@@ -601,7 +639,30 @@
       "invalidation": "Invalidation",
       "risk": "Risk",
       "backtestRule": "Backtest Rule",
-      "suggestedAction": "Suggested Action"
+      "suggestedAction": "Suggested Action",
+      "providerStatus": "Provider Status",
+      "model": "Model",
+      "latency": "Latency",
+      "marketRegime": "Market Structure",
+      "coreThesis": "Core Trading Hypothesis",
+      "klineEvidence": "Kline Evidence",
+      "indicatorEvidence": "Indicator Evidence",
+      "orderbookEvidence": "Orderbook Evidence",
+      "volumeEvidence": "Volume Evidence",
+      "triggerPrice": "Trigger Price",
+      "confirmationCondition": "Confirmation Condition",
+      "stopLoss": "Stop Loss",
+      "takeProfit": "Take Profit",
+      "expectedRr": "Expected R/R",
+      "whyNotOpposite": "Why Not Opposite Direction",
+      "entryRule": "Entry Rule",
+      "exitRule": "Exit Rule",
+      "stopRule": "Stop Rule",
+      "takeProfitRule": "Take Profit Rule",
+      "positionSizingRule": "Position Sizing Rule",
+      "spreadValue": "Spread {{value}}",
+      "imbalanceValue": "Imbalance {{value}}",
+      "htxDerivativesPlanned": "HTX derivatives planned"
     },
     "metrics": {
       "context": {
@@ -740,6 +801,7 @@
       "briefMeta": "Backtest brief metadata",
       "metrics": "Backtest Result Metrics",
       "strategyRule": "Strategy Rule",
+      "assumptions": "Assumptions",
       "verdict": "Backtest Verdict",
       "equityCurve": "Equity Curve",
       "drawdownCurve": "Drawdown Curve",
@@ -813,6 +875,7 @@
       "status": "Conditionally Valid",
       "title": "Send to Risk Firewall with guarded sizing",
       "summary": "The rule has positive historical edge, but elevated drawdown periods require position limits before paper execution.",
+      "reviewOnly": "Review only; paper order creation is disabled.",
       "checks": {
         "edge": {
           "title": "Historical Edge",
@@ -838,7 +901,19 @@
     },
     "labels": {
       "wins": "Wins",
-      "losses": "Losses"
+      "losses": "Losses",
+      "sampleSize": "Sample Size",
+      "fees": "Fees",
+      "slippage": "Slippage",
+      "finalEquity": "Final Equity",
+      "netPnl": "Net PnL",
+      "strategy": "Strategy",
+      "symbol": "Symbol",
+      "timeframe": "Timeframe",
+      "dataSource": "Data Source",
+      "exposureTime": "Exposure Time",
+      "limitations": "Limitations",
+      "realData": "Real Data"
     },
     "tradeSides": {
       "long": "Long"
@@ -851,6 +926,10 @@
     },
     "tradeList": {
       "title": "Recent backtest trades"
+    },
+    "empty": {
+      "noBacktest": "Historical validation is waiting for a generated hypothesis and backtest run.",
+      "noTrades": "No completed paper backtest trades are available yet."
     }
   },
   "riskFirewall": {
@@ -897,6 +976,12 @@
       "pass": "Pass",
       "warning": "Warning",
       "block": "Blocked"
+    },
+    "rejection": {
+      "title": "{{count}} blocking reason(s)",
+      "summary": "The current setup is rejected because one or more risk gates failed. The system will not create a paper order.",
+      "thresholdActual": "Threshold: {{threshold}} / Actual: {{actual}}",
+      "suggestion": "Improve the backtest edge, reduce risk, or wait for a cleaner market condition before trying again."
     },
     "metrics": {
       "riskLevel": {
@@ -1001,7 +1086,7 @@
       "conditional": "Conditional",
       "rejected": "Rejected",
       "approvedSummary": "The strategy can create a paper order draft using the stored risk_check_id and calculated position size.",
-      "conditionalSummary": "The strategy can move to paper execution only with the recorded warnings and constrained size preserved.",
+      "conditionalSummary": "Strategy adjustment is required; paper order creation is disabled.",
       "rejectedSummary": "The strategy is blocked by Risk Firewall rules and cannot create a paper order."
     },
     "actions": {
@@ -1071,8 +1156,15 @@
       "ticketMeta": "Paper execution ticket metadata",
       "orderTicket": "Order Ticket",
       "executionPreview": "Execution Preview",
+      "summary": "Paper Summary",
       "activePositions": "Active Paper Positions",
       "executionLog": "Execution Log"
+    },
+    "safety": {
+      "kicker": "Simulation boundary",
+      "title": "Paper Trading Only",
+      "body": "This page controls the internal paper ledger only. No real funds, live exchange orders, wallet transfers, or real-money execution buttons are available.",
+      "liveDisabled": "Live Trading Disabled"
     },
     "status": {
       "paperOnly": "Paper Trading Only",
@@ -1108,20 +1200,49 @@
       "symbol": "Symbol",
       "side": "Side",
       "orderType": "Order Type",
+      "entryPrice": "Entry Price",
       "entry": "Limit Entry",
       "size": "Paper Size",
+      "risk": "Risk",
+      "mode": "Mode",
       "stop": "Stop",
       "takeProfit": "Take Profit",
       "route": "Execution Route",
-      "executeNote": "This creates a simulated paper-trade record only; it does not send a live exchange order."
+      "executeNote": "This creates a simulated paper-trade record only; it does not send a live exchange order.",
+      "editable": "draft editable",
+      "locked": "locked",
+      "stale": "Risk check stale. Return to Risk Firewall before execution.",
+      "riskRequired": "A current risk check is required before execution.",
+      "execute": "Execute Paper Trade",
+      "cancel": "Cancel Paper Trade"
     },
     "values": {
       "long": "Long",
       "limit": "Limit",
+      "market": "Market",
       "simulatorRoute": "Internal paper simulator",
       "noPosition": "No Position"
     },
     "preview": {
+      "expectedRiskReward": "Expected Risk/Reward",
+      "expectedRiskRewardMeta": "Read from the stored Risk Firewall result.",
+      "maxLoss": "Max Loss",
+      "maxLossMeta": "Derived from stop distance and backend risk sizing.",
+      "expectedProfit": "Expected Profit",
+      "expectedProfitMeta": "Calculated from ticket price, target, and quantity.",
+      "riskFirewallStatus": "Risk Firewall Status",
+      "backtestVerdict": "Backtest Verdict",
+      "backtestStats": "Profit factor {{profitFactor}} / {{tradeCount}} trades",
+      "marketConditionFit": "Market Condition Fit",
+      "liveMarketData": "Live market data",
+      "marketConditionFitMeta": "Uses the stored risk-check market data status.",
+      "positionSizing": "Position Sizing",
+      "positionSizingMeta": "Read from backend risk sizing.",
+      "correlationCheck": "Correlation Check",
+      "correlationAvailable": "risk context linked",
+      "correlationMeta": "Unavailable when the stored risk check is missing.",
+      "generateReviewReport": "Generate Review Report",
+      "generatingReport": "Generating Review Report...",
       "estimatedFill": "Estimated Fill",
       "estimatedFillMeta": "Calculated from demo spread and slippage assumptions.",
       "slippage": "Modeled Slippage",
@@ -1132,10 +1253,44 @@
       "maxSimulatedLossMeta": "Derived from stop distance and paper size.",
       "noExchangeOrder": "Live exchange routing is disabled; this preview never becomes a real-money order."
     },
-    "tables": {
-      "mark": "Mark"
+    "summary": {
+      "strategy": "Strategy",
+      "modelConfidence": "Model Confidence",
+      "timeHorizon": "Time Horizon",
+      "market": "Market",
+      "direction": "Direction",
+      "leverage": "Leverage",
+      "setupQuality": "Setup Quality",
+      "paperStatus": "Paper Status",
+      "equity": "Equity",
+      "riskUtilization": "Risk Utilization"
+    },
+    "positions": {
+      "symbol": "Symbol",
+      "side": "Side",
+      "quantity": "Quantity",
+      "entryPrice": "Entry",
+      "markPrice": "Mark",
+      "pnl": "Unrealized PnL",
+      "stopLoss": "Stop",
+      "takeProfit": "Target",
+      "links": "Risk / Hypothesis"
+    },
+    "empty": {
+      "empty": "empty",
+      "noOrderId": "No paper_order_id",
+      "noStatus": "No status",
+      "noOrderLoaded": "No paper order is loaded.",
+      "noRiskCheck": "No linked risk check.",
+      "noBacktest": "No linked backtest result.",
+      "noAccount": "Paper account unavailable.",
+      "noPositions": "No active paper positions in the database.",
+      "noLogs": "No execution log entries in the database."
     },
     "log": {
+      "order": "Order",
+      "risk": "Risk",
+      "hypothesis": "Hypothesis",
       "orderCreated": {
         "title": "Paper order created",
         "meta": "Order ticket stored in the internal simulator."
@@ -1152,6 +1307,14 @@
         "title": "Audit record linked",
         "meta": "Execution log attached to the approved risk-firewall decision."
       }
+    },
+    "tables": {
+      "mark": "Mark"
+    },
+    "rejected": {
+      "title": "Risk Firewall rejected this path",
+      "noOrder": "No paper order was created. You can still generate an audit report for the rejected scenario.",
+      "generateAudit": "Generate Audit Report"
     }
   },
   "auditReports": {
@@ -1166,6 +1329,12 @@
       "riskFirewall": "Risk Firewall",
       "execution": "Execution",
       "review": "Review",
+      "reviewAudit": "Review & Audit",
+      "workflowTrace": "Workflow Evidence Chain",
+      "auditTimeline": "Audit Timeline",
+      "keyEvidence": "Key Evidence & Logs",
+      "auditHash": "Audit Hash",
+      "auditInspector": "Audit Inspector",
       "auditLog": "Audit Log",
       "actions": "Audit report actions"
     },
@@ -1174,17 +1343,73 @@
       "reviewComplete": "Review Complete",
       "needsReview": "Needs Review",
       "watchOnly": "Watch Only",
-      "immutable": "Immutable Trail",
+      "immutable": "Local Hash Trail",
       "success": "PASS",
       "warning": "WATCH",
       "info": "INFO",
       "danger": "LOCKED",
-      "neutral": "LOG"
+      "neutral": "LOG",
+      "mock": "mock",
+      "needsReport": "needs report"
     },
     "labels": {
       "symbol": "Symbol",
       "actor": "Actor",
-      "recordHash": "Record Hash"
+      "recordHash": "Record Hash",
+      "reportId": "Report ID",
+      "status": "Status",
+      "time": "Time",
+      "asset": "Asset",
+      "eventType": "Event Type",
+      "decision": "Decision",
+      "riskLevel": "Risk Level",
+      "result": "Result",
+      "outcome": "Outcome",
+      "summary": "Summary",
+      "entity": "Entity",
+      "missingEntity": "missing entity",
+      "noEntity": "no entity",
+      "localHash": "Audit Hash",
+      "pendingHash": "pending",
+      "hashMethod": "sha256(report_json)",
+      "localTamperEvident": "Local tamper-evident audit hash"
+    },
+    "actions": {
+      "generate": "Generate audit report",
+      "generating": "Generating...",
+      "copySummary": "Copy Summary",
+      "openAuditLog": "Open Audit Log",
+      "viewEvidence": "View Evidence",
+      "exportJson": "Export JSON",
+      "exportMarkdown": "Export Markdown",
+      "close": "Close"
+    },
+    "empty": {
+      "title": "Audit report not selected",
+      "description": "Generate or select a report to review the full evidence chain.",
+      "loading": "Loading audit evidence...",
+      "noReports": "No persisted audit reports yet.",
+      "selectReport": "Select an audit report or generate one from the current paper order.",
+      "noTimeline": "No audit timeline is connected.",
+      "noEvidence": "No evidence logs are connected."
+    },
+    "messages": {
+      "summaryCopied": "Audit summary copied.",
+      "jsonExported": "Audit JSON downloaded.",
+      "markdownExported": "Audit Markdown downloaded.",
+      "actionFailed": "Audit action failed."
+    },
+    "summary": {
+      "workflow": "{{symbol}} audit workflow is recorded with decision {{decision}} and risk level {{risk}}.",
+      "outcome": "Workflow outcome: {{decision}} with {{risk}} controls; Live Trading remains disabled."
+    },
+    "stepTitles": {
+      "market_event": "Market Event",
+      "agent_hypothesis": "Agent Hypothesis",
+      "backtest_result": "Backtest Result",
+      "risk_firewall": "Risk Firewall",
+      "execution_simulation": "Execution / Simulation",
+      "review_audit": "Review & Audit"
     },
     "metrics": {
       "reports": {
@@ -1285,14 +1510,112 @@
     }
   },
   "htxEcosystem": {
-    "name": "HTX Ecosystem"
+    "name": "HTX Ecosystem",
+    "aria": "HTX ecosystem integration status",
+    "brief": {
+      "kicker": "Ecosystem Fit",
+      "title": "HTX integration status without overclaiming",
+      "summary": "This page separates live HTX public-market connectivity from planned account access, B.AI compute, $HTX utility tiers, marketplace, and DAO governance.",
+      "executionBoundary": "Execution Boundary"
+    },
+    "sections": {
+      "htxApi": "HTX API Integration",
+      "aiCompute": "AI Compute Layer",
+      "utilityModel": "$HTX Utility Model",
+      "roadmap": "Future Ecosystem Roadmap"
+    },
+    "actions": {
+      "refresh": "Refresh"
+    },
+    "loading": {
+      "htx": "Running HTX health checks...",
+      "ai": "Loading AI compute status...",
+      "utility": "Loading utility roadmap...",
+      "roadmap": "Loading ecosystem roadmap..."
+    },
+    "empty": {
+      "noModel": "model not configured"
+    },
+    "status": {
+      "connected": "Connected",
+      "read_only": "Read-only",
+      "disabled": "Disabled",
+      "planned": "Planned",
+      "roadmap": "Roadmap",
+      "disconnected": "Disconnected",
+      "degraded": "Degraded"
+    },
+    "environment": {
+      "production": "Production"
+    },
+    "meta": {
+      "healthChecked": "Real HTX health check"
+    },
+    "htxApi": {
+      "ticker_data": "Ticker Data Connected",
+      "kline_data": "Kline Data Connected",
+      "order_book": "Order Book Connected",
+      "trades": "Trades Connected",
+      "accountReadOnly": "Account Read-only Planned",
+      "liveTrading": "Live Trading Disabled",
+      "apiEnvironment": "API Environment",
+      "lastSync": "Last Sync"
+    },
+    "ai": {
+      "currentProvider": "Current Provider",
+      "plannedProvider": "Planned Provider B.AI",
+      "credentialStatus": {
+        "configured": "Credential Configured",
+        "not_configured": "Credential Missing"
+      },
+      "capabilities": {
+        "agent_reasoning": "Agent Reasoning",
+        "hypothesis_generation": "Hypothesis Generation",
+        "risk_explanation": "Risk Explanation",
+        "report_generation": "Report Generation"
+      }
+    },
+    "utility": {
+      "feature": "Feature",
+      "tiers": {
+        "free": "Free",
+        "htx_holder": "HTX Holder",
+        "htx_pro": "HTX Pro"
+      },
+      "features": {
+        "ai_agent_access": "AI Agent Access",
+        "advanced_research": "Advanced Research",
+        "backtest_quota": "Backtest Quota",
+        "priority_inference": "Priority Inference",
+        "exclusive_reports": "Exclusive Reports",
+        "agent_marketplace_access": "Agent Marketplace Access",
+        "dao_governance_rights": "DAO Governance Rights",
+        "fee_discounts": "Fee Discounts"
+      }
+    },
+    "roadmap": {
+      "items": {
+        "htx_market_data_integration": "HTX Market Data Integration",
+        "b_ai_integration": "B.AI Integration",
+        "htx_usage_tier": "$HTX Usage Tier",
+        "agent_marketplace": "Agent Marketplace",
+        "dao_market_intelligence": "DAO-level Market Intelligence"
+      },
+      "details": {
+        "htx_market_data_integration": "Public ticker, kline, order book, and trades are checked through real HTX health calls.",
+        "b_ai_integration": "B.AI remains planned until a provider connector and credentials exist.",
+        "htx_usage_tier": "$HTX tiers remain roadmap-only until permissions and entitlement checks exist.",
+        "agent_marketplace": "Marketplace access is not active without an agent publishing and permission layer.",
+        "dao_market_intelligence": "DAO-level intelligence remains roadmap until governance rights are implemented."
+      }
+    }
   },
   "settings": {
     "name": "Settings",
     "aria": "Settings control plane",
     "brief": {
       "title": "Workspace configuration with live trading locked out",
-      "summary": "Settings expose data source, AI provider, risk, and language controls while market data and intelligence use real sources only."
+      "summary": "Settings persist data source, agent provider, risk controls, demo mode, and language to the backend while keeping real-money execution unavailable."
     },
     "sections": {
       "controlPlane": "Settings Control Plane",
@@ -1305,7 +1628,8 @@
     },
     "labels": {
       "executionBoundary": "Execution Boundary",
-      "languageOptions": "Language options"
+      "languageOptions": "Language options",
+      "savedAt": "Last updated"
     },
     "values": {
       "evidenceMode": "Evidence Mode",
@@ -1326,30 +1650,39 @@
       "publicOnly": "Public Only",
       "evidenceMode": "Evidence Mode",
       "guardrailsLocked": "Guardrails Locked",
-      "configurable": "Configurable"
+      "configurable": "Configurable",
+      "liveLocked": "Live Trading Disabled",
+      "paperExecutionUnavailable": "Paper Execution Disabled",
+      "paperAvailable": "Paper Execution Available",
+      "persistent": "Persistent"
     },
     "actions": {
-      "testDataSource": "Test Data Source"
+      "testDataSource": "Test Market Source",
+      "saveSettings": "Save Settings",
+      "resetToDefaults": "Reset to Defaults",
+      "testMarketSource": "Test Market Source",
+      "testAIProvider": "Test AI Provider"
     },
     "feedback": {
-      "saved": "Settings saved and synced to runtime"
+      "saved": "Settings saved and synced to runtime.",
+      "reset": "Settings reset to defaults."
     },
     "metrics": {
       "data": {
-        "title": "Data Route",
-        "meta": "Public HTX feed is the default market source."
+        "title": "Data Source",
+        "meta": "Current source and connection policy."
       },
       "agent": {
-        "title": "Agent Mode",
-        "meta": "Outputs remain structured for backtest and risk review."
+        "title": "Agent Provider",
+        "meta": "Provider status from backend configuration."
       },
       "risk": {
-        "title": "Risk Mode",
-        "meta": "Live execution is blocked before every handoff."
+        "title": "Risk Limit",
+        "meta": "Risk Firewall reads these limits."
       },
       "language": {
         "title": "Language",
-        "meta": "Locale preference is persisted in local storage."
+        "meta": "Stored on the backend and applied to the shell."
       }
     },
     "dataSource": {
@@ -1363,7 +1696,7 @@
       },
       "symbol": {
         "label": "Default Symbol",
-        "meta": "Feeds the Command Center, Agent Lab, Backtest Studio, and paper ticket."
+        "meta": "Feeds Command Center, Agent Lab, Backtest Studio, and paper ticket."
       }
     },
     "agent": {
@@ -1383,11 +1716,11 @@
     "ai": {
       "provider": "Default provider",
       "model": "Model",
-      "modelPlaceholder": "Enter model name",
+      "modelPlaceholder": "Choose a model",
       "apiBase": "API base URL",
-      "apiBasePlaceholder": "Enter compatible API endpoint",
+      "apiBasePlaceholder": "Backend provider endpoint",
       "apiKey": "API key",
-      "apiKeyPlaceholder": "Enter the backend runtime key",
+      "apiKeyPlaceholder": "Configured in backend environment",
       "persistenceNote": "Settings are saved to the backend and used by the next AI analysis or hypothesis generation."
     },
     "risk": {
@@ -1407,7 +1740,7 @@
     "demo": {
       "enabledTitle": "Demo mode is active",
       "disabledTitle": "Demo mode is off",
-      "toggleMeta": "Turning demo mode off does not enable live trading; the live lock stays in place.",
+      "toggleMeta": "Demo mode never enables live trading; the live lock remains enforced.",
       "paperLedger": {
         "title": "Paper ledger only",
         "meta": "Balances, fills, fees, and PnL are simulator records."
@@ -1419,10 +1752,436 @@
       "auditTrail": {
         "title": "Audit trail retained",
         "meta": "Configuration state is visible to reports and review screens."
+      },
+      "realFundsDisabled": "Real Funds Disabled",
+      "realFundsMeta": "No exchange wallet, transfer, or real-money execution path is active.",
+      "paperExecutionOnly": "Paper Execution Only",
+      "paperExecutionMeta": "Orders, fills, balances, fees, and PnL remain simulator records.",
+      "hackathonEnabled": "Hackathon Demo Mode Enabled",
+      "hackathonMeta": "The workflow stays presentation-safe while still using real public market data.",
+      "scenarios": {
+        "pass": "PASS Scenario",
+        "reject": "REJECT Scenario"
       }
     },
     "language": {
-      "persistenceNote": "Language choice updates immediately and persists after refresh."
+      "persistenceNote": "Language choice is saved to the backend and restored after refresh.",
+      "previewEnglish": "Preview: English interface",
+      "previewChinese": "Preview: Chinese interface"
+    },
+    "actionsBar": "Settings actions",
+    "liveTradingLock": "Live trading is disabled in this demo build.",
+    "fields": {
+      "primaryDataSource": "Primary Data Source",
+      "connectionType": "Connection Type",
+      "fallbackMethod": "Fallback Method",
+      "latencyMonitor": "Latency Monitor",
+      "latencyWarning": "Warning ms",
+      "latencyCritical": "Critical ms",
+      "autoReconnect": "Auto Reconnect",
+      "modelProvider": "Model Provider",
+      "modelName": "Model Name",
+      "outputMode": "Output Mode",
+      "confidenceCalibration": "Confidence Calibration",
+      "structuredHypothesisMode": "Structured Hypothesis Mode",
+      "confidenceLow": "Low Band",
+      "confidenceMedium": "Medium Band",
+      "confidenceHigh": "High Band",
+      "maxRiskPerTrade": "Max Risk Per Trade",
+      "maxDailyLoss": "Max Daily Loss",
+      "maxConsecutiveLosses": "Max Consecutive Losses",
+      "positionSizeMode": "Position Size Mode",
+      "stopLossEnforcement": "Stop Loss Enforcement",
+      "paperTrading": "Paper Trading",
+      "liveTrading": "Live Trading",
+      "demoMode": "Demo Mode",
+      "useSampleAccount": "Use Sample Account",
+      "paperExecutionOnly": "Paper Execution Only",
+      "guidedDemoFlow": "Guided Demo Flow",
+      "demoScenario": "Demo Scenario",
+      "persistentLanguage": "Persistent Language"
+    },
+    "credentials": {
+      "aria": "Encrypted credential manager",
+      "title": "Encrypted Credential",
+      "apiBaseUrl": "API Base URL",
+      "apiKey": "API Key",
+      "secret": "Secret / AK/SK",
+      "optional": "Optional",
+      "save": "Save Credential",
+      "delete": "Delete Credential",
+      "notConfigured": "Not Configured",
+      "missingApiKey": "Missing API Key",
+      "connectionOk": "Connection OK",
+      "connectionFailed": "Connection Failed",
+      "deleted": "Credential deleted"
+    },
+    "placeholders": {
+      "modelName": "Choose a model from the selected provider"
+    },
+    "empty": {
+      "noModel": "model not configured"
+    },
+    "notes": {
+      "apiKeysBackendOnly": "API keys are configured only through backend environment or encrypted storage. They are never shown in this page."
+    },
+    "aiStatus": {
+      "Configured": "Configured",
+      "Not Configured": "Not Configured",
+      "Connection OK": "Connection OK",
+      "Connection Failed": "Connection Failed",
+      "Missing API Key": "Missing API Key",
+      "Unsupported Model": "Unsupported Model",
+      "Planned": "Planned",
+      "Error": "Error"
+    }
+  },
+  "display": {
+    "status": {
+      "completed": "Completed",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "live": "Live",
+      "unavailable": "Unavailable",
+      "ready_for_rule": "Ready for rule",
+      "ready_for_backtest": "Ready for backtest",
+      "win": "Win",
+      "loss": "Loss",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "block": "Blocked",
+      "pass": "Passed",
+      "warning": "Warning",
+      "conditional": "Conditional",
+      "ready_for_risk": "Ready for risk",
+      "ready_for_execution": "Ready for execution",
+      "risk_rejected": "Risk rejected",
+      "draft": "Draft",
+      "open": "Open",
+      "filled": "Filled",
+      "cancelled": "Cancelled",
+      "failed": "Failed",
+      "blocked": "Blocked",
+      "missing": "Missing",
+      "not_created": "Not created",
+      "recorded": "Recorded",
+      "loading": "Loading",
+      "error": "Error",
+      "connecting": "Connecting",
+      "reconnecting": "Reconnecting",
+      "stale": "Stale",
+      "fallback": "Fallback",
+      "degraded": "Degraded",
+      "configured": "Configured",
+      "not_configured": "Not configured",
+      "strict_json": "Structured JSON",
+      "warning_awaiting_paper_execution": "Warning awaiting paper execution",
+      "pass_awaiting_paper_execution": "Pass awaiting paper execution",
+      "paper_order_recorded": "Paper order recorded",
+      "incomplete": "Incomplete",
+      "balanced": "Balanced",
+      "structured": "Structured"
+    },
+    "decision": {
+      "pass": "Pass",
+      "caution": "Caution",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "block": "Blocked",
+      "conditional": "Conditional",
+      "warning_awaiting_paper_execution": "Warning awaiting paper execution",
+      "pass_awaiting_paper_execution": "Pass awaiting paper execution",
+      "paper_order_recorded": "Paper order recorded",
+      "incomplete": "Incomplete",
+      "unavailable": "Unavailable"
+    },
+    "eventType": {
+      "breakout": "Breakout",
+      "breakout_watch": "Breakout watch",
+      "volume_spike": "Volume spike",
+      "liquidity_shift": "Liquidity shift",
+      "agent_analysis": "Agent analysis",
+      "acceptance": "Acceptance",
+      "audit_seed": "Audit seed",
+      "hypothesis": "Hypothesis",
+      "market_event": "Market event"
+    },
+    "metric": {
+      "win_rate": "Win Rate",
+      "profit_factor": "Profit Factor",
+      "max_drawdown": "Max Drawdown",
+      "trade_count": "Trade Count",
+      "sample_size": "Sample Size",
+      "direction": "Direction",
+      "confidence": "Confidence",
+      "feasibility": "Feasibility",
+      "risk_score": "Risk Score",
+      "stop_loss": "Stop Loss",
+      "take_profit": "Take Profit",
+      "deterministic_replay": "Deterministic replay",
+      "not_live_trading": "Not live trading",
+      "fees_and_slippage_estimated": "Fees and slippage estimated"
+    },
+    "providerStatus": {
+      "configured": "Configured",
+      "not_configured": "Not Configured",
+      "connection_ok": "Connection OK",
+      "connection_failed": "Connection Failed",
+      "loading": "Loading",
+      "error": "Error"
+    },
+    "riskRule": {
+      "expectancy_positive": "Backtest expectancy positive",
+      "profit_factor": "Profit factor meets threshold",
+      "max_drawdown": "Max drawdown below threshold",
+      "sample_size": "Sample size sufficient",
+      "spread": "Spread acceptable",
+      "liquidity": "Liquidity sufficient",
+      "volatility": "Volatility controlled",
+      "btc_correlation": "BTC correlation controlled",
+      "resistance_distance": "Resistance distance acceptable",
+      "stop_loss_distance": "Stop-loss distance reasonable",
+      "risk_per_trade": "Risk per trade within limit",
+      "daily_loss_limit": "Daily loss limit not triggered",
+      "live_trading_disabled": "Live trading disabled",
+      "hard_block_keywords": "Hard-block keyword check",
+      "market_data_available": "Market data available",
+      "market_data_live": "Live market data",
+      "demo_reject_scenario": "Guided demo reject scenario"
+    },
+    "riskRuleMessage": {
+      "expectancy_positive": "Backtest expectancy is not positive enough for this setup.",
+      "profit_factor": "Profit factor is below the minimum risk threshold.",
+      "max_drawdown": "Historical drawdown is above the allowed limit.",
+      "sample_size": "Backtest sample size is too small for approval.",
+      "spread": "Current spread is too wide for guarded execution.",
+      "liquidity": "Order book liquidity is below the required score.",
+      "volatility": "Market volatility is too elevated.",
+      "btc_correlation": "BTC correlation is above the allowed risk cap.",
+      "resistance_distance": "Nearest resistance is too close to entry.",
+      "stop_loss_distance": "Stop-loss distance is outside the configured band.",
+      "risk_per_trade": "Configured risk per trade is above the allowed cap.",
+      "daily_loss_limit": "Daily loss limit has already been reached.",
+      "live_trading_disabled": "Live trading remains disabled; only paper execution is allowed.",
+      "hard_block_keywords": "A hard-block keyword was found in the hypothesis context.",
+      "market_data_available": "Market data is unavailable or degraded.",
+      "market_data_live": "Live market data is required for risk approval.",
+      "demo_reject_scenario": "Reject Scenario is selected for the guided demo."
+    },
+    "riskLevel": {
+      "high": "High risk",
+      "medium": "Medium risk",
+      "low": "Low risk",
+      "unknown": "Unknown risk"
+    },
+    "executionMode": {
+      "paper": "Paper only",
+      "live_disabled": "Live disabled"
+    },
+    "analysisMode": {
+      "ai": "AI output",
+      "rule_based": "Rule-based"
+    },
+    "hypothesisType": {
+      "bullish_continuation": "Bullish continuation",
+      "bearish_breakdown": "Bearish breakdown",
+      "neutral_watch": "Neutral watch"
+    },
+    "validity": {
+      "low": "Low",
+      "moderate": "Moderate",
+      "high": "High",
+      "invalid": "Invalid",
+      "unknown": "--"
+    },
+    "riskValue": {
+      "missing_backtest": "Missing backtest",
+      "missing_stop": "Missing stop",
+      "none_above_entry": "None above entry",
+      "no_hard-block_keyword": "No hard-block keyword",
+      "none": "None",
+      "false": "false",
+      "true": "true",
+      "live": "Live",
+      "unavailable": "Unavailable",
+      "demo_scenario=pass": "PASS Scenario",
+      "demo_scenario=reject": "REJECT Scenario",
+      "paper": "Paper",
+      "planned": "Planned",
+      "unknown": "Unknown"
+    },
+    "side": {
+      "buy": "Buy",
+      "sell": "Sell",
+      "long": "Long",
+      "short": "Short"
+    },
+    "source": {
+      "htx_rest": "HTX REST",
+      "htx_ws": "HTX WebSocket",
+      "htx_rest_fallback": "HTX REST fallback",
+      "htx_rest_ticker_cache": "HTX REST ticker cache",
+      "live_ws_htx": "HTX WebSocket",
+      "backend": "Backend",
+      "news": "News",
+      "ai_provider": "AI Provider",
+      "audit_service": "Audit service",
+      "paper_e2e_seed": "Paper E2E seed",
+      "e2e_seed": "E2E seed"
+    },
+    "signal": {
+      "bullish": "Bullish",
+      "bearish": "Bearish",
+      "neutral": "Neutral",
+      "range": "Range",
+      "trend": "Trend",
+      "planned": "Planned",
+      "connected": "Connected"
+    },
+    "actionType": {
+      "hypothesis_generation": "Hypothesis generation",
+      "create_agent_run": "Create agent run",
+      "store_agent_hypothesis": "Store agent hypothesis",
+      "patch_agent_hypothesis": "Update agent hypothesis",
+      "reject_agent_hypothesis": "Reject agent hypothesis",
+      "run_backtest": "Run backtest",
+      "run_risk_check": "Run risk check",
+      "create_paper_order": "Create paper order",
+      "execute_paper_order": "Execute paper order",
+      "execute_paper_order_blocked": "Paper execution blocked",
+      "execute_paper_order_failed": "Paper execution failed",
+      "cancel_paper_order": "Cancel paper order",
+      "generate_audit_report": "Generate audit report",
+      "save_strategy_rule": "Save strategy rule",
+      "update_settings": "Update settings",
+      "run_ai_analysis": "Run AI analysis",
+      "ai_analysis_failed": "AI analysis failed",
+      "order_drafted": "Order drafted",
+      "market_source_unavailable": "Market source unavailable",
+      "fill": "Fill",
+      "execute": "Execute",
+      "cancel": "Cancel"
+    },
+    "entityType": {
+      "market_event": "Market event",
+      "hypothesis": "Hypothesis",
+      "agent_run": "Agent run",
+      "ai_analysis": "AI analysis",
+      "backtest": "Backtest",
+      "backtest_result": "Backtest result",
+      "risk_check": "Risk check",
+      "paper_order": "Paper order",
+      "audit_report": "Audit report",
+      "action_log": "Action log",
+      "paper_execution_log": "Paper execution log",
+      "strategy_rule": "Strategy rule",
+      "user_settings": "Settings",
+      "user_api_credential": "API credential"
+    },
+    "actor": {
+      "market": "Market",
+      "agent": "Agent",
+      "backtest": "Backtest",
+      "risk": "Risk",
+      "execution": "Execution",
+      "review": "Review",
+      "backend": "Backend"
+    },
+    "marketEventTitle": {
+      "acceptance": "Acceptance market event",
+      "audit_seed": "Audit seed event",
+      "breakout_watch": "Breakout watch",
+      "liquidity_shift": "Liquidity shift",
+      "volume_spike": "Volume spike",
+      "agent_analysis": "Agent analysis",
+      "market_event": "Market event"
+    },
+    "marketEventSummary": {
+      "acceptance": "{{symbol}} event accepted into the workflow for hypothesis, backtest, and risk review.",
+      "audit_seed": "{{symbol}} workflow seed prepared for audit replay.",
+      "breakout_watch": "{{symbol}} is near the recent range high with MA support; use it as a watch signal.",
+      "liquidity_shift": "{{symbol}} order book depth changed; review spread and imbalance before execution.",
+      "volume_spike": "{{symbol}} volume expanded versus the recent baseline.",
+      "agent_analysis": "{{symbol}} has fresh market context ready for Agent hypothesis generation.",
+      "market_event": "{{symbol}} market event is linked to the current OathFi workflow."
+    },
+    "auditStepTitle": {
+      "market_event": "Market event",
+      "agent_hypothesis": "Agent hypothesis",
+      "backtest_result": "Backtest result",
+      "risk_firewall": "Risk firewall",
+      "execution_simulation": "Execution / simulation",
+      "review_audit": "Review & audit"
+    },
+    "auditStepSummary": {
+      "market_event": "Market context is recorded for the workflow.",
+      "agent_hypothesis": "Agent hypothesis fields are linked for review.",
+      "backtest_result": "Backtest metrics and verdict are linked.",
+      "risk_firewall": "Risk firewall decision is recorded as {{status}}.",
+      "execution_simulation": "Paper execution state is recorded as {{status}}; no real funds are used.",
+      "review_audit": "Audit report hash and replay metadata are ready."
+    },
+    "evidenceTitle": {
+      "market_event_snapshot": "Market event snapshot",
+      "agent_hypothesis": "Agent hypothesis",
+      "ai_analysis_metadata": "AI analysis metadata",
+      "backtest_result": "Backtest result",
+      "risk_firewall_result": "Risk firewall result",
+      "paper_execution_record": "Paper execution record",
+      "workflow_action_logs": "Workflow action logs",
+      "paper_execution_logs": "Paper execution logs",
+      "market_event": "Market event snapshot",
+      "hypothesis": "Agent hypothesis",
+      "ai_analysis": "AI analysis metadata",
+      "backtest": "Backtest result",
+      "risk_check": "Risk firewall result",
+      "paper_order": "Paper execution record",
+      "action_log": "Workflow action logs",
+      "paper_execution_log": "Paper execution logs"
+    },
+    "evidenceSummary": {
+      "market_event": "Market event raw payload is available in Raw evidence.",
+      "hypothesis": "Hypothesis raw payload is available in Raw evidence.",
+      "ai_analysis": "AI analysis raw payload is available in Raw evidence.",
+      "backtest": "Backtest raw payload is available in Raw evidence.",
+      "risk_check": "Risk raw payload is available in Raw evidence.",
+      "paper_order": "Paper order raw payload is available in Raw evidence.",
+      "action_log": "Workflow action logs are available in Raw evidence.",
+      "paper_execution_log": "Paper execution logs are available in Raw evidence."
+    },
+    "paperLogMessage": {
+      "order_drafted": "Paper order draft was recorded.",
+      "market_source_unavailable": "Market source was unavailable during paper execution.",
+      "execute_paper_order": "Paper order execution was recorded as {{status}}.",
+      "fill": "Paper fill was recorded.",
+      "cancel": "Paper order cancellation was recorded."
+    },
+    "actionLogMessage": {
+      "create_agent_run": "{{entity}} action completed.",
+      "store_agent_hypothesis": "{{entity}} stored for workflow review.",
+      "patch_agent_hypothesis": "{{entity}} updated.",
+      "reject_agent_hypothesis": "{{entity}} rejected.",
+      "run_backtest": "{{entity}} completed.",
+      "run_risk_check": "{{entity}} completed with status {{status}}.",
+      "create_paper_order": "{{entity}} draft created; no exchange order was sent.",
+      "execute_paper_order": "{{entity}} simulator execution recorded.",
+      "execute_paper_order_blocked": "{{entity}} execution blocked by risk decision.",
+      "execute_paper_order_failed": "{{entity}} execution failed before any real trade.",
+      "cancel_paper_order": "{{entity}} cancelled in simulator.",
+      "generate_audit_report": "{{entity}} generated with linked evidence.",
+      "save_strategy_rule": "{{entity}} draft saved.",
+      "update_settings": "{{entity}} saved with live trading disabled."
+    },
+    "agentText": {
+      "summary": "{{symbol}} structured hypothesis is ready for review; direction {{direction}}, type {{type}}.",
+      "trigger": "Trigger: wait for the selected setup to remain valid with stable liquidity and price confirmation.",
+      "invalidation": "Invalidation: cancel the setup if trend support fails or order-book balance turns adverse.",
+      "risk": "Risk: position size remains capped and Live Trading stays disabled.",
+      "backtest_rule": "Backtest rule: use trend, RSI, spread, and fixed invalidation filters before risk review.",
+      "suggested_action": "Suggested action: send the hypothesis to backtest first, then risk review if metrics qualify.",
+      "current_task": "Generating structured market hypothesis",
+      "output_mode": "Structured output",
+      "confidence_calibration": "Balanced confidence calibration"
     }
   },
   "decision": {
@@ -1505,7 +2264,9 @@
     "generating": "Generating Hypothesis...",
     "backtesting": "Running Backtest...",
     "riskChecking": "Checking Risk Rules...",
-    "creatingOrder": "Creating Paper Order..."
+    "creatingOrder": "Creating Paper Order...",
+    "executing": "Executing Paper Order...",
+    "cancelling": "Cancelling Paper Order..."
   },
   "marketLive": {
     "status": {
@@ -1632,7 +2393,14 @@
     "diagnostics": {
       "aria": "Market stream diagnostics",
       "maxStreamAge": "Maximum stream age",
-      "staleDrops": "Retries and stale stream tracking"
+      "staleDrops": "Retries and stale stream tracking",
+      "tickerStreamStatus": "Ticker stream",
+      "klineStreamStatus": "Kline stream",
+      "depthStreamStatus": "Depth stream",
+      "tradeStreamStatus": "Trade stream",
+      "lastMessageAgeMs": "Last message age",
+      "reconnectCount": "Reconnect count",
+      "chartPatch": "Chart patch"
     },
     "drawing": {
       "trend": "Trend",

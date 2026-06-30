@@ -1,6 +1,7 @@
 import { ArrowRight, ListChecks } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { MarketEvent } from "../../api/market";
+import { marketEventSummary, marketEventTitle } from "../../lib/displayLabels";
 import { StatusPill, type StatusPillVariant } from "../common/StatusPill";
 
 type ActiveMarketEventsProps = {
@@ -53,8 +54,8 @@ export function ActiveMarketEvents({
           <article className="market-event" key={event.id}>
             <div>
               <span>{event.symbol} / {formatTime(event.created_at)}</span>
-              <h3>{event.title}</h3>
-              <p>{event.summary}</p>
+              <h3>{marketEventTitle(t, event)}</h3>
+              <p>{marketEventSummary(t, event)}</p>
               <button
                 className="secondary-action secondary-action--compact"
                 type="button"
@@ -69,7 +70,7 @@ export function ActiveMarketEvents({
           </article>
         ))}
         {isLoading ? <div className="market-snapshot-empty">{t("loadingStates.syncing")}</div> : null}
-        {error ? <div className="market-snapshot-empty">{error.message}</div> : null}
+        {error ? <div className="market-snapshot-empty">{t("marketLive.status.error")}</div> : null}
         {!isLoading && !error && events.length === 0 ? (
           <div className="market-snapshot-empty">{t("dashboard.empty.noMarketEvents")}</div>
         ) : null}

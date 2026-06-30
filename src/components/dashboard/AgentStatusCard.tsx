@@ -1,6 +1,7 @@
 import { Bot } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { DashboardAgentStatus } from "../../api/dashboard";
+import { agentDisplayText, sourceLabel, statusLabel } from "../../lib/displayLabels";
 import { StatusPill } from "../common/StatusPill";
 
 type AgentStatusCardProps = {
@@ -19,8 +20,17 @@ function formatTime(value?: string | null) {
   }).format(new Date(value));
 }
 
+function providerLabel(value?: string | null) {
+  const labels: Record<string, string> = {
+    deepseek: "DeepSeek",
+    openai: "OpenAI",
+    qwen: "Qwen",
+  };
+  return value ? labels[value] ?? value : "backend";
+}
+
 export function AgentStatusCard({ agent }: AgentStatusCardProps) {
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
   const running = Boolean(agent?.running);
 
   return (
@@ -31,10 +41,12 @@ export function AgentStatusCard({ agent }: AgentStatusCardProps) {
         </span>
         <h2>{t("panels.agentStatus")}</h2>
       </header>
-      <strong>{running ? t("status.agentRunning") : agent?.status ?? t("marketLive.status.disconnected")}</strong>
-      <p>{agent?.current_task ?? t("dashboard.empty.noAgentRun")}</p>
+      <strong>{running ? t("status.agentRunning") : statusLabel(t, agent?.status ?? "disconnected")}</strong>
+      <p>{agent?.current_task ? agentDisplayText(t, i18n.language, "current_task", agent.current_task) : t("dashboard.empty.noAgentRun")}</p>
       <div className="command-card-footer">
-        <StatusPill variant={running ? "success" : "warning"}>{agent?.model_provider ?? "backend"}</StatusPill>
+        <StatusPill variant={running ? "success" : "warning"}>
+          {agent?.model_provider ? providerLabel(agent.model_provider) : sourceLabel(t, "backend")}
+        </StatusPill>
         <span>{formatTime(agent?.last_analysis_at)}</span>
       </div>
     </article>

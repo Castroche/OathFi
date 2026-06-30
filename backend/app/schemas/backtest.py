@@ -33,10 +33,23 @@ class BacktestRead(SourceMeta):
     sharpe: float
     sample_quality: str
     equity_curve: list[dict]
+    drawdown_curve: list[dict]
+    pnl_distribution: list[dict]
     trades: list[dict]
     methodology: str
     data_source: str
     sample_period: str
+    fees: float
+    slippage: float
+    initial_capital: float
+    final_equity: float
+    net_pnl: float
+    max_consecutive_losses: int
+    exposure_time: float
+    data_window: dict
+    strategy_rule_snapshot: dict
+    verdict: dict
+    report: dict
     created_at: datetime
 
 

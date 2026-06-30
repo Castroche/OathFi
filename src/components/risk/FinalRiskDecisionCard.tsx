@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight, Ban, CheckCircle2, FileWarning, RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { RiskCheck } from "../../api/risk";
+import { decisionLabel, riskRuleMessage } from "../../lib/displayLabels";
 import { StatusPill } from "../common/StatusPill";
 
 type FinalRiskDecisionCardProps = {
@@ -28,6 +29,7 @@ export function FinalRiskDecisionCard({
 }: FinalRiskDecisionCardProps) {
   const { t } = useTranslation();
   const isRejected = riskCheck.decision === "REJECTED" || riskCheck.decision === "BLOCK";
+  const isPaperOrderBlocked = riskCheck.decision !== "APPROVED";
   const titleKey = isRejected
     ? "riskFirewall.finalDecision.rejected"
     : riskCheck.decision === "CONDITIONAL"
@@ -51,7 +53,7 @@ export function FinalRiskDecisionCard({
     <section className="risk-panel risk-panel--final" aria-labelledby="risk-final-title">
       <div className="risk-panel__heading">
         <span id="risk-final-title">{t("riskFirewall.sections.finalDecision")}</span>
-        <StatusPill variant={variant(riskCheck.decision)}>{riskCheck.decision}</StatusPill>
+        <StatusPill variant={variant(riskCheck.decision)}>{decisionLabel(t, riskCheck.decision)}</StatusPill>
       </div>
       <h2>{t(titleKey)}</h2>
       <p>{t(summaryKey)}</p>
@@ -75,7 +77,7 @@ export function FinalRiskDecisionCard({
               <strong>{t("riskFirewall.final.blocks", "Blocking reasons")}</strong>
               <ul>
                 {blocks.map((block) => (
-                  <li key={block}>{block}</li>
+                  <li key={block}>{riskRuleMessage(t, block)}</li>
                 ))}
               </ul>
             </div>
@@ -85,7 +87,7 @@ export function FinalRiskDecisionCard({
               <strong>{t("riskFirewall.final.warnings", "Warnings")}</strong>
               <ul>
                 {warnings.map((warning) => (
-                  <li key={warning}>{warning}</li>
+                  <li key={warning}>{riskRuleMessage(t, warning)}</li>
                 ))}
               </ul>
             </div>
@@ -102,7 +104,13 @@ export function FinalRiskDecisionCard({
           <Ban size={14} aria-hidden="true" />
           <span>{isRejectingStrategy ? t("riskFirewall.actions.rejecting") : t("actions.rejectStrategy")}</span>
         </button>
-        <button className="primary-action" type="button" disabled={isRejected || isSendingPaperOrder} onClick={onSendToPaperExecution}>
+        <button
+          className="primary-action"
+          type="button"
+          title={isPaperOrderBlocked ? t(summaryKey) : undefined}
+          disabled={isPaperOrderBlocked || isSendingPaperOrder}
+          onClick={onSendToPaperExecution}
+        >
           <span>{isSendingPaperOrder ? t("loadingStates.creatingOrder") : t("actions.sendToPaperExecution")}</span>
           <ArrowRight size={14} aria-hidden="true" />
         </button>

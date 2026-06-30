@@ -1,6 +1,7 @@
 import { ArrowRight, FileSearch } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { DashboardDecision } from "../../api/dashboard";
+import { actionLogMessage, actionTypeLabel, entityTypeLabel, statusLabel } from "../../lib/displayLabels";
 import { StatusPill } from "../common/StatusPill";
 
 type RecentDecisionTrailProps = {
@@ -38,11 +39,11 @@ export function RecentDecisionTrail({ decisions, isLoading, onViewAudit }: Recen
           <article className="decision-item" key={decision.id}>
             <time>{formatTime(decision.created_at)}</time>
             <div>
-              <h3>{decision.action_type}</h3>
-              <p>{decision.message}</p>
+              <h3>{actionTypeLabel(t, decision.action_type)}</h3>
+              <p>{actionLogMessage(t, decision)}</p>
             </div>
             <StatusPill variant={decision.status === "failed" ? "danger" : "info"}>
-              {decision.entity_type}
+              {entityTypeLabel(t, decision.entity_type)}
             </StatusPill>
           </article>
         ))}
@@ -58,8 +59,8 @@ export function RecentDecisionTrail({ decisions, isLoading, onViewAudit }: Recen
             <div className="audit-step" key={entity}>
               <span>{String(index + 1).padStart(2, "0")}</span>
               <div>
-                <strong>{entity.replace("_", " ")}</strong>
-                <p>{matched?.entity_id ?? t("marketLive.status.disconnected")}</p>
+                <strong>{entityTypeLabel(t, entity)}</strong>
+                <p>{matched?.entity_id ?? statusLabel(t, "disconnected")}</p>
               </div>
             </div>
           );

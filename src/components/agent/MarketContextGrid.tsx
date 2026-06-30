@@ -1,6 +1,7 @@
 import { Activity, BarChart3, BookOpen, CalendarClock, CircleDollarSign, Gauge, Layers3, Radio, TrendingUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { AgentContext } from "../../api/agent";
+import { marketEventTitle, signalLabel, sourceLabel, statusLabel } from "../../lib/displayLabels";
 import { StatusPill } from "../common/StatusPill";
 
 type MarketContextGridProps = {
@@ -29,8 +30,8 @@ export function MarketContextGrid({ context, isLoading, error }: MarketContextGr
   const fundingRate = context?.funding_rate ?? {};
   const rows = [
     { icon: CircleDollarSign, label: t("agentLab.fields.asset", "Asset"), value: context?.asset ?? "--", meta: context?.symbol ?? "--" },
-    { icon: Activity, label: t("agentLab.fields.currentPrice", "Current Price"), value: formatNumber(context?.price ?? context?.current_price), meta: context?.source ?? "--" },
-    { icon: CalendarClock, label: t("agentLab.fields.timeframe", "Timeframe"), value: context?.timeframe ?? "--", meta: context?.status ?? "--" },
+    { icon: Activity, label: t("agentLab.fields.currentPrice", "Current Price"), value: formatNumber(context?.price ?? context?.current_price), meta: sourceLabel(t, context?.source) },
+    { icon: CalendarClock, label: t("agentLab.fields.timeframe", "Timeframe"), value: context?.timeframe ?? "--", meta: statusLabel(t, context?.status) },
     {
       icon: Layers3,
       label: t("agentLab.fields.keyLevels", "Key Levels"),
@@ -44,24 +45,24 @@ export function MarketContextGrid({ context, isLoading, error }: MarketContextGr
       meta: `24h / 20MA x${formatNumber(volume.ratio_to_20ma, 2)}`,
     },
     { icon: Gauge, label: t("agentLab.fields.rsi", "RSI"), value: formatNumber(context?.rsi, 1), meta: "RSI 14" },
-    { icon: TrendingUp, label: t("agentLab.fields.macd", "MACD"), value: formatNumber(macd.histogram, 4), meta: String(macd.status ?? "--") },
+    { icon: TrendingUp, label: t("agentLab.fields.macd", "MACD"), value: formatNumber(macd.histogram, 4), meta: signalLabel(t, String(macd.status ?? "--")) },
     {
       icon: BookOpen,
       label: t("agentLab.fields.orderBookSummary", "Order Book Summary"),
-      value: `Spread ${formatNumber(context?.spread ?? orderBook.spread, 4)}`,
-      meta: `Imbalance ${formatPercent(context?.imbalance ?? orderBook.imbalance)}`,
+      value: t("agentLab.fields.spreadValue", { value: formatNumber(context?.spread ?? orderBook.spread, 4), defaultValue: "Spread {{value}}" }),
+      meta: t("agentLab.fields.imbalanceValue", { value: formatPercent(context?.imbalance ?? orderBook.imbalance), defaultValue: "Imbalance {{value}}" }),
     },
     {
       icon: Radio,
       label: t("agentLab.fields.btcCorrelation", "BTC Correlation"),
       value: formatNumber(btcCorrelation.value, 2),
-      meta: String(btcCorrelation.status ?? btcCorrelation.source ?? "--"),
+      meta: signalLabel(t, String(btcCorrelation.status ?? btcCorrelation.source ?? "--")),
     },
     {
       icon: Activity,
       label: t("agentLab.fields.fundingRate", "Funding Rate"),
-      value: fundingRate.value == null ? String(fundingRate.label ?? "Planned") : formatPercent(fundingRate.value),
-      meta: fundingRate.value == null ? "HTX derivatives planned" : "Connected",
+      value: fundingRate.value == null ? signalLabel(t, String(fundingRate.label ?? "planned")) : formatPercent(fundingRate.value),
+      meta: fundingRate.value == null ? t("agentLab.fields.htxDerivativesPlanned", "HTX derivatives planned") : statusLabel(t, "connected"),
     },
   ];
 
@@ -70,10 +71,10 @@ export function MarketContextGrid({ context, isLoading, error }: MarketContextGr
       <div className="agent-panel__heading">
         <span id="agent-market-context">{t("agentLab.sections.context", "Market Context")}</span>
         <StatusPill variant={error ? "danger" : context ? "success" : "warning"}>
-          {isLoading ? t("loadingStates.syncing") : error ? t("marketLive.status.error") : context?.status ?? t("marketLive.status.loading")}
+          {isLoading ? t("loadingStates.syncing") : error ? t("marketLive.status.error") : statusLabel(t, context?.status ?? "loading")}
         </StatusPill>
       </div>
-      {error ? <div className="action-feedback action-feedback--error">Market data failed: {error}</div> : null}
+      {error ? <div className="action-feedback action-feedback--error">{t("agentLab.feedback.marketDataFailed", { error, defaultValue: "Market data failed: {{error}}" })}</div> : null}
       <div className="market-context-grid">
         {rows.map((row) => {
           const Icon = row.icon;
@@ -90,7 +91,7 @@ export function MarketContextGrid({ context, isLoading, error }: MarketContextGr
       <div className="recent-event-strip">
         <span>{t("agentLab.fields.recentEvents", "Recent Events")}</span>
         {(context?.recent_events ?? []).slice(0, 4).map((event) => (
-          <p key={String(event.id)}>{String(event.title ?? "--")}</p>
+          <p key={String(event.id)}>{marketEventTitle(t, { event_type: String(event.event_type ?? ""), title: String(event.title ?? ""), symbol: context?.symbol })}</p>
         ))}
         {!isLoading && !context?.recent_events.length ? <p>{t("dashboard.empty.noMarketEvents")}</p> : null}
       </div>

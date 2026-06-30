@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { ChevronDown, Grip, RotateCcw } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { sourceLabel, statusLabel } from "../../lib/displayLabels";
 import { StatusPill } from "../common/StatusPill";
 
 type PanelFrameProps = {
@@ -39,8 +40,8 @@ export function PanelFrame({
           {subtitle ? <span>{subtitle}</span> : null}
         </div>
         <div className="market-panel-frame__badges">
-          {status ? <StatusPill variant={statusVariant}>{status}</StatusPill> : null}
-          {source ? <StatusPill variant={source === "live_ws_htx" ? "success" : source === "htx_rest_fallback" ? "warning" : "info"}>{source}</StatusPill> : null}
+          {status ? <StatusPill variant={statusVariant}>{statusLabel(t, status)}</StatusPill> : null}
+          {source ? <StatusPill variant={source === "live_ws_htx" ? "success" : source === "htx_rest_fallback" ? "warning" : "info"}>{sourceLabel(t, source)}</StatusPill> : null}
           {actions}
           <button className="market-panel-frame__collapse" type="button" aria-label={t("marketLive.panel.collapseReserved")} disabled>
             <ChevronDown size={14} aria-hidden="true" />

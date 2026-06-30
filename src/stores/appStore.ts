@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { WorkflowStepId } from "../lib/workflow";
+import type { AgentHypothesis } from "../api/agent";
 import type { AuditReport } from "../api/auditReports";
 import type { Backtest } from "../api/backtests";
-import type { Hypothesis } from "../api/hypotheses";
 import type { PaperOrder } from "../api/paperOrders";
 import type { RiskCheck } from "../api/risk";
 
@@ -11,6 +11,12 @@ export type Locale = "en" | "zh-CN";
 export type ToastVariant = "success" | "error" | "info" | "warning";
 
 let toastSequence = 0;
+
+function initialLanguage(): Locale {
+  if (typeof window === "undefined") return "en";
+  const stored = window.localStorage.getItem("i18nextLng");
+  return stored?.toLowerCase().startsWith("zh") ? "zh-CN" : "en";
+}
 
 function createToastId() {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -37,7 +43,7 @@ type AppState = {
   riskCheckId?: string;
   paperOrderId?: string;
   auditReportId?: string;
-  latestHypothesis?: Hypothesis;
+  latestAgentHypothesis?: AgentHypothesis;
   latestBacktest?: Backtest;
   latestRiskCheck?: RiskCheck;
   latestPaperOrder?: PaperOrder;
@@ -50,7 +56,7 @@ type AppState = {
   setSelectedSymbol: (symbol: string) => void;
   setSelectedTimeframe: (timeframe: string) => void;
   setWorkflowIds: (ids: Partial<Pick<AppState, "workflowId" | "marketEventId" | "hypothesisId" | "backtestId" | "riskCheckId" | "paperOrderId" | "auditReportId">>) => void;
-  setLatestHypothesis: (hypothesis?: Hypothesis) => void;
+  setLatestAgentHypothesis: (hypothesis?: AgentHypothesis) => void;
   setLatestBacktest: (backtest?: Backtest) => void;
   setLatestRiskCheck: (riskCheck?: RiskCheck) => void;
   setLatestPaperOrder: (paperOrder?: PaperOrder) => void;
@@ -65,7 +71,7 @@ type AppState = {
 export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
-      language: "en",
+      language: initialLanguage(),
       selectedSymbol: "ETH/USDT",
       selectedTimeframe: "15m",
       sidebarCollapsed: false,
@@ -75,7 +81,7 @@ export const useAppStore = create<AppState>()(
       setSelectedSymbol: (selectedSymbol) => set({ selectedSymbol }),
       setSelectedTimeframe: (selectedTimeframe) => set({ selectedTimeframe }),
       setWorkflowIds: (ids) => set(ids),
-      setLatestHypothesis: (latestHypothesis) => set({ latestHypothesis }),
+      setLatestAgentHypothesis: (latestAgentHypothesis) => set({ latestAgentHypothesis }),
       setLatestBacktest: (latestBacktest) => set({ latestBacktest }),
       setLatestRiskCheck: (latestRiskCheck) => set({ latestRiskCheck }),
       setLatestPaperOrder: (latestPaperOrder) => set({ latestPaperOrder }),
@@ -108,7 +114,7 @@ export const useAppStore = create<AppState>()(
         riskCheckId: state.riskCheckId,
         paperOrderId: state.paperOrderId,
         auditReportId: state.auditReportId,
-        latestHypothesis: state.latestHypothesis,
+        latestAgentHypothesis: state.latestAgentHypothesis,
         latestBacktest: state.latestBacktest,
         latestRiskCheck: state.latestRiskCheck,
         latestPaperOrder: state.latestPaperOrder,

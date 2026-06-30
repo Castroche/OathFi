@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { sourceLabel, statusLabel } from "../../lib/displayLabels";
 import { useMarketDataStore } from "../../stores/marketDataStore";
 import type { StreamDiagnostic, StreamName } from "../../services/htx/htxTypes";
 import { StatusPill } from "../common/StatusPill";
@@ -46,30 +47,30 @@ export function DiagnosticsPanel() {
           const diagnostic = streamDiagnostics[stream];
           return (
             <article className="market-diagnostic-tile" key={stream}>
-              <span>{label}</span>
-              <StatusPill variant={streamStatusVariant(diagnostic.status)}>{diagnostic.status}</StatusPill>
+              <span>{t(`marketLive.diagnostics.${label}`, label)}</span>
+              <StatusPill variant={streamStatusVariant(diagnostic.status)}>{statusLabel(t, diagnostic.status)}</StatusPill>
               <small>{diagnostic.subscribedTopic ?? "--"}</small>
             </article>
           );
         })}
         <article className="market-diagnostic-tile">
-          <span>lastMessageAgeMs</span>
+          <span>{t("marketLive.diagnostics.lastMessageAgeMs", "lastMessageAgeMs")}</span>
           <strong>{formatMetric(lastMessageAgeMs)}</strong>
           <small>{t("marketLive.diagnostics.maxStreamAge")}</small>
         </article>
         <article className="market-diagnostic-tile">
-          <span>source</span>
-          <strong>{dataSource}</strong>
-          <small>{connectionStatus}</small>
+          <span>{t("marketLive.header.source")}</span>
+          <strong>{sourceLabel(t, dataSource)}</strong>
+          <small>{statusLabel(t, connectionStatus)}</small>
         </article>
         <article className="market-diagnostic-tile">
-          <span>reconnectCount</span>
+          <span>{t("marketLive.diagnostics.reconnectCount", "reconnectCount")}</span>
           <strong>{formatMetric(reconnectCount, "")}</strong>
           <small>{t("marketLive.diagnostics.staleDrops")}</small>
         </article>
         <article className="market-diagnostic-tile">
-          <span>chartPatch</span>
-          <StatusPill variant={streamStatusVariant(streamDiagnostics.chartPatch.status)}>{streamDiagnostics.chartPatch.status}</StatusPill>
+          <span>{t("marketLive.diagnostics.chartPatch", "chartPatch")}</span>
+          <StatusPill variant={streamStatusVariant(streamDiagnostics.chartPatch.status)}>{statusLabel(t, streamDiagnostics.chartPatch.status)}</StatusPill>
           <small>{formatMetric(streamDiagnostics.chartPatch.lastMessageAgeMs)}</small>
         </article>
       </div>

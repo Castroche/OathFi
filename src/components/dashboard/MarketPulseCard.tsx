@@ -2,6 +2,7 @@ import { Activity } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { DashboardMarketPulse } from "../../api/dashboard";
 import type { MarketTicker } from "../../services/htx/htxTypes";
+import { sourceLabel, statusLabel } from "../../lib/displayLabels";
 import { StatusPill, type StatusPillVariant } from "../common/StatusPill";
 
 type MarketPulseCardProps = {
@@ -40,7 +41,7 @@ export function MarketPulseCard({ pulse, tickers, isLoading }: MarketPulseCardPr
         </span>
         <h2>{t("panels.marketPulse")}</h2>
         <StatusPill variant={statusVariant(liveCount > 0 ? "live" : pulse?.status)}>
-          {liveCount > 0 ? t("marketLive.status.live") : pulse?.status ?? t("marketLive.status.loading")}
+          {liveCount > 0 ? t("marketLive.status.live") : statusLabel(t, pulse?.status ?? "loading")}
         </StatusPill>
       </header>
       <div className="market-pulse-symbols">
@@ -60,7 +61,7 @@ export function MarketPulseCard({ pulse, tickers, isLoading }: MarketPulseCardPr
       <p>
         {isLoading
           ? t("loadingStates.syncing")
-          : `${pulse?.source ?? "htx_ws"} / ${pulse?.active_events ?? 0} ${t("dashboard.labels.activeEvents")}`}
+          : `${sourceLabel(t, pulse?.source ?? "htx_ws")} / ${pulse?.active_events ?? 0} ${t("dashboard.labels.activeEvents")}`}
       </p>
     </article>
   );

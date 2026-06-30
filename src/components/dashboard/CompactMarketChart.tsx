@@ -1,6 +1,7 @@
 import { BarChart3 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { MarketKline, MarketOrderBook } from "../../services/htx/htxTypes";
+import { statusLabel } from "../../lib/displayLabels";
 import { StatusPill, type StatusPillVariant } from "../common/StatusPill";
 
 type CompactMarketChartProps = {
@@ -44,7 +45,7 @@ export function CompactMarketChart({ klines, orderBook, status }: CompactMarketC
           <BarChart3 size={15} aria-hidden="true" />
           <h2 id="market-snapshot">{t("dashboard.sections.ethOneHour")}</h2>
         </div>
-        <StatusPill variant={statusVariant(status)}>{status}</StatusPill>
+        <StatusPill variant={statusVariant(status)}>{statusLabel(t, status)}</StatusPill>
       </div>
       <div className="mini-chart" aria-label={t("commandCenter.sections.miniChart")}>
         {bars.length > 0 ? (

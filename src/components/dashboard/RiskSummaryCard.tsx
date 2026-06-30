@@ -1,6 +1,7 @@
 import { ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { DashboardRiskSummary } from "../../api/dashboard";
+import { decisionLabel, executionModeLabel, riskLevelLabel } from "../../lib/displayLabels";
 import { StatusPill, type StatusPillVariant } from "../common/StatusPill";
 
 type RiskSummaryCardProps = {
@@ -26,9 +27,9 @@ export function RiskSummaryCard({ risk }: RiskSummaryCardProps) {
         </span>
         <h2>{t("panels.riskSummary")}</h2>
       </header>
-      <strong>{level}</strong>
+      <strong>{riskLevelLabel(t, level)}</strong>
       <p>
-        {t("dashboard.labels.executionMode")}: {risk?.execution_mode ?? "paper"} / {t("status.liveTradingDisabled")}
+        {t("dashboard.labels.executionMode")}: {executionModeLabel(t, risk?.execution_mode ?? "paper")} / {t("status.liveTradingDisabled")}
       </p>
       <div className="risk-score-row">
         <span>
@@ -41,7 +42,7 @@ export function RiskSummaryCard({ risk }: RiskSummaryCardProps) {
         </span>
       </div>
       <StatusPill variant={riskVariant(level)}>
-        {risk?.latest_decision ?? t("status.riskModeGuarded")}
+        {risk?.latest_decision ? decisionLabel(t, risk.latest_decision) : t("status.riskModeGuarded")}
       </StatusPill>
     </article>
   );

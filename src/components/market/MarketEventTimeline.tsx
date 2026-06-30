@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { detectMarketEvents, fetchMarketEvents } from "../../api/market";
+import { eventTypeLabel, marketEventSummary, marketEventTitle, sourceLabel } from "../../lib/displayLabels";
 import { useMarketDataStore } from "../../stores/marketDataStore";
 import { StatusPill } from "../common/StatusPill";
 
@@ -84,13 +85,13 @@ export function MarketEventTimeline() {
               <div className="market-event-timeline__dot" />
               <div>
                 <header>
-                  <strong>{event.title}</strong>
-                  <StatusPill variant={severityVariant(event.severity)}>{event.event_type}</StatusPill>
+                  <strong>{marketEventTitle(t, event)}</strong>
+                  <StatusPill variant={severityVariant(event.severity)}>{eventTypeLabel(t, event.event_type)}</StatusPill>
                 </header>
-                <p>{event.summary}</p>
+                <p>{marketEventSummary(t, event)}</p>
                 <footer>
                   <span>{event.symbol}</span>
-                  <span>{event.source}</span>
+                  <span>{sourceLabel(t, event.source)}</span>
                   <time>{formatEventTime(event.detected_at ?? event.created_at)}</time>
                 </footer>
               </div>
@@ -101,4 +102,3 @@ export function MarketEventTimeline() {
     </section>
   );
 }
-

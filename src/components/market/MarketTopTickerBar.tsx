@@ -7,6 +7,7 @@ import {
   fetchMarketSymbols,
   fetchMarketTickers,
 } from "../../api/market";
+import { sourceLabel } from "../../lib/displayLabels";
 import { useMarketDataStore } from "../../stores/marketDataStore";
 import type { MarketTicker } from "../../services/htx/htxTypes";
 
@@ -109,7 +110,7 @@ export function MarketTopTickerBar() {
               <strong>{symbol}</strong>
               <span className="market-ticker-card__source">
                 <i className={isLive ? "is-live" : ""} />
-                {source}
+                {sourceLabel(t, source)}
               </span>
             </div>
             <div className="market-ticker-card__price">

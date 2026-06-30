@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { sourceLabel } from "../../lib/displayLabels";
 import { markRender } from "../../lib/perfDiagnostics";
 import { useMarketDataStore } from "../../stores/marketDataStore";
 import { StatusPill } from "../common/StatusPill";
@@ -214,7 +215,7 @@ export const LiveOrderBook = memo(function LiveOrderBook() {
           {t(statusKey(connectionStatus))}
         </StatusPill>
         <StatusPill variant={dataSource === "unavailable" ? "danger" : "info"}>
-          {dataSource === "unavailable" ? t("marketLive.status.error") : dataSource}
+          {dataSource === "unavailable" ? t("marketLive.status.error") : sourceLabel(t, dataSource)}
         </StatusPill>
         <span>{formatTimestamp(lastUpdated, t("marketLive.status.loading"))}</span>
       </div>

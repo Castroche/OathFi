@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Search, Star } from "lucide-react";
 import { DEFAULT_SYMBOLS } from "../../services/htx/htxTypes";
 import { fetchMarketSymbols, fetchMarketTickers, type CachedTicker } from "../../api/market";
+import { sourceLabel } from "../../lib/displayLabels";
 import { useMarketDataStore } from "../../stores/marketDataStore";
 
 type SymbolFilter = "USDT" | "BTC" | "HTX" | "FAV" | "RECENT";
@@ -188,7 +189,7 @@ export const SymbolSelector = memo(function SymbolSelector() {
             <span>
               <strong>{symbol.symbol}</strong>
               <em>
-                {formatPrice(tickerMap[symbol.symbol], symbol.symbol)} · {formatChange(tickerMap[symbol.symbol])} · {formatCompact(tickerMap[symbol.symbol]?.quoteVolume)} · {tickerMap[symbol.symbol]?.source ?? registrySource}
+                {formatPrice(tickerMap[symbol.symbol], symbol.symbol)} · {formatChange(tickerMap[symbol.symbol])} · {formatCompact(tickerMap[symbol.symbol]?.quoteVolume)} · {sourceLabel(t, tickerMap[symbol.symbol]?.source ?? registrySource)}
               </em>
             </span>
             {favorites.includes(symbol.symbol) ? <Star size={13} aria-hidden="true" /> : null}

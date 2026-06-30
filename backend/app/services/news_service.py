@@ -386,10 +386,21 @@ class NewsService:
         return urllib.parse.urljoin(base_url, link)
 
     def _clean_text(self, value: str) -> str:
-        text = html.unescape(value or "")
+        text = html.unescape(self._repair_mojibake(value or ""))
         text = re.sub(r"<[^>]+>", " ", text)
         text = re.sub(r"\s+", " ", text)
         return text.strip()
+
+    def _repair_mojibake(self, value: str) -> str:
+        if not value or not re.search(r"[ÃÂâäåæçèéï]", value):
+            return value
+        try:
+            repaired = value.encode("latin1").decode("utf-8")
+        except UnicodeError:
+            return value
+        original_cjk = len(re.findall(r"[\u4e00-\u9fff]", value))
+        repaired_cjk = len(re.findall(r"[\u4e00-\u9fff]", repaired))
+        return repaired if repaired_cjk > original_cjk else value
 
     def _local_name(self, tag: str) -> str:
         return tag.rsplit("}", 1)[-1] if "}" in tag else tag

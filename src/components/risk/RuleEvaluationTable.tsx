@@ -1,6 +1,7 @@
 import { ListChecks } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { RiskItem } from "../../api/risk";
+import { riskRuleLabel, riskRuleMessage, riskValueLabel, statusLabel } from "../../lib/displayLabels";
 import { StatusPill } from "../common/StatusPill";
 
 type RuleEvaluationTableProps = {
@@ -40,13 +41,13 @@ export function RuleEvaluationTable({ rules }: RuleEvaluationTableProps) {
         </div>
         {rules.map((rule) => (
           <article className={rowClass(rule.status)} key={rule.name}>
-            <strong data-label={t("tables.rule")}>{rule.name}</strong>
-            <span data-label={t("tables.threshold")}>{rule.threshold ?? "--"}</span>
-            <span data-label={t("tables.actual")}>{rule.actual ?? "--"}</span>
+            <strong data-label={t("tables.rule")}>{riskRuleLabel(t, rule.name)}</strong>
+            <span data-label={t("tables.threshold")}>{riskValueLabel(t, rule.threshold)}</span>
+            <span data-label={t("tables.actual")}>{riskValueLabel(t, rule.actual)}</span>
             <StatusPill variant={statusVariant(rule.status)} data-label={t("tables.status")}>
-              {rule.status}
+              {statusLabel(t, rule.status)}
             </StatusPill>
-            <p data-label={t("tables.notes")}>{rule.message}</p>
+            <p data-label={t("tables.notes")}>{riskRuleMessage(t, rule.name)}</p>
           </article>
         ))}
         {rules.length === 0 ? <div className="market-snapshot-empty">{t("riskFirewall.empty.noRules")}</div> : null}

@@ -17,7 +17,7 @@ void i18n
     returnNull: false,
     returnEmptyString: false,
     saveMissing: false,
-    parseMissingKeyHandler: () => "Unavailable",
+    parseMissingKeyHandler: (key) => `missing:${key}`,
     interpolation: {
       escapeValue: false,
     },

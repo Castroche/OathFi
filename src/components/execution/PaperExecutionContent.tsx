@@ -1,16 +1,40 @@
-import { ArrowLeft, Lock, Radio, ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { StatusPill } from "../common/StatusPill";
-import type { PaperOrder } from "../../api/paperOrders";
+import { useQuery } from "@tanstack/react-query";
+import { fetchSettings } from "../../api/settings";
+import type { PaperAccount, PaperExecutionLog, PaperOrder, PaperPosition } from "../../api/paperOrders";
 import type { RiskCheck } from "../../api/risk";
+import { riskRuleMessage } from "../../lib/displayLabels";
+import { ActivePaperPositions } from "./ActivePaperPositions";
+import { ExecutionLogTable } from "./ExecutionLogTable";
+import { ExecutionPreview } from "./ExecutionPreview";
+import { OrderTicket } from "./OrderTicket";
+import { PaperSummaryCard } from "./PaperSummaryCard";
+import { SafetyBannerRow } from "./SafetyBannerRow";
 
 type PaperExecutionContentProps = {
   paperOrder?: PaperOrder;
   riskCheck?: RiskCheck;
+  paperAccount?: PaperAccount;
+  paperPositions: PaperPosition[];
+  executionLogs: PaperExecutionLog[];
   blockReason?: string;
+  orderError?: string | null;
+  accountError?: string | null;
+  positionsError?: string | null;
+  logsError?: string | null;
+  isOrderLoading: boolean;
+  isAccountLoading: boolean;
+  isPositionsLoading: boolean;
+  isLogsLoading: boolean;
   onExecutePaperTrade: () => void;
+  onCancelPaperTrade: () => void;
   onReturnToAgentLab: () => void;
-  isCreatingPaperOrder: boolean;
+  onReturnToRiskFirewall: () => void;
+  onGenerateReviewReport: () => void;
+  isExecutingPaperOrder: boolean;
+  isCancellingPaperOrder: boolean;
+  isGeneratingReviewReport: boolean;
+  canGenerateReviewReport: boolean;
   canExecutePaperOrder: boolean;
   disabledReason?: string;
 };
@@ -18,82 +42,91 @@ type PaperExecutionContentProps = {
 export function PaperExecutionContent({
   paperOrder,
   riskCheck,
+  paperAccount,
+  paperPositions,
+  executionLogs,
   blockReason,
+  orderError,
+  accountError,
+  positionsError,
+  logsError,
+  isOrderLoading,
+  isAccountLoading,
+  isPositionsLoading,
+  isLogsLoading,
+  onExecutePaperTrade,
+  onCancelPaperTrade,
   onReturnToAgentLab,
-  isCreatingPaperOrder,
+  onReturnToRiskFirewall,
+  onGenerateReviewReport,
+  isExecutingPaperOrder,
+  isCancellingPaperOrder,
+  isGeneratingReviewReport,
+  canGenerateReviewReport,
+  canExecutePaperOrder,
   disabledReason,
 }: PaperExecutionContentProps) {
   const { t } = useTranslation();
-  const reason = blockReason || disabledReason || "Exchange execution is not connected. Simulated paper execution is disabled.";
+  const settingsQuery = useQuery({
+    queryKey: ["settings"],
+    queryFn: ({ signal }) => fetchSettings(signal),
+    retry: false,
+  });
+  const settings = settingsQuery.data;
+  const reason =
+    orderError ||
+    (blockReason ? blockReason.split(";").map((item) => riskRuleMessage(t, item.trim())).join("; ") : undefined) ||
+    disabledReason ||
+    (!paperOrder && !isOrderLoading ? t("paperExecution.empty.noOrderLoaded") : undefined);
   const riskSummary = riskCheck ?? paperOrder?.risk_check;
-  const riskStatus = riskCheck?.decision ?? paperOrder?.risk_check?.status ?? paperOrder?.risk_check?.decision;
+  const riskRejected = !paperOrder && riskSummary && ["REJECTED", "BLOCK"].includes(String(riskSummary.decision ?? riskSummary.status).toUpperCase());
 
   return (
     <section className="paper-execution" aria-label={t("paperExecution.aria")}>
-      <div className="execution-brief">
-        <div>
-          <span className="execution-brief__eyebrow">{t("paperExecution.sections.executionTicket")}</span>
-          <h2>{paperOrder?.id ?? "Disconnected"}</h2>
-          <p>{paperOrder ? `${paperOrder.symbol} ${paperOrder.side} ${paperOrder.quantity}` : reason}</p>
-        </div>
-        <div className="execution-brief__meta">
-          <button className="secondary-action" type="button" onClick={onReturnToAgentLab}>
-            <ArrowLeft size={14} aria-hidden="true" />
-            <span>{t("actions.returnToAgentLab")}</span>
+      <SafetyBannerRow
+        orderId={paperOrder?.id}
+        status={paperOrder?.status}
+        onReturnToAgentLab={onReturnToAgentLab}
+        onReturnToRiskFirewall={onReturnToRiskFirewall}
+      />
+
+      {settings?.paper_trading_enabled === false ? (
+        <div className="action-feedback action-feedback--warning">{t("settings.status.paperExecutionUnavailable")}</div>
+      ) : null}
+
+      {reason ? <div className={orderError ? "action-feedback action-feedback--error" : "action-feedback"}>{reason}</div> : null}
+      {riskRejected ? (
+        <div className="action-feedback action-feedback--warning">
+          <strong>{t("paperExecution.rejected.title")}</strong>
+          <span>{t("paperExecution.rejected.noOrder")}</span>
+          <button type="button" disabled={!canGenerateReviewReport || isGeneratingReviewReport} onClick={onGenerateReviewReport}>
+            {isGeneratingReviewReport ? t("loadingStates.syncing") : t("paperExecution.rejected.generateAudit")}
           </button>
-          <StatusPill variant="danger">
-            <Lock size={13} aria-hidden="true" />
-            {t("status.liveTradingDisabled")}
-          </StatusPill>
-          <StatusPill variant={paperOrder ? "success" : "warning"}>{paperOrder ? paperOrder.status : "disconnected"}</StatusPill>
         </div>
-      </div>
+      ) : null}
+      {isOrderLoading ? <div className="market-snapshot-empty">{t("loadingStates.syncing")}</div> : null}
 
-      <div className="execution-grid">
-        <section className="execution-panel" aria-labelledby="execution-status-title">
-          <div className="execution-panel__heading">
-            <span id="execution-status-title">
-              <Radio size={15} aria-hidden="true" />
-              Execution connection
-            </span>
-            <StatusPill variant="warning">{isCreatingPaperOrder ? t("loadingStates.creatingOrder") : "not connected"}</StatusPill>
-          </div>
-          <p>{reason}</p>
-        </section>
+      <PaperSummaryCard paperOrder={paperOrder} account={paperAccount} accountError={accountError} />
 
-        <section className="execution-panel" aria-labelledby="execution-risk-title">
-          <div className="execution-panel__heading">
-            <span id="execution-risk-title">
-              <ShieldCheck size={15} aria-hidden="true" />
-              Risk check
-            </span>
-            <StatusPill variant={riskSummary ? "success" : "warning"}>{riskStatus ?? "disconnected"}</StatusPill>
-          </div>
-          <p>{riskSummary?.id ?? "No real risk check is connected."}</p>
-        </section>
-
-        {paperOrder ? (
-          <section className="execution-panel" aria-labelledby="execution-order-title">
-            <div className="execution-panel__heading">
-              <span id="execution-order-title">Order record</span>
-              <StatusPill variant={paperOrder.is_mock ? "danger" : "success"}>{paperOrder.is_mock ? "mock" : "real"}</StatusPill>
-            </div>
-            <dl className="execution-summary">
-              <div>
-                <dt>price</dt>
-                <dd>{paperOrder.price}</dd>
-              </div>
-              <div>
-                <dt>quantity</dt>
-                <dd>{paperOrder.quantity}</dd>
-              </div>
-              <div>
-                <dt>source</dt>
-                <dd>{paperOrder.source}</dd>
-              </div>
-            </dl>
-          </section>
-        ) : null}
+      <div className="paper-grid">
+        <OrderTicket
+          paperOrder={paperOrder}
+          riskCheck={riskSummary}
+          isExecuting={isExecutingPaperOrder}
+          isCancelling={isCancellingPaperOrder}
+          disabledReason={canExecutePaperOrder ? undefined : disabledReason || blockReason}
+          onExecute={onExecutePaperTrade}
+          onCancel={onCancelPaperTrade}
+        />
+        <ExecutionPreview
+          paperOrder={paperOrder}
+          riskCheck={riskSummary}
+          onGenerateReviewReport={onGenerateReviewReport}
+          isGeneratingReviewReport={isGeneratingReviewReport}
+          canGenerateReviewReport={canGenerateReviewReport}
+        />
+        <ActivePaperPositions positions={paperPositions} isLoading={isAccountLoading || isPositionsLoading} error={positionsError ?? accountError} />
+        <ExecutionLogTable logs={executionLogs} isLoading={isLogsLoading} error={logsError} />
       </div>
     </section>
   );

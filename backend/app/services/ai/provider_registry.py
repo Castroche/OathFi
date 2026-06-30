@@ -61,6 +61,9 @@ class AIProviderRegistry:
 
     def get(self, name: str) -> AIProvider | None:
         config = self.config_for(name)
+        return self.provider_from_config(config)
+
+    def provider_from_config(self, config: ProviderConfig | None) -> AIProvider | None:
         if config is None:
             return None
         if config.name == "anthropic":
@@ -72,6 +75,26 @@ class AIProviderRegistry:
         if config.openai_compatible:
             return OpenAICompatibleProvider(config)
         return None
+
+    def config_for_with_credentials(
+        self,
+        name: str,
+        *,
+        api_key: str | None = None,
+        base_url: str | None = None,
+        model: str | None = None,
+    ) -> ProviderConfig | None:
+        config = self.config_for(name)
+        if config is None:
+            return None
+        return config.model_copy(
+            update={
+                "api_key": api_key or config.api_key,
+                "base_url": base_url or config.base_url,
+                "default_model": model or config.default_model,
+                "configured": bool(api_key or config.api_key) or config.name == "ollama",
+            }
+        )
 
     def config_for(self, name: str) -> ProviderConfig | None:
         normalized = name.strip().lower()

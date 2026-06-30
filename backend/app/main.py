@@ -7,6 +7,7 @@ from app.api import (
     audit_reports,
     backtests,
     dashboard,
+    ecosystem,
     health,
     hypotheses,
     market,
@@ -53,6 +54,8 @@ app.include_router(hypotheses.router, prefix="/api")
 app.include_router(backtests.router, prefix="/api")
 app.include_router(risk.router, prefix="/api")
 app.include_router(paper_orders.router, prefix="/api")
+app.include_router(paper_orders.account_router, prefix="/api")
 app.include_router(audit_reports.router, prefix="/api")
 app.include_router(dashboard.router, prefix="/api")
+app.include_router(ecosystem.router, prefix="/api")
 app.include_router(market_stream.router)

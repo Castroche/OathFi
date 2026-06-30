@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMarketIndicators } from "../../api/market";
+import { sourceLabel } from "../../lib/displayLabels";
 import { useMarketDataStore } from "../../stores/marketDataStore";
 import { StatusPill } from "../common/StatusPill";
 
@@ -93,7 +94,7 @@ export function IndicatorPanel() {
           <h2 id="indicators-title">{t("marketLive.indicators.title")}</h2>
         </div>
         <StatusPill variant={indicatorsQuery.isError ? "danger" : indicatorsQuery.isLoading ? "warning" : "success"}>
-          {indicatorsQuery.isLoading ? t("marketLive.status.loading") : indicatorsQuery.isError ? t("marketLive.status.error") : data?.source ?? "htx_rest_fallback"}
+          {indicatorsQuery.isLoading ? t("marketLive.status.loading") : indicatorsQuery.isError ? t("marketLive.status.error") : sourceLabel(t, data?.source ?? "htx_rest_fallback")}
         </StatusPill>
       </div>
       <div className="indicator-grid">

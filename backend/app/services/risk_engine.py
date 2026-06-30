@@ -15,6 +15,7 @@ from app.models.risk_check import RiskCheck
 from app.models.user_settings import UserSettings
 from app.providers.market import MarketProviderError
 from app.schemas.risk import RiskCheckRequest
+from app.services.executable_strategy import MIN_REWARD_RISK, strategy_from_hypothesis, validate_executable_strategy
 from app.services.market_data_service import MarketDataService
 from app.services.workflow_service import log_action, new_workflow_id
 
@@ -34,12 +35,38 @@ class RiskSettings:
     daily_loss_limit: float
     daily_realized_loss: float
     live_trading_enabled: bool
+    demo_mode_enabled: bool
+    demo_scenario: str
 
 
 class RiskEngine:
     hard_block_keywords = ("exploit", "hack", "depeg", "insolvent", "halted", "security incident")
 
     rule_definitions = [
+        {
+            "name": "hypothesis_tradeable",
+            "label": "Hypothesis Tradeable",
+            "threshold": "direction is long or short",
+            "source": "hypothesis",
+        },
+        {
+            "name": "executable_strategy_valid",
+            "label": "Executable Strategy Valid",
+            "threshold": "strategy contract is present and valid",
+            "source": "hypothesis.raw_json + suggested_rule_json",
+        },
+        {
+            "name": "side_price_consistency",
+            "label": "Side Price Consistency",
+            "threshold": "long: stop < entry < target; short: stop > entry > target",
+            "source": "executable_strategy",
+        },
+        {
+            "name": "backtest_verdict_pass",
+            "label": "Backtest Verdict Pass",
+            "threshold": "backtest.verdict.decision = pass",
+            "source": "backtest_result",
+        },
         {
             "name": "expectancy_positive",
             "label": "Backtest Expectancy Positive",
@@ -113,14 +140,14 @@ class RiskEngine:
             "source": "paper account",
         },
         {
-            "name": "live_trading_disabled",
-            "label": "Live Trading Disabled",
-            "threshold": "live_trading_enabled = false",
-            "source": "settings",
+            "name": "risk_reward_minimum",
+            "label": "Risk Reward Minimum",
+            "threshold": "reward_risk >= 1.2",
+            "source": "executable_strategy",
         },
         {
-            "name": "market_data_available",
-            "label": "Market Data Available",
+            "name": "market_data_live",
+            "label": "Market Data Live",
             "threshold": "ticker, orderbook, and kline available",
             "source": "htx market provider",
         },
@@ -267,6 +294,7 @@ class RiskEngine:
         record = db.scalar(select(UserSettings).order_by(UserSettings.created_at.desc()).limit(1))
         settings_json = record.settings_json if record and isinstance(record.settings_json, dict) else {}
         risk_json = settings_json.get("risk") if isinstance(settings_json.get("risk"), dict) else {}
+        demo_json = settings_json.get("demo") if isinstance(settings_json.get("demo"), dict) else {}
         account_json = settings_json.get("paper_account") if isinstance(settings_json.get("paper_account"), dict) else {}
         account_equity = _positive_float(account_json.get("equity"), request.account_equity, 10000)
         risk_per_trade = _positive_float(risk_json.get("risk_per_trade"), request.risk_per_trade, 0.01)
@@ -286,6 +314,8 @@ class RiskEngine:
             daily_loss_limit=daily_loss_limit,
             daily_realized_loss=_positive_float(account_json.get("daily_realized_loss"), 0),
             live_trading_enabled=live_trading_enabled,
+            demo_mode_enabled=bool(getattr(record, "demo_mode", False) and getattr(record, "demo_mode_enabled", False)) if record else False,
+            demo_scenario=str(getattr(record, "demo_scenario", "") or demo_json.get("demo_scenario") or "pass"),
         )
 
     @staticmethod
@@ -382,16 +412,74 @@ class RiskEngine:
             ]
         ).lower()
         hard_hits = [keyword for keyword in self.hard_block_keywords if keyword in text]
+        demo_reject = settings.demo_mode_enabled and settings.demo_scenario == "reject"
+        profit_factor_threshold = 1.2
+        min_trade_count = settings.min_trade_count
+        max_drawdown_threshold = settings.max_drawdown
+        max_spread_ratio = settings.max_spread_ratio
+        min_liquidity_score = settings.min_liquidity_score
+        max_volatility_score = settings.max_volatility_score
+        max_btc_correlation = settings.max_btc_correlation
+        executable_strategy = strategy_from_hypothesis(hypothesis)
+        strategy_validation = validate_executable_strategy(
+            executable_strategy,
+            hypothesis_direction=hypothesis.direction if hypothesis else None,
+            min_reward_risk=MIN_REWARD_RISK,
+        )
+        if strategy_validation.entry_price:
+            entry_price = strategy_validation.entry_price
+            stop_loss = strategy_validation.stop_loss or stop_loss
+            take_profit = strategy_validation.take_profit if strategy_validation.take_profit is not None else take_profit
+            stop_distance = abs(entry_price - stop_loss) if entry_price and stop_loss else 0
+            stop_distance_ratio = stop_distance / entry_price if entry_price else 0
+            reward_distance = abs(float(take_profit) - entry_price) if take_profit and entry_price else 0
+            reward_risk = reward_distance / stop_distance if stop_distance else 0
+            suggested_size = allowed_loss / stop_distance if stop_distance else 0
+            requested_size = request.position_size if request.position_size is not None and request.position_size > 0 else suggested_size
+            position_size = max(0.0, min(suggested_size, requested_size))
+            max_loss = stop_distance * position_size if stop_distance else 0
+            spread_ratio = float(orderbook.get("spread") or 0) / entry_price if entry_price else 0
+            resistance_distance = _nearest_resistance_distance(klines, entry_price)
+        verdict = backtest.verdict_json if backtest and isinstance(backtest.verdict_json, dict) else {}
+        verdict_decision = str(verdict.get("decision") or "").lower()
 
         def add(name: str, label: str, passed: bool, threshold: str, actual: str, warning: bool = False) -> None:
             status = "PASS" if passed else ("WARNING" if warning else "BLOCK")
-            message = f"{label}: {actual} vs {threshold}."
+            message = name
             rules.append({"name": name, "status": status, "message": message, "threshold": threshold, "actual": actual})
             if status == "WARNING":
-                warnings.append(message)
+                warnings.append(name)
             if status == "BLOCK":
-                block_reasons.append(message)
+                block_reasons.append(name)
 
+        add(
+            "hypothesis_tradeable",
+            "Hypothesis Tradeable",
+            bool(hypothesis and hypothesis.direction in {"long", "short"}),
+            "long or short",
+            hypothesis.direction if hypothesis else "missing hypothesis",
+        )
+        add(
+            "executable_strategy_valid",
+            "Executable Strategy Valid",
+            strategy_validation.valid,
+            "valid executable_strategy",
+            "valid" if strategy_validation.valid else ", ".join(strategy_validation.reasons),
+        )
+        add(
+            "side_price_consistency",
+            "Side Price Consistency",
+            "side_price_consistency" not in strategy_validation.reasons and strategy_validation.entry_price is not None,
+            "long: stop < entry < target; short: stop > entry > target",
+            f"side={strategy_validation.side}, entry={_fmt_number(strategy_validation.entry_price)}, stop={_fmt_number(strategy_validation.stop_loss)}, target={_fmt_number(strategy_validation.take_profit)}",
+        )
+        add(
+            "backtest_verdict_pass",
+            "Backtest Verdict Pass",
+            bool(backtest and verdict_decision == "pass"),
+            "pass",
+            verdict_decision or ("missing backtest" if not backtest else "missing verdict"),
+        )
         add(
             "expectancy_positive",
             "Backtest Expectancy Positive",
@@ -402,62 +490,62 @@ class RiskEngine:
         add(
             "profit_factor",
             "Profit Factor",
-            bool(backtest and backtest.profit_factor >= 1.2),
-            ">= 1.20",
+            bool(backtest and backtest.profit_factor >= profit_factor_threshold),
+            f">= {_fmt_number(profit_factor_threshold)}",
             _fmt_number(backtest.profit_factor) if backtest else "missing backtest",
         )
         add(
             "max_drawdown",
             "Max Drawdown Below Threshold",
-            bool(backtest and backtest.max_drawdown <= settings.max_drawdown),
-            _fmt_pct(settings.max_drawdown),
+            bool(backtest and abs(backtest.max_drawdown) <= max_drawdown_threshold),
+            _fmt_pct(max_drawdown_threshold),
             _fmt_pct(backtest.max_drawdown) if backtest else "missing backtest",
-            warning=bool(backtest and backtest.max_drawdown <= settings.max_drawdown * 1.2),
+            warning=bool(backtest and abs(backtest.max_drawdown) <= max_drawdown_threshold * 1.2),
         )
         add(
             "sample_size",
             "Sample Size Sufficient",
-            bool(backtest and backtest.trade_count >= settings.min_trade_count),
-            f">= {settings.min_trade_count}",
+            bool(backtest and backtest.trade_count >= min_trade_count),
+            f">= {min_trade_count}",
             str(backtest.trade_count) if backtest else "missing backtest",
         )
         add(
             "spread",
             "Spread Acceptable",
-            spread_ratio <= settings.max_spread_ratio,
-            f"<= {_fmt_pct(settings.max_spread_ratio)}",
+            spread_ratio <= max_spread_ratio,
+            f"<= {_fmt_pct(max_spread_ratio)}",
             _fmt_pct(spread_ratio),
-            warning=spread_ratio <= settings.max_spread_ratio * 1.5,
+            warning=spread_ratio <= max_spread_ratio * 1.5,
         )
         add(
             "liquidity",
             "Liquidity Score",
-            liquidity_score >= settings.min_liquidity_score,
-            f">= {_fmt_number(settings.min_liquidity_score)}",
+            liquidity_score >= min_liquidity_score,
+            f">= {_fmt_number(min_liquidity_score)}",
             _fmt_number(liquidity_score),
-            warning=market_data_status != "live" or liquidity_score >= settings.min_liquidity_score * 0.8,
+            warning=market_data_status != "live" or liquidity_score >= min_liquidity_score * 0.8,
         )
         add(
             "volatility",
             "Volatility Not Extreme",
-            volatility_score <= settings.max_volatility_score,
-            f"<= {_fmt_number(settings.max_volatility_score)}",
+            volatility_score <= max_volatility_score,
+            f"<= {_fmt_number(max_volatility_score)}",
             _fmt_number(volatility_score),
-            warning=volatility_score <= min(100, settings.max_volatility_score * 1.15),
+            warning=volatility_score <= min(100, max_volatility_score * 1.15),
         )
         add(
             "btc_correlation",
             "BTC Correlation Risk",
-            abs(btc_correlation) <= settings.max_btc_correlation,
-            f"<= {_fmt_number(settings.max_btc_correlation)}",
+            abs(btc_correlation) <= max_btc_correlation,
+            f"<= {_fmt_number(max_btc_correlation)}",
             _fmt_number(btc_correlation),
-            warning=abs(btc_correlation) <= min(1, settings.max_btc_correlation + 0.1),
+            warning=abs(btc_correlation) <= min(1, max_btc_correlation + 0.1),
         )
         add(
             "resistance_distance",
             "Resistance Not Nearby",
             resistance_distance is None or resistance_distance >= 0.01,
-            ">= 1.00% away",
+            ">= 1.00%",
             "none above entry" if resistance_distance is None else _fmt_pct(resistance_distance),
             warning=resistance_distance is not None and resistance_distance >= 0.006,
         )
@@ -483,13 +571,6 @@ class RiskEngine:
             _fmt_number(settings.daily_realized_loss),
         )
         add(
-            "live_trading_disabled",
-            "Live Trading Disabled",
-            not settings.live_trading_enabled,
-            "false",
-            str(settings.live_trading_enabled).lower(),
-        )
-        add(
             "hard_block_keywords",
             "Hard Block News or Hypothesis Keywords",
             not hard_hits,
@@ -497,13 +578,27 @@ class RiskEngine:
             ", ".join(hard_hits) if hard_hits else "none",
         )
         add(
-            "market_data_available",
-            "Market Data Available",
+            "risk_reward_minimum",
+            "Risk Reward Minimum",
+            reward_risk >= MIN_REWARD_RISK,
+            f">= {_fmt_number(MIN_REWARD_RISK)}",
+            _fmt_number(reward_risk),
+        )
+        add(
+            "market_data_live",
+            "Market Data Live",
             market_data_status == "live",
             "live",
             market_data_status,
-            warning=True,
         )
+        if demo_reject:
+            add(
+                "demo_reject_scenario",
+                "Guided Demo Reject Scenario",
+                False,
+                "demo_scenario is not reject",
+                "demo_scenario=reject",
+            )
 
         warnings = list(dict.fromkeys(warnings))
         block_reasons = list(dict.fromkeys(block_reasons))

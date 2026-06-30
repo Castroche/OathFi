@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -9,15 +9,10 @@ import {
   fetchDashboardRecentDecisions,
   fetchDashboardSummary,
 } from "../../api/dashboard";
-import {
-  fetchMarketKlines,
-  fetchMarketTicker,
-  toMarketKlines,
-  toMarketTicker,
-} from "../../api/market";
-import { generateHypothesis } from "../../api/hypotheses";
+import { fetchSettings } from "../../api/settings";
+import { getAIProvider } from "../../config/aiProviders";
+import { generateAgentHypotheses } from "../../api/agent";
 import type { MarketEvent } from "../../api/market";
-import type { MarketKline } from "../../services/htx/htxTypes";
 import { useAppStore } from "../../stores/appStore";
 import { useMarketDataStore } from "../../stores/marketDataStore";
 import { StatusPill } from "../common/StatusPill";
@@ -26,6 +21,7 @@ import { AgentStatusCard } from "./AgentStatusCard";
 import { CompactMarketChart } from "./CompactMarketChart";
 import { MainOpportunityCard } from "./MainOpportunityCard";
 import { MarketPulseCard } from "./MarketPulseCard";
+import { NewsOverviewCard } from "./NewsOverviewCard";
 import { RecentDecisionTrail } from "./RecentDecisionTrail";
 import { RiskSummaryCard } from "./RiskSummaryCard";
 
@@ -37,15 +33,14 @@ function errorMessage(error: unknown) {
 }
 
 export function CommandCenterContent() {
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [ethKlines, setEthKlines] = useState<MarketKline[]>([]);
-  const [dashboardStreamStatus, setDashboardStreamStatus] = useState("connecting");
   const topTickers = useMarketDataStore((state) => state.topTickers);
-  const applyTopTicker = useMarketDataStore((state) => state.applyTopTicker);
+  const klines = useMarketDataStore((state) => state.klines);
+  const connectionStatus = useMarketDataStore((state) => state.connectionStatus);
   const setWorkflowIds = useAppStore((state) => state.setWorkflowIds);
-  const setLatestHypothesis = useAppStore((state) => state.setLatestHypothesis);
+  const setLatestAgentHypothesis = useAppStore((state) => state.setLatestAgentHypothesis);
   const latestAuditReport = useAppStore((state) => state.latestAuditReport);
   const showToast = useAppStore((state) => state.showToast);
 
@@ -69,51 +64,14 @@ export function CommandCenterContent() {
     queryFn: ({ signal }) => fetchDashboardMarketEvents(5, signal),
     refetchInterval: 15_000,
   });
-
-  useEffect(() => {
-    setDashboardStreamStatus("connecting");
-    const controller = new AbortController();
-
-    const refreshTickers = () => {
-      DASHBOARD_SYMBOLS.forEach((symbol) => {
-        fetchMarketTicker(symbol, controller.signal)
-          .then((data) => {
-            const ticker = toMarketTicker({ ...data, source: "htx_rest_fallback", status: "degraded", is_mock: false });
-            applyTopTicker(ticker, {
-              status: "degraded",
-              dataSource: "htx_rest_fallback",
-              lastUpdated: Date.now(),
-              latencyMs: data.latency_ms ?? null,
-              error: null,
-            });
-            setDashboardStreamStatus("degraded");
-          })
-          .catch(() => {
-            if (!controller.signal.aborted) {
-              setDashboardStreamStatus("disconnected");
-            }
-          });
-      });
-    };
-
-    refreshTickers();
-    fetchMarketKlines("ETH/USDT", DASHBOARD_TIMEFRAME, 120, controller.signal)
-      .then((data) => setEthKlines(toMarketKlines(data)))
-      .catch(() => {
-        if (!controller.signal.aborted) {
-          setDashboardStreamStatus("degraded");
-        }
-      });
-
-    const refreshTimer = window.setInterval(refreshTickers, 10_000);
-
-    return () => {
-      window.clearInterval(refreshTimer);
-      controller.abort();
-    };
-  }, [applyTopTicker]);
+  const settingsQuery = useQuery({
+    queryKey: ["settings"],
+    queryFn: ({ signal }) => fetchSettings(signal),
+    retry: false,
+  });
 
   const primaryMarketEvent = marketEventsQuery.data?.[0];
+  const runtimeSettings = settingsQuery.data;
   const ethTicker = topTickers["ETH/USDT"];
   const liveTickerCount = useMemo(
     () => DASHBOARD_SYMBOLS.filter((symbol) => topTickers[symbol]?.status === "live" || topTickers[symbol]?.status === "degraded").length,
@@ -124,10 +82,11 @@ export function CommandCenterContent() {
     mutationFn: async (marketEvent?: MarketEvent) => {
       const event = marketEvent ?? primaryMarketEvent;
       const symbol = opportunityQuery.data?.symbol ?? event?.symbol ?? "ETH/USDT";
-      return generateHypothesis({
+      return generateAgentHypotheses({
         symbol,
         timeframe: DASHBOARD_TIMEFRAME,
         market_event_id: event?.id,
+        language: i18n.language.toLowerCase().startsWith("zh") ? "zh-CN" : "en",
         context: {
           ticker: topTickers[symbol],
           orderbook: null,
@@ -140,9 +99,11 @@ export function CommandCenterContent() {
         },
       });
     },
-    onSuccess: (hypothesis) => {
+    onSuccess: (result) => {
+      const hypothesis = result.hypotheses[0];
+      if (!hypothesis) return;
       setWorkflowIds({ workflowId: hypothesis.workflow_id, hypothesisId: hypothesis.id });
-      setLatestHypothesis(hypothesis);
+      setLatestAgentHypothesis(hypothesis);
       showToast({
         variant: "success",
         message: t("dashboard.feedback.hypothesisGenerated", { id: hypothesis.id }),
@@ -180,15 +141,21 @@ export function CommandCenterContent() {
         })}
         <StatusPill variant={liveTickerCount > 0 ? "success" : "danger"}>
           <RadioTower size={13} aria-hidden="true" />
-          {t("status.htxApiConnected")}
+          {runtimeSettings?.primary_data_source ?? "HTX"} / {runtimeSettings?.connection_type ?? "Hybrid"}
         </StatusPill>
-        <StatusPill variant={summaryQuery.data?.agent_status.running ? "success" : "warning"}>
-          {t("status.agentRunning")}
+        <StatusPill variant={summaryQuery.data?.agent_status.running && runtimeSettings?.model_provider ? "success" : "warning"}>
+          {runtimeSettings?.model_provider ? getAIProvider(runtimeSettings.model_provider).displayName : t("status.agentRunning")}
         </StatusPill>
-        <StatusPill variant="warning">{t("status.riskModeGuarded")}</StatusPill>
+        <StatusPill variant={runtimeSettings?.paper_trading_enabled === false ? "warning" : "info"}>
+          {runtimeSettings?.paper_trading_enabled === false ? t("settings.status.paperExecutionUnavailable") : t("status.paperTradingOnly")}
+        </StatusPill>
+        <StatusPill variant="danger">{t("status.liveTradingDisabled")}</StatusPill>
         <StatusPill variant="info">
           <CheckCircle2 size={13} aria-hidden="true" />
-          {t("dashboard.labels.demoModeOn")}
+          {runtimeSettings?.demo_mode_enabled === false ? t("status.disabled") : t("dashboard.labels.demoModeOn")}
+        </StatusPill>
+        <StatusPill variant={runtimeSettings?.demo_scenario === "reject" ? "warning" : "success"}>
+          {t("settings.fields.demoScenario")}: {runtimeSettings ? t(`settings.demo.scenarios.${runtimeSettings.demo_scenario}`) : "--"}
         </StatusPill>
       </div>
 
@@ -211,6 +178,7 @@ export function CommandCenterContent() {
           onAnalyze={(event) => generateHypothesisMutation.mutate(event)}
           onViewAllEvents={() => navigate("/market")}
         />
+        <NewsOverviewCard />
         <MainOpportunityCard
           opportunity={opportunityQuery.data}
           isGenerating={generateHypothesisMutation.isPending}
@@ -218,9 +186,9 @@ export function CommandCenterContent() {
           onViewSupportingData={() => navigate("/market")}
         />
         <CompactMarketChart
-          klines={ethKlines}
+          klines={klines}
           orderBook={null}
-          status={ethTicker?.status ?? dashboardStreamStatus}
+          status={ethTicker?.status ?? connectionStatus}
         />
         <RecentDecisionTrail
           decisions={decisionsQuery.data ?? []}

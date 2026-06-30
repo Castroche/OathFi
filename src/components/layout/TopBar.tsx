@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { CheckCircle2, DatabaseZap, Globe2, ShieldCheck, Wifi } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cachedTickerToMarketTicker, fetchMarketTickers } from "../../api/market";
+import { fetchSettings, saveSettings, settingsToUpdate } from "../../api/settings";
 import { StatusPill } from "../common/StatusPill";
 import { useAppStore, type Locale } from "../../stores/appStore";
 import { useMarketDataStore } from "../../stores/marketDataStore";
@@ -54,7 +55,7 @@ function formatTickerChange(ticker: MarketTicker | undefined, status: SymbolLive
 
 export function TopBar() {
   markRender("TopBar");
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
   const language = useAppStore((state) => state.language);
   const setLanguage = useAppStore((state) => state.setLanguage);
   const activeSymbol = useMarketDataStore((state) => state.activeSymbol);
@@ -91,7 +92,7 @@ export function TopBar() {
     };
 
     refreshTickers();
-    const timer = window.setInterval(refreshTickers, 5_000);
+    const timer = window.setInterval(refreshTickers, 60_000);
     return () => {
       window.clearInterval(timer);
       controller.abort();
@@ -100,6 +101,18 @@ export function TopBar() {
 
   const selectLanguage = (nextLanguage: Locale) => {
     setLanguage(nextLanguage);
+    void i18n.changeLanguage(nextLanguage);
+    document.documentElement.lang = nextLanguage;
+    fetchSettings()
+      .then((settings) =>
+        saveSettings({
+          ...settingsToUpdate(settings),
+          language: nextLanguage,
+          live_trading_enabled: false,
+          real_trading_enabled: false,
+        }),
+      )
+      .catch(() => undefined);
   };
 
   const tickerSymbols = [activeSymbol, ...DEFAULT_SYMBOLS.filter((symbol) => symbol !== activeSymbol)];

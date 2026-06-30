@@ -1,6 +1,7 @@
 import { ArrowRight, Target } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { DashboardOpportunity } from "../../api/dashboard";
+import { businessCopyLabel, sideLabel, statusLabel } from "../../lib/displayLabels";
 import { StatusPill } from "../common/StatusPill";
 
 type MainOpportunityCardProps = {
@@ -26,15 +27,15 @@ export function MainOpportunityCard({
           <h2 id="main-opportunity">{t("commandCenter.sections.mainOpportunity")}</h2>
         </div>
         <StatusPill variant={opportunity ? "success" : "warning"}>
-          {opportunity?.status ?? t("marketLive.status.disconnected")}
+          {statusLabel(t, opportunity?.status ?? "disconnected")}
         </StatusPill>
       </div>
       {opportunity ? (
         <>
           <div className="opportunity-symbol">{opportunity.symbol}</div>
-          <h3>{opportunity.setup}</h3>
+          <h3>{businessCopyLabel(t, opportunity.setup)}</h3>
           <p>
-            {t("dashboard.labels.direction")}: {opportunity.direction} / {t("dashboard.labels.confidence")}: {opportunity.confidence}
+            {t("dashboard.labels.direction")}: {sideLabel(t, opportunity.direction)} / {t("dashboard.labels.confidence")}: {opportunity.confidence}
           </p>
           <dl className="opportunity-rules">
             <div>

@@ -9,8 +9,10 @@ PROJECT_DIR = BACKEND_DIR.parent
 
 class Settings(BaseSettings):
     app_version: str = "0.1.0"
+    app_environment: str = "development"
     database_url: str = "sqlite:///./oathfi_demo.db"
     backend_port: int = 8001
+    settings_encryption_key: str = ""
 
     ai_mock_mode: bool = False
     default_ai_provider: str = "deepseek"
@@ -22,12 +24,12 @@ class Settings(BaseSettings):
     deepseek_api_key: str = ""
     deepseek_base_url: str = "https://api.deepseek.com"
     deepseek_default_model: str = ""
-    deepseek_model: str = "deepseek-chat"
+    deepseek_model: str = "deepseek-v4-flash"
 
     openai_api_key: str = ""
     openai_base_url: str = "https://api.openai.com/v1"
     openai_default_model: str = ""
-    openai_model: str = "gpt-4.1-mini"
+    openai_model: str = "gpt-4.1"
     openai_reasoning_model: str = ""
 
     anthropic_api_key: str = ""

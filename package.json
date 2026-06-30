@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preflight:security": "node scripts/preflight-security-check.mjs",
+    "test:e2e": "node tests/e2e/run-all.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.101.0",
@@ -27,6 +29,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
+    "@playwright/test": "^1.61.1",
     "@types/pako": "^2.0.4",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",

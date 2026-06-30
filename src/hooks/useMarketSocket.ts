@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { apiWsUrl } from "../api/client";
 import {
   DEFAULT_BACKEND_SYMBOLS,
@@ -17,7 +17,7 @@ import {
 } from "../api/market";
 import { useAppStore } from "../stores/appStore";
 import { useMarketDataStore } from "../stores/marketDataStore";
-import type { MarketMessageMeta } from "../services/htx/htxTypes";
+import type { MarketMessageMeta, MarketOrderBook, MarketTrade } from "../services/htx/htxTypes";
 
 function buildMeta(receivedAt: number, data: { source: string; updated_at: string; status: string; is_mock: boolean }, stream?: MarketMessageMeta["stream"], topic?: string): MarketMessageMeta {
   const htxMessageTs = new Date(data.updated_at).getTime();
@@ -60,8 +60,35 @@ export function useMarketSocket() {
   const wsRef = useRef<WebSocket | null>(null);
   const staleTimerRef = useRef(0);
   const reconnectTimerRef = useRef(0);
+  const bufferedFlushTimerRef = useRef(0);
+  const pendingOrderBookRef = useRef<{ orderBook: MarketOrderBook; meta: MarketMessageMeta } | null>(null);
+  const pendingTradesRef = useRef<{ symbol: string; trades: MarketTrade[]; meta: MarketMessageMeta } | null>(null);
   const intentionalCloseRef = useRef(false);
   const [socketAttempt, setSocketAttempt] = useState(0);
+
+  const flushBufferedMarketUpdates = useCallback(() => {
+    const store = useMarketDataStore.getState();
+    const pendingOrderBook = pendingOrderBookRef.current;
+    const pendingTrades = pendingTradesRef.current;
+    pendingOrderBookRef.current = null;
+    pendingTradesRef.current = null;
+    if (pendingOrderBook) {
+      store.applyOrderBook(pendingOrderBook.orderBook, pendingOrderBook.meta);
+    }
+    if (pendingTrades) {
+      store.applyTrades(pendingTrades.symbol, pendingTrades.trades, pendingTrades.meta);
+    }
+  }, []);
+
+  const scheduleBufferedMarketFlush = useCallback(() => {
+    if (bufferedFlushTimerRef.current) {
+      return;
+    }
+    bufferedFlushTimerRef.current = window.setTimeout(() => {
+      bufferedFlushTimerRef.current = 0;
+      flushBufferedMarketUpdates();
+    }, 200);
+  }, [flushBufferedMarketUpdates]);
 
   useEffect(() => {
     useMarketDataStore.getState().setAvailableSymbols(DEFAULT_BACKEND_SYMBOLS);
@@ -242,12 +269,22 @@ export function useMarketSocket() {
         const orderBook = toMarketOrderBook(message.data);
         const meta = buildMeta(receivedAt, message.data, "depth", message.topic);
         store.recordStreamMessage("depth", message.topic ?? null, meta);
-        store.applyOrderBook(orderBook, meta);
+        pendingOrderBookRef.current = { orderBook, meta };
+        scheduleBufferedMarketFlush();
       }
       if (message.type === "trades") {
         const meta = buildMeta(receivedAt, message.data, "trade", message.topic);
+        const nextTrades = toMarketTrades(message.data);
         store.recordStreamMessage("trade", message.topic ?? null, meta);
-        store.applyTrades(message.symbol, toMarketTrades(message.data), meta);
+        const pending = pendingTradesRef.current;
+        pendingTradesRef.current = pending && pending.symbol === message.symbol
+          ? {
+              symbol: message.symbol,
+              trades: Array.from(new Map([...nextTrades, ...pending.trades].map((trade) => [trade.id, trade])).values()).slice(0, 100),
+              meta,
+            }
+          : { symbol: message.symbol, trades: nextTrades, meta };
+        scheduleBufferedMarketFlush();
       }
       };
 
@@ -290,7 +327,14 @@ export function useMarketSocket() {
         socket.close();
       }
     };
-  }, [activeSymbol, activeTimeframe, socketAttempt]);
+  }, [activeSymbol, activeTimeframe, scheduleBufferedMarketFlush, socketAttempt]);
+
+  useEffect(() => () => {
+    window.clearTimeout(bufferedFlushTimerRef.current);
+    bufferedFlushTimerRef.current = 0;
+    pendingOrderBookRef.current = null;
+    pendingTradesRef.current = null;
+  }, []);
 
   useEffect(() => {
     staleTimerRef.current = window.setInterval(() => {

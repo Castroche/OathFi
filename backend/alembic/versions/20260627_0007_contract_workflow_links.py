@@ -1,7 +1,7 @@
 """contract workflow links
 
 Revision ID: 20260627_0007
-Revises: 20260627_0006
+Revises: 20260627_0004
 Create Date: 2026-06-27
 """
 from typing import Sequence, Union
@@ -10,7 +10,7 @@ from alembic import op
 import sqlalchemy as sa
 
 revision: str = "20260627_0007"
-down_revision: Union[str, None] = "20260627_0006"
+down_revision: Union[str, None] = "20260627_0004"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

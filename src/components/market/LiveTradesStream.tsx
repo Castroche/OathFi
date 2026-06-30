@@ -2,7 +2,6 @@ import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import { markRender } from "../../lib/perfDiagnostics";
 import { useMarketDataStore } from "../../stores/marketDataStore";
-import type { MarketTrade } from "../../services/htx/htxTypes";
 
 function formatTime(timestamp: number) {
   return new Intl.DateTimeFormat("en-US", {

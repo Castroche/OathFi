@@ -71,6 +71,12 @@ class RiskContractTest(unittest.TestCase):
         hypothesis_id = f"hyp_contract_{suffix}"
         backtest_id = f"bt_contract_{suffix}"
         with SessionLocal() as db:
+            executable_strategy = {
+                "side": "long",
+                "entry": {"type": "breakout", "operator": ">=", "price": 100.0, "confirmations": []},
+                "exit": {"stop_loss": 98.0, "take_profit_1": 104.0, "take_profit_2": None, "time_stop_bars": 24},
+                "risk": {"risk_per_trade": 0.01, "max_position_notional_pct": 1.0},
+            }
             hypothesis = Hypothesis(
                 id=hypothesis_id,
                 workflow_id=workflow_id,
@@ -99,7 +105,7 @@ class RiskContractTest(unittest.TestCase):
                 summary="Contract hypothesis",
                 reasons_json=["seeded"],
                 warnings_json=[],
-                raw_json={},
+                raw_json={"structured_hypothesis": {"executable_strategy": executable_strategy}},
                 source="contract_seed",
                 status="ready_for_risk",
                 is_mock=False,
@@ -108,7 +114,7 @@ class RiskContractTest(unittest.TestCase):
                 is_ai_generated=False,
                 analysis_mode="rule_based",
                 bias="long",
-                suggested_rule_json={},
+                suggested_rule_json={"executable_strategy": executable_strategy},
                 created_at=now_utc(),
                 updated_at=now_utc(),
             )
@@ -128,7 +134,7 @@ class RiskContractTest(unittest.TestCase):
                 equity_curve_json=[],
                 drawdown_curve_json=[],
                 trade_distribution_json=[],
-                verdict_json={},
+                verdict_json={"decision": "pass" if expectancy > 0 and profit_factor >= 1.2 and trades >= 50 else "reject"},
                 strategy_rule_json={},
                 report_json={},
                 trades_json=[],
@@ -195,13 +201,13 @@ class RiskContractTest(unittest.TestCase):
             self.assertEqual(hypothesis.latest_risk_check_id, risk_check["id"])
             self.assertEqual(hypothesis.latest_paper_order_id, order["id"])
 
-    def test_conditional_risk_can_create_draft(self) -> None:
+    def test_conditional_risk_cannot_create_draft(self) -> None:
         hypothesis_id, backtest_id = self.seed_case(expectancy=0.4, profit_factor=1.5, drawdown=0.13, trades=100)
         risk_check = self.run_risk(hypothesis_id, backtest_id)
         self.assertEqual(risk_check["status"], "CONDITIONAL")
         response = self.create_order(hypothesis_id, backtest_id, risk_check["id"])
-        self.assertEqual(response.status_code, 200, response.text)
-        self.assertEqual(response.json()["data"]["risk_check_id"], risk_check["id"])
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(response.json()["error"]["code"], "RISK_BLOCKED")
 
     def test_rejected_risk_blocks_paper_order(self) -> None:
         hypothesis_id, backtest_id = self.seed_case(expectancy=-0.1, profit_factor=0.8, drawdown=0.25, trades=10)
@@ -216,12 +222,85 @@ class RiskContractTest(unittest.TestCase):
         risk_check = self.run_risk(hypothesis_id)
         self.assertEqual(risk_check["backtest_id"], backtest_id)
 
-    def test_market_unavailable_downgrades_to_conditional(self) -> None:
+    def test_market_unavailable_rejects_risk(self) -> None:
         risk_api.service.market_data = UnavailableMarketData()
         hypothesis_id, backtest_id = self.seed_case(expectancy=0.4, profit_factor=1.5, drawdown=0.05, trades=100)
         risk_check = self.run_risk(hypothesis_id, backtest_id)
         self.assertEqual(risk_check["market_data_status"], "unavailable")
-        self.assertEqual(risk_check["status"], "CONDITIONAL")
+        self.assertEqual(risk_check["status"], "REJECTED")
+        self.assertIn("market_data_live", risk_check["block_reasons"])
+
+    def test_no_trade_hypothesis_rejects_risk(self) -> None:
+        hypothesis_id, backtest_id = self.seed_case(expectancy=0.4, profit_factor=1.5, drawdown=0.05, trades=100)
+        with SessionLocal() as db:
+            hypothesis = db.get(Hypothesis, hypothesis_id)
+            hypothesis.direction = "no_trade"
+            hypothesis.raw_json = {"structured_hypothesis": {"executable_strategy": {"side": "no_trade"}}}
+            hypothesis.suggested_rule_json = {"executable_strategy": {"side": "no_trade"}}
+            db.commit()
+        risk_check = self.run_risk(hypothesis_id, backtest_id)
+        self.assertEqual(risk_check["status"], "REJECTED")
+        self.assertIn("hypothesis_tradeable", risk_check["block_reasons"])
+
+    def test_backtest_caution_blocks_risk_approval(self) -> None:
+        hypothesis_id, backtest_id = self.seed_case(expectancy=0.4, profit_factor=1.5, drawdown=0.05, trades=100)
+        with SessionLocal() as db:
+            backtest = db.get(BacktestResult, backtest_id)
+            backtest.verdict_json = {"decision": "caution"}
+            db.commit()
+        risk_check = self.run_risk(hypothesis_id, backtest_id)
+        self.assertEqual(risk_check["status"], "REJECTED")
+        self.assertIn("backtest_verdict_pass", risk_check["block_reasons"])
+
+    def test_demo_scenario_pass_does_not_relax_risk_thresholds(self) -> None:
+        hypothesis_id, backtest_id = self.seed_case(expectancy=-0.1, profit_factor=0.0, drawdown=0.05, trades=100)
+        with SessionLocal() as db:
+            settings = db.query(UserSettings).order_by(UserSettings.created_at.desc()).first()
+            settings.demo_mode = True
+            settings.demo_mode_enabled = True
+            settings.demo_scenario = "pass"
+            backtest = db.get(BacktestResult, backtest_id)
+            backtest.verdict_json = {"decision": "pass"}
+            db.commit()
+        risk_check = self.run_risk(hypothesis_id, backtest_id)
+        self.assertEqual(risk_check["status"], "REJECTED")
+        self.assertIn("expectancy_positive", risk_check["block_reasons"])
+        self.assertIn("profit_factor", risk_check["block_reasons"])
+
+    def test_long_order_requires_stop_entry_target_ordering(self) -> None:
+        hypothesis_id, backtest_id = self.seed_case(expectancy=0.4, profit_factor=1.5, drawdown=0.05, trades=100)
+        with SessionLocal() as db:
+            hypothesis = db.get(Hypothesis, hypothesis_id)
+            bad_strategy = {
+                "side": "long",
+                "entry": {"type": "breakout", "operator": ">=", "price": 100.0, "confirmations": []},
+                "exit": {"stop_loss": 101.0, "take_profit_1": 104.0, "take_profit_2": None, "time_stop_bars": 24},
+                "risk": {"risk_per_trade": 0.01, "max_position_notional_pct": 1.0},
+            }
+            hypothesis.raw_json = {"structured_hypothesis": {"executable_strategy": bad_strategy}}
+            hypothesis.suggested_rule_json = {"executable_strategy": bad_strategy}
+            db.commit()
+        risk_check = self.run_risk(hypothesis_id, backtest_id)
+        self.assertEqual(risk_check["status"], "REJECTED")
+        self.assertIn("side_price_consistency", risk_check["block_reasons"])
+
+    def test_short_order_requires_stop_entry_target_ordering(self) -> None:
+        hypothesis_id, backtest_id = self.seed_case(expectancy=0.4, profit_factor=1.5, drawdown=0.05, trades=100)
+        with SessionLocal() as db:
+            hypothesis = db.get(Hypothesis, hypothesis_id)
+            bad_strategy = {
+                "side": "short",
+                "entry": {"type": "breakdown", "operator": "<=", "price": 100.0, "confirmations": []},
+                "exit": {"stop_loss": 98.0, "take_profit_1": 96.0, "take_profit_2": None, "time_stop_bars": 24},
+                "risk": {"risk_per_trade": 0.01, "max_position_notional_pct": 1.0},
+            }
+            hypothesis.direction = "short"
+            hypothesis.raw_json = {"structured_hypothesis": {"executable_strategy": bad_strategy}}
+            hypothesis.suggested_rule_json = {"executable_strategy": bad_strategy}
+            db.commit()
+        risk_check = self.run_risk(hypothesis_id, backtest_id)
+        self.assertEqual(risk_check["status"], "REJECTED")
+        self.assertIn("side_price_consistency", risk_check["block_reasons"])
 
 
 if __name__ == "__main__":

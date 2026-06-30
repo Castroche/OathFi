@@ -45,6 +45,7 @@ class AgentHypothesisGenerateRequest(BaseModel):
     provider: str | None = None
     model: str | None = None
     mode: Literal["ai", "rule_based"] = "ai"
+    language: Literal["en", "zh-CN"] = "en"
     context: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -93,6 +94,9 @@ class AgentRunRead(SourceMeta):
     raw_output_preview: str | None = None
     error_type: str | None = None
     error_message: str | None = None
+    fallback_reason: str | None = None
+    provider_status: str | None = None
+    latency_ms: int | None = None
     context_loaded: bool = False
     is_mock_context: bool = False
 
@@ -108,6 +112,12 @@ class AgentHypothesisRead(SourceMeta):
     model: str
     is_ai_generated: bool = True
     analysis_mode: str = "ai"
+    provider_status: str | None = None
+    fallback_reason: str | None = None
+    provider_raw_output: dict[str, Any] | None = None
+    structured_hypothesis: dict[str, Any] | None = None
+    translations: dict[str, str] = Field(default_factory=dict)
+    latency_ms: int | None = None
     bias: str | None = None
     suggested_rule: dict[str, Any] | None = None
     symbol: str
@@ -156,6 +166,12 @@ class StrategyRuleRead(SourceMeta):
     updated_at: datetime
 
 
+class AgentHypothesisTranslationsRead(BaseModel):
+    hypothesis_id: str
+    target_language: Literal["en", "zh-CN"]
+    translations: dict[str, str] = Field(default_factory=dict)
+
+
 class AgentHypothesesGenerateData(BaseModel):
     provider_configured: bool = False
     provider_healthy: bool = False
@@ -169,6 +185,11 @@ class AgentHypothesesGenerateData(BaseModel):
     is_ai_generated: bool = True
     error_type: str | None = None
     error_message: str | None = None
+    fallback_reason: str | None = None
+    provider_status: str | None = None
+    provider_raw_output: dict[str, Any] | None = None
+    structured_hypothesis: dict[str, Any] | None = None
+    latency_ms: int | None = None
     raw_output_preview: str | None = None
     agent_run: AgentRunRead
     context: AgentContextRead
@@ -188,6 +209,11 @@ class AgentHypothesesGenerateResponse(BaseModel):
     data: AgentHypothesesGenerateData
 
 
+class AgentHypothesesListResponse(BaseModel):
+    ok: Literal[True] = True
+    data: list[AgentHypothesisRead]
+
+
 class AgentHypothesisResponse(BaseModel):
     ok: Literal[True] = True
     data: AgentHypothesisRead
@@ -196,3 +222,8 @@ class AgentHypothesisResponse(BaseModel):
 class StrategyRuleResponse(BaseModel):
     ok: Literal[True] = True
     data: StrategyRuleRead
+
+
+class AgentHypothesisTranslationsResponse(BaseModel):
+    ok: Literal[True] = True
+    data: AgentHypothesisTranslationsRead

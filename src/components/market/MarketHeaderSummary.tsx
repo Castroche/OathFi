@@ -1,6 +1,7 @@
 import { ArrowRight, Signal } from "lucide-react";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { sourceLabel, statusLabel } from "../../lib/displayLabels";
 import { StatusPill } from "../common/StatusPill";
 import { useMarketDataStore } from "../../stores/marketDataStore";
 
@@ -76,7 +77,7 @@ export function MarketHeaderSummary({ onGenerateHypothesis, isGeneratingHypothes
     { label: t("marketLive.header.low24h"), value: formatPrice(ticker?.low, loading), meta: "HTX" },
     { label: t("marketLive.header.volume24h"), value: formatCompact(ticker?.volumeQuote, loading), meta: t("marketLive.header.quoteVolume") },
     { label: t("marketLive.header.fundingRate"), value: typeof ticker?.fundingRate === "number" ? `${(ticker.fundingRate * 100).toFixed(4)}%` : (ticker?.fundingRateLabel ?? t("status.planned")), meta: t("marketLive.header.spotFundingMeta") },
-    { label: t("marketLive.header.source"), value: dataSource, meta: connectionStatus },
+    { label: t("marketLive.header.source"), value: sourceLabel(t, dataSource), meta: statusLabel(t, connectionStatus) },
     { label: t("marketLive.header.latency"), value: `${latencyMs ?? ticker?.latencyMs ?? 0} ms`, meta: formatTime(lastUpdated, loading) },
     { label: t("marketLive.header.spread"), value: formatPrice(spread, loading), meta: orderBook ? `${((orderBook.imbalance ?? 0) * 100).toFixed(1)}%` : t("marketLive.header.bestBidAsk") },
   ];
@@ -121,4 +122,3 @@ export function MarketHeaderSummary({ onGenerateHypothesis, isGeneratingHypothes
     </div>
   );
 }
-

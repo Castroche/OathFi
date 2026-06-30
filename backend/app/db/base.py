@@ -34,12 +34,14 @@ class MockStatusMixin:
 from app.models.action_log import ActionLog  # noqa: E402,F401
 from app.models.agent_run import AgentRun  # noqa: E402,F401
 from app.models.ai_analysis import AIAnalysis  # noqa: E402,F401
-from app.models.audit_report import AuditReport  # noqa: E402,F401
+from app.models.ai_translation import AITranslationCache  # noqa: E402,F401
+from app.models.audit_report import AuditEvent, AuditEvidence, AuditReport  # noqa: E402,F401
 from app.models.backtest import BacktestJob, BacktestResult  # noqa: E402,F401
 from app.models.hypothesis import Hypothesis  # noqa: E402,F401
 from app.models.market_data import Kline, MarketSnapshot, OrderBookSnapshot, Symbol, TradeTick  # noqa: E402,F401
 from app.models.market_event import MarketEvent  # noqa: E402,F401
-from app.models.paper_order import PaperOrder  # noqa: E402,F401
+from app.models.paper_order import PaperAccount, PaperExecutionLog, PaperFill, PaperOrder, PaperPosition  # noqa: E402,F401
 from app.models.risk_check import RiskCheck  # noqa: E402,F401
 from app.models.strategy_rule import StrategyRule  # noqa: E402,F401
 from app.models.user_settings import UserSettings  # noqa: E402,F401
+from app.models.user_api_credential import UserApiCredential  # noqa: E402,F401

@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { sourceLabel } from "../../lib/displayLabels";
 import { Check, Crosshair, Eye, EyeOff, Maximize2, MousePointer2, RotateCcw, Ruler, Settings, Trash2, X } from "lucide-react";
 import {
   dispose,
@@ -831,9 +832,16 @@ export const ProKlineTerminal = memo(function ProKlineTerminal() {
       volumePrecision: 6,
     });
     chart.setPeriod(periodByTimeframe[activeTimeframe]);
+  }, [activeSymbol, activeTimeframe]);
+
+  useEffect(() => {
+    const chart = chartRef.current;
+    if (!chart || snapshotVersion === 0) {
+      return;
+    }
     chart.resetData();
     window.setTimeout(() => chart.scrollToRealTime(120), 0);
-  }, [activeSymbol, activeTimeframe, snapshotVersion]);
+  }, [snapshotVersion]);
 
   useEffect(() => {
     if (
@@ -865,7 +873,7 @@ export const ProKlineTerminal = memo(function ProKlineTerminal() {
         </div>
         <div className="market-chart-panel__badges">
           <StatusPill variant="info">
-            {t("marketLive.header.source")}: {dataSource}
+            {t("marketLive.header.source")}: {sourceLabel(t, dataSource)}
           </StatusPill>
           <StatusPill variant={connectionStatus === "live" ? "success" : connectionStatus === "fallback" ? "warning" : "info"}>
             {t(`marketLive.status.${connectionStatus === "connecting" ? "loading" : connectionStatus}`)}
@@ -1043,7 +1051,7 @@ export const ProKlineTerminal = memo(function ProKlineTerminal() {
 
       <div className="chart-legend" aria-label={t("marketLive.chart.dataStatus")}>
         <span>{t("marketLive.chart.ohlc")} {ticker ? `${ticker.open.toFixed(2)} / ${ticker.high.toFixed(2)} / ${ticker.low.toFixed(2)} / ${ticker.last.toFixed(2)}` : t("marketLive.status.loading")}</span>
-        <span>{t("marketLive.header.source")}: {dataSource}</span>
+        <span>{t("marketLive.header.source")}: {sourceLabel(t, dataSource)}</span>
         <span>{t("marketLive.header.updated")}: {formatTimestamp(lastUpdated, t("marketLive.status.loading"))}</span>
         <span>{t("marketLive.header.latency")}: {latencyMs ?? 0} ms</span>
       </div>

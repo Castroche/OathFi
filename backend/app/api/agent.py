@@ -7,9 +7,11 @@ from app.providers.market import MarketProviderError
 from app.schemas.agent import (
     AgentContextResponse,
     AgentHypothesesGenerateResponse,
+    AgentHypothesesListResponse,
     AgentHypothesisPatchRequest,
     AgentHypothesisResponse,
     AgentHypothesisGenerateRequest,
+    AgentHypothesisTranslationsResponse,
     StrategyRuleResponse,
     StrategyRuleWriteRequest,
 )
@@ -69,12 +71,34 @@ def generate_agent_hypotheses(
         return provider_error_response(exc)
 
 
+@router.get("/hypotheses", response_model=AgentHypothesesListResponse)
+def list_agent_hypotheses(
+    workflow_id: str | None = Query(default=None),
+    limit: int = Query(default=20, ge=1, le=100),
+    db: Session = Depends(get_db),
+) -> AgentHypothesesListResponse:
+    return AgentHypothesesListResponse(data=service.list_hypotheses(db, workflow_id=workflow_id, limit=limit))
+
+
 @router.get("/hypotheses/{hypothesis_id}", response_model=AgentHypothesisResponse)
 def get_agent_hypothesis(hypothesis_id: str, db: Session = Depends(get_db)) -> AgentHypothesisResponse:
     hypothesis = service.get_hypothesis(db, hypothesis_id)
     if hypothesis is None:
         raise HTTPException(status_code=404, detail="Hypothesis not found")
     return AgentHypothesisResponse(data=hypothesis)
+
+
+@router.post("/hypotheses/{hypothesis_id}/translations", response_model=AgentHypothesisTranslationsResponse)
+def translate_agent_hypothesis(
+    hypothesis_id: str,
+    target_language: str = Query(default="zh-CN"),
+    db: Session = Depends(get_db),
+) -> AgentHypothesisTranslationsResponse:
+    translations = service.translate_hypothesis(db, hypothesis_id, target_language=target_language)
+    if translations is None:
+        raise HTTPException(status_code=404, detail="Hypothesis not found")
+    db.commit()
+    return AgentHypothesisTranslationsResponse(data=translations)
 
 
 @router.patch("/hypotheses/{hypothesis_id}", response_model=AgentHypothesisResponse)

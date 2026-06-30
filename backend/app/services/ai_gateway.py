@@ -98,23 +98,86 @@ AGENT_HYPOTHESES_OUTPUT_SCHEMA: dict[str, Any] = {
                 "type": "object",
                 "required": [
                     "label",
-                    "type",
-                    "trigger",
-                    "invalidation",
-                    "risk",
-                    "backtest_rule",
-                    "suggested_action",
+                    "direction",
+                    "setup_type",
                     "confidence",
+                    "market_regime",
+                    "thesis_summary",
+                    "evidence",
+                    "entry_plan",
+                    "risk_notes",
+                    "why_not_opposite_direction",
+                    "invalidation_conditions",
+                    "backtest_rule",
+                    "audit_summary",
+                    "limitations",
                 ],
                 "properties": {
                     "label": {"type": "string"},
-                    "type": {"type": "string"},
-                    "trigger": {"type": "string"},
-                    "invalidation": {"type": "string"},
-                    "risk": {"type": "string"},
-                    "backtest_rule": {"type": "string"},
-                    "suggested_action": {"type": "string"},
+                    "direction": {"type": "string", "enum": ["long", "short", "neutral", "no_trade"]},
+                    "setup_type": {
+                        "type": "string",
+                        "enum": ["breakout", "pullback", "range", "momentum", "mean_reversion", "no_trade"],
+                    },
                     "confidence": {"type": "integer", "minimum": 0, "maximum": 100},
+                    "market_regime": {"type": "string"},
+                    "thesis_summary": {"type": "string"},
+                    "evidence": {
+                        "type": "object",
+                        "required": [
+                            "kline_evidence",
+                            "indicator_evidence",
+                            "orderbook_evidence",
+                            "volume_evidence",
+                            "risk_evidence",
+                        ],
+                        "properties": {
+                            "kline_evidence": {"type": "string"},
+                            "indicator_evidence": {"type": "string"},
+                            "orderbook_evidence": {"type": "string"},
+                            "volume_evidence": {"type": "string"},
+                            "risk_evidence": {"type": "string"},
+                        },
+                    },
+                    "entry_plan": {
+                        "type": "object",
+                        "required": [
+                            "entry_type",
+                            "trigger_price",
+                            "confirmation_condition",
+                            "invalidation_price",
+                            "stop_loss",
+                            "take_profit_1",
+                            "take_profit_2",
+                            "expected_rr",
+                        ],
+                        "properties": {
+                            "entry_type": {"type": "string"},
+                            "trigger_price": {"type": ["number", "null"]},
+                            "confirmation_condition": {"type": "string"},
+                            "invalidation_price": {"type": ["number", "null"]},
+                            "stop_loss": {"type": ["number", "null"]},
+                            "take_profit_1": {"type": ["number", "null"]},
+                            "take_profit_2": {"type": ["number", "null"]},
+                            "expected_rr": {"type": ["number", "string", "null"]},
+                        },
+                    },
+                    "risk_notes": {"type": "string"},
+                    "why_not_opposite_direction": {"type": "string"},
+                    "invalidation_conditions": {"type": "string"},
+                    "backtest_rule": {
+                        "type": "object",
+                        "required": ["entry_rule", "exit_rule", "stop_rule", "take_profit_rule", "position_sizing_rule"],
+                        "properties": {
+                            "entry_rule": {"type": "string"},
+                            "exit_rule": {"type": "string"},
+                            "stop_rule": {"type": "string"},
+                            "take_profit_rule": {"type": "string"},
+                            "position_sizing_rule": {"type": "string"},
+                        },
+                    },
+                    "audit_summary": {"type": "string"},
+                    "limitations": {"type": "string"},
                 },
             },
         },
@@ -399,6 +462,7 @@ class AIGateway:
             "workflow_id": analysis.workflow_id,
             "provider": analysis.provider,
             "model": analysis.model,
+            "latency_ms": analysis.latency_ms,
             "task": analysis.task,
             "summary": analysis.summary,
             "signals": raw_output.get("signals") or raw_output.get("reasons") or [],
@@ -421,10 +485,27 @@ class AIGateway:
 
     def _build_prompt(self, request: AIAnalyzeRequest, output_schema: dict[str, Any]) -> str:
         context = request.context or {}
+        language = "zh-CN" if str(context.get("language") or "").lower().startswith("zh") else "en"
+        language_rule = (
+            "Language constraint: all human-readable field values must use Simplified Chinese. Keep JSON keys in English. Technical names such as provider names, model IDs, HTX, USDT, API, REST, WebSocket, MACD, and RSI may remain in English."
+            if language == "zh-CN"
+            else "Language constraint: all human-readable field values must use English. Keep JSON keys in English."
+        )
+        risk_note_rule = (
+            "For zh-CN, risk_notes must include this Chinese safety phrase: 实盘交易已禁用，仅允许模拟交易。 Do not write Live Trading Disabled or Paper Trading Only in Chinese human-readable fields."
+            if language == "zh-CN"
+            else "For English, risk_notes must explicitly mention: Live Trading Disabled, Paper Trading Only."
+        )
         prompt_payload = {
             "symbol": request.symbol,
             "timeframe": context.get("timeframe") or context.get("kline_summary", {}).get("timeframe") or "unknown",
             "task": request.task,
+            "language": language,
+            "market_snapshot": context.get("market_snapshot") or {},
+            "kline_context": context.get("kline_context") or context.get("kline_summary") or {},
+            "indicator_context": context.get("indicator_context") or {},
+            "orderbook_context": context.get("orderbook_context") or context.get("orderbook") or {},
+            "demo_context": context.get("demo_context") or {},
             "ticker_summary": context.get("ticker") or {},
             "orderbook_summary": context.get("orderbook") or {},
             "market_events": context.get("market_events") or [],
@@ -436,12 +517,23 @@ class AIGateway:
         }
         return "\n".join(
             [
-                "You are the OathFi backend AI Gateway.",
-                "Analyze only the provided market, orderbook, news, on-chain, backtest, and risk context.",
-                "Do not invent unknown market data, backtest results, news, on-chain facts, or risk approvals.",
-                "Do not promise guaranteed returns or use absolute profit language.",
-                "Do not create, suggest creating, or approve any real order. Risk controls remain mandatory.",
-                "For agent_hypotheses_generation, return 1 to 3 mutually distinct hypotheses labeled Hypothesis A, Hypothesis B, and Hypothesis C when the evidence supports them.",
+                "You are a crypto market structured research Agent for OathFi.",
+                "You may analyze only the provided public market data, klines, indicators, orderbook, and risk rules.",
+                "Do not invent missing prices, indicator values, volume, orderbook depth, news, backtest results, or risk approvals.",
+                "Do not provide live trading advice. This system is for paper trading and audit demonstrations only.",
+                language_rule,
+                "For agent_hypotheses_generation, return structured JSON with 1 to 3 research hypotheses only when evidence supports them.",
+                "You must judge the market structure: trend, range, breakout, pullback, and liquidity abnormality.",
+                "Every conclusion must cite evidence from the input context.",
+                "Entry triggers must include specific prices, indicators, volume, spread, or orderbook conditions. Avoid vague phrases such as 'wait for confirmation'.",
+                "Never use example/template prices. trigger_price, invalidation_price, stop_loss, take_profit_1, and take_profit_2 must be derived from market_snapshot.last_price, recent_high, recent_low, MA20, MA50, volatility, spread, and orderbook imbalance.",
+                "For spot-like symbols, concrete entry/stop/take-profit prices should remain in the same price region as market_snapshot.last_price; if support or resistance cannot be computed, return direction no_trade and setup_type no_trade.",
+                "Invalidation must include a concrete price or indicator condition.",
+                "Explain the basis for stop loss, take profit, and expected R/R.",
+                "Explain why the opposite direction is not preferred.",
+                "If evidence is insufficient, use direction no_trade and setup_type no_trade instead of forcing long or short.",
+                "Backtest rules must be directly consumable as entry_rule, exit_rule, stop_rule, take_profit_rule, and position_sizing_rule.",
+                risk_note_rule,
                 "Return only one JSON object matching output_json_schema.",
                 json.dumps(prompt_payload, ensure_ascii=False, default=str),
             ]

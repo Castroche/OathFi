@@ -25,5 +25,17 @@ export default tseslint.config(
         { allowConstantExport: true }
       ]
     }
+  },
+  {
+    files: ["tests/e2e/**/*.mjs"],
+    languageOptions: {
+      globals: {
+        process: "readonly",
+        console: "readonly",
+      },
+    },
+    rules: {
+      "no-console": "off",
+    },
   }
 );
