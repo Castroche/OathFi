@@ -1,42 +1,166 @@
-# OathFi Docs Pack
+# OathFi
 
-This package contains the frontend constraint documents for OathFi.
+> AI-assisted Crypto Trading Research, Risk Control, Paper Execution & Audit Workflow Terminal
 
-## Files
+OathFi is an AI-powered cryptocurrency trading research platform designed for traders and researchers.
 
-```text
-docs/00-codex-instructions.md
-docs/01-product-brief.md
-docs/02-style.md
-docs/03-tech-stack.md
-docs/04-i18n-rules.md
-docs/05-frontend-constraints.md
-docs/06-acceptance-checklist.md
+It combines:
+
+- 📈 Real-time market monitoring
+- 🤖 AI-generated trading hypotheses
+- 📊 Strategy backtesting
+- 🛡 Risk Firewall
+- 📝 Paper Trading Execution
+- 🔍 Audit Report & Evidence Chain
+- 🌐 English / 简体中文 Interface
+
+The platform focuses on creating a transparent and verifiable trading research workflow instead of automated live trading.
+
+---
+
+# Architecture
+
+Frontend
+
+- React
+- TypeScript
+- Vite
+
+Backend
+
+- FastAPI
+- SQLAlchemy
+- Alembic
+
+Data
+
+- HTX Market API
+- WebSocket Streaming
+
+AI
+
+- DeepSeek
+- OpenAI
+- Anthropic
+- Gemini
+- Ollama (Local)
+
+---
+
+# Features
+
+## Command Center
+
+Unified dashboard for market status, AI insights and portfolio overview.
+
+## Market Monitor
+
+Professional trading terminal with:
+
+- Real-time K-Line
+- Order Book
+- Trade Stream
+- Indicators
+- Market Events
+
+## Agent Lab
+
+Generate structured trading hypotheses using AI.
+
+## Backtest Studio
+
+Replay and validate trading strategies.
+
+## Risk Firewall
+
+Evaluate every strategy before execution.
+
+## Paper Execution
+
+Execute simulated trades with complete execution records.
+
+## Audit Reports
+
+Every decision is traceable through an evidence chain.
+
+---
+
+# Tech Stack
+
+Frontend
+
+- React
+- TypeScript
+- Vite
+
+Backend
+
+- FastAPI
+- SQLAlchemy
+- Alembic
+
+Database
+
+- SQLite
+
+Testing
+
+- Pytest
+- Playwright
+
+---
+
+# Quick Start
+
+Frontend
+
+```bash
+npm install
+npm run dev
 ```
 
-## How to use
+Backend
 
-1. Copy the `docs/` folder into the root of your project.
-2. Give Codex this instruction:
-
-```text
-Please read docs/00-codex-instructions.md first, then read all docs in order.
-Do not modify code until you finish the project audit and implementation plan.
-The final frontend must match the dark professional OathFi UI style defined in docs/02-style.md.
-```
-
-## Target
-
-The frontend must visually match the generated OathFi dark terminal UI references:
-Command Center, Market Monitor, Agent Lab, Backtest Studio, and Risk Firewall.
-
-## Local demo ports
-
-Use port `8001` for the OathFi backend during local validation so it does not collide with services already using `8000`.
-
-```powershell
+```bash
 cd backend
+python -m venv .venv
+pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8001
 ```
 
-The Vite dev proxy sends `/api` to `http://localhost:8001` and `/ws` to `ws://localhost:8001`.
+---
+
+# Security
+
+This repository does **not** contain:
+
+- API Keys
+- Exchange Secrets
+- Database Dumps
+
+Use:
+
+```
+.env.example
+backend/.env.example
+```
+
+to configure your local environment.
+
+---
+
+# Project Status
+
+Current stage:
+
+✅ Research Platform
+
+✅ Paper Trading
+
+🚧 Live Trading (planned)
+
+---
+
+# License
+
+MIT License
